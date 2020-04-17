@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import url('https://fonts.googleapis.com/css?family=Comfortaa:400,700|Indie+Flower|Roboto:100,400,700&display=swap');
+
+
+.roboto {
+  font-family: 'Roboto', sans-serif;
+}
+
+.if {
+  font-family: 'Indie Flower', cursive;
+}
+
+.comf {
+  font-family: 'Comfortaa', cursive;
+}
+
+.fs-10 {
+  font-size: 10px;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.fs-14 {
+  font-size: 14px;
+}
