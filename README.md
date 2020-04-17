@@ -2,6 +2,8 @@
 
 Boba Shop [![Build Status](https://travis-ci.com/yiqu/boba.svg?branch=master)](https://travis-ci.com/yiqu/boba)
 
+Firebase URL: https://boba-store.web.app/
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
