@@ -6,6 +6,7 @@ import { MainComponent } from './main.component';
 import { MainOpenComponent } from './open/open.component';
 import { MainClosedComponent } from './closed/closed.component';
 import { RouterModule } from '@angular/router';
+import { MainLandingComponent } from './landing/landing.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { RouterModule } from '@angular/router';
   declarations: [
     MainComponent,
     MainOpenComponent,
-    MainClosedComponent
+    MainClosedComponent,
+    MainLandingComponent
   ],
 
   providers: [

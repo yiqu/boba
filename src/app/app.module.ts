@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +14,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faFutbol } from '@fortawesome/free-solid-svg-icons';
 import { NotFoundComponentModule } from './404/404.module';
 import { MainComponent } from './main/main.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
 
@@ -26,6 +29,7 @@ import { MainComponent } from './main/main.component';
     MaterialModuleBundle,
     CommonModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     FontAwesomeModule,
     NotFoundComponentModule,
@@ -45,6 +49,7 @@ import { MainComponent } from './main/main.component';
         warning: 'toast-warning'
       }
     }),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     AppRoutingModule
   ],
 

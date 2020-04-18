@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavItem } from '../shared/models/nav-item.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import { RestDataFireService } from '../shared/services/fire-data.service';
 
 @Component({
   selector: 'app-main',
@@ -12,11 +13,16 @@ export class MainComponent implements OnInit {
   tabLinks: NavItem[] = [];
   activeLink: NavItem;
 
-  constructor(public router: Router, public route: ActivatedRoute) {
+  constructor(public router: Router, public route: ActivatedRoute,
+    public dfs: RestDataFireService) {
     this.tabLinks.push(
       new NavItem('open', "Open", "open-orders"),
       new NavItem('closed', "Completed", "completed-orders")
-    )
+    );
+
+    this.route.url.subscribe((val) => {
+      this.setActiveTab();
+    })
   }
 
   ngOnInit() {
@@ -32,6 +38,8 @@ export class MainComponent implements OnInit {
 
     if (current > -1) {
       this.activeLink = this.tabLinks[current];
+    } else {
+      this.activeLink = null;
     }
   }
 }
