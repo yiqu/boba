@@ -1,0 +1,7 @@
+input {
+  height: calc(1.2em + .75rem + 2px);
+}
+
+.no-padding {
+  padding: 0.5rem 0rem;
+}

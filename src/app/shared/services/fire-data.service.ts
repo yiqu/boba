@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireDatabase, AngularFireList, SnapshotAction } from '@angular/fire/database';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { DrinkOrder } from '../models/tea.models';
 
 @Injectable({
@@ -18,14 +18,14 @@ export class RestDataFireService {
   openOrders: AngularFireList<DrinkOrder>;
   closedOrders: AngularFireList<DrinkOrder>;
 
-  openOrders$: BehaviorSubject<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>([]);
+  openOrders$: Observable<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>(null);
 
   constructor(public http: HttpClient, public firedb: AngularFireDatabase) {
 
     this.openOrders = this.firedb.list(this.ORDER_BASE_URL + this.ORDER_OPEN_URL);
     this.closedOrders = this.firedb.list(this.ORDER_BASE_URL + this.ORDER_CLOSED_URL);
 
-    this.openOrders.snapshotChanges().pipe(
+    this.openOrders$ = this.openOrders.snapshotChanges().pipe(
       map((changes) => {
         return changes.map((c: SnapshotAction<DrinkOrder>) => {
           return (
@@ -40,12 +40,9 @@ export class RestDataFireService {
         val.forEach((val) => {
           res.push(new DrinkOrder(val.fireKey, +val.date, val.orders, val.user));
         })
+        console.log(res)
         return res;
       }))
-      .subscribe((val) => {
-        console.log("open:",val)
-      });
-
   }
 
 }

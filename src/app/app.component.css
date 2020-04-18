@@ -39,3 +39,9 @@
   display: inline-block;
   vertical-align: sub;
 }
+
+.core {
+  height: 100%;
+  display: block;
+  overflow: auto;
+}

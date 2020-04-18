@@ -7,6 +7,8 @@ import { MainOpenComponent } from './open/open.component';
 import { MainClosedComponent } from './closed/closed.component';
 import { RouterModule } from '@angular/router';
 import { MainLandingComponent } from './landing/landing.component';
+import { LoadingSpinnerModule } from '../shared/loading/loading.module';
+import { OrderTableNavModule } from '../shared/order-table-nav/order-table-nav.module';
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { MainLandingComponent } from './landing/landing.component';
     FormsModule,
     RouterModule,
     ReactiveFormsModule,
-    MaterialModuleBundle
+    MaterialModuleBundle,
+    LoadingSpinnerModule,
+    OrderTableNavModule
   ],
 
   exports: [
@@ -32,4 +36,4 @@ import { MainLandingComponent } from './landing/landing.component';
 
   ],
 })
-export class HistoryComponentModule { }
+export class MainComponentModule { }

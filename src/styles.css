@@ -7,6 +7,10 @@ body {
   font-family: 'Comfortaa', cursive;
 }
 
+.wrapper {
+  min-height: calc(100vh - 50px);
+}
+
 button {
   font-family: 'Comfortaa', cursive !important;
 }
@@ -37,4 +41,9 @@ a {
 
 .fs-14 {
   font-size: 14px;
+}
+
+.center-loading {
+  display: flex;
+  justify-content: center;
 }

@@ -15,12 +15,12 @@ import { faFutbol } from '@fortawesome/free-solid-svg-icons';
 import { NotFoundComponentModule } from './404/404.module';
 import { MainComponent } from './main/main.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MainComponentModule } from './main/main.module';
 
 @NgModule({
 
   declarations: [
-    AppComponent,
-    MainComponent
+    AppComponent
   ],
 
   imports: [
@@ -33,6 +33,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     FontAwesomeModule,
     NotFoundComponentModule,
+    MainComponentModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       extendedTimeOut: 1000,

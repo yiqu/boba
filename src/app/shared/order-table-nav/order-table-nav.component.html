@@ -1,0 +1,22 @@
+<!-- <mat-toolbar color="colorPallet">
+  <mat-toolbar-row>
+    <div class="mr-3">
+      <button mat-stroked-button class="action-btn">
+        Expand All
+      </button>
+    </div>
+    <div>
+      <mat-form-field class="search-field">
+        <mat-label>Search orders</mat-label>
+        <input matInput placeholder="Ex. Black Milk Tea" >
+      </mat-form-field>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar> -->
+
+<nav class="navbar navbar-light bg-light" [ngClass]="noPadding ? 'no-padding' : ''">
+  <ng-content></ng-content>
+  <form class="form-inline">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search orders" #searchInput>
+  </form>
+</nav>

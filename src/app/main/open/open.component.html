@@ -1,1 +1,41 @@
-Open
+<ng-container *ngIf="(this.fds.openOrders$ | async) as openOrders; else loading">
+
+  <div class="row">
+    <div class="col-sm-12 mb-2">
+      <app-shared-order-table-nav [noPadding]="true" (searchedVal)="onSearch($event)">
+        <button class="btn btn-sm btn-info my-2 my-sm-0 mr-3" type="submit" (click)="toggleExpand()">
+          {{ toggleExpandText }}
+        </button>
+      </app-shared-order-table-nav>
+    </div>
+  </div>
+
+  <mat-accordion [multi]="true">
+    <div class="row" *ngFor="let drinkOrder of openOrders; index as i; last as last">
+      <div class="col-sm-12">
+        <mat-expansion-panel [expanded]="panelsExpanded" [ngClass]="last ? 'mb-3' : 'mb-2'">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Self aware panel
+            </mat-panel-title>
+
+            <mat-panel-description>
+              Currently
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <p>I'm visible because I am open</p>
+
+        </mat-expansion-panel>
+      </div>
+    </div>
+  </mat-accordion>
+</ng-container>
+
+<ng-template #loading>
+  <div class="row">
+    <div class="col-sm-12 center-loading pt-3">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+  </div>
+</ng-template>
