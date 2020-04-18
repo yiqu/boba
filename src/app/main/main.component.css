@@ -1,0 +1,11 @@
+button {
+  font-size: 12px;
+}
+
+::ng-deep .mat-tab-links {
+  justify-content: space-around;
+}
+
+a.mat-tab-link {
+  width: 50%;
+}

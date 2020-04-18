@@ -7,6 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
+  headerTitle: string = "BobaShop";
+  footerTitle: string = "@KQ 2020";
+
   constructor() {
 
   }

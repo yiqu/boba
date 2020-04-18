@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row mt-2 mb-2">
+    <div class="col-sm-12">
+      <button class="btn btn-primary">New order</button>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-sm-12">
+      <nav mat-tab-nav-bar [backgroundColor]="undefined">
+        <a mat-tab-link *ngFor="let link of tabLinks"
+          (click)="activeLink = link"
+          [active]="activeLink == link"
+          [routerLink]="[link.url]">
+            {{link.display}}
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
