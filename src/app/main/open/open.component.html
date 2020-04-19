@@ -10,26 +10,40 @@
     </div>
   </div>
 
-  <mat-accordion [multi]="true">
-    <div class="row" *ngFor="let drinkOrder of openOrders; index as i; last as last">
+  <ng-container *ngFor="let drinkOrder of openOrders; index as i; last as last" class="">
+    <div class="row mb-1">
       <div class="col-sm-12">
-        <mat-expansion-panel [expanded]="panelsExpanded" [ngClass]="last ? 'mb-3' : 'mb-2'">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Self aware panel
-            </mat-panel-title>
-
-            <mat-panel-description>
-              Currently
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-
-          <p>I'm visible because I am open</p>
-
-        </mat-expansion-panel>
+        <app-shared-order-user-info [userInfo]="drinkOrder.user" [userNumber]="i"
+          [ordersCount]="drinkOrder.orders.length">
+        </app-shared-order-user-info>
       </div>
     </div>
-  </mat-accordion>
+    <div class="row mb-3">
+      <div class="col-sm-12">
+        <mat-accordion [multi]="true">
+          <div class="row" *ngFor="let orderDetail of drinkOrder.orders; index as i;">
+            <div class="col-sm-12">
+              <mat-expansion-panel [expanded]="panelsExpanded">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <app-shared-order-table-icon
+                      [drinkSeries]="orderDetail.drinkType.seriesName"></app-shared-order-table-icon>
+                  </mat-panel-title>
+
+                  <mat-panel-description>
+                    middle descrp
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <p>I'm visible because I am open</p>
+
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </mat-accordion>
+      </div>
+    </div>
+  </ng-container>
 </ng-container>
 
 <ng-template #loading>

@@ -9,6 +9,8 @@ import { RouterModule } from '@angular/router';
 import { MainLandingComponent } from './landing/landing.component';
 import { LoadingSpinnerModule } from '../shared/loading/loading.module';
 import { OrderTableNavModule } from '../shared/order-table-nav/order-table-nav.module';
+import { OrderTableIconModule } from '../shared/order-table-icon/order-icon.module';
+import { OrderTableUserInfoModule } from '../shared/order-table-user-info/user-label.module';
 
 @NgModule({
   imports: [
@@ -18,7 +20,9 @@ import { OrderTableNavModule } from '../shared/order-table-nav/order-table-nav.m
     ReactiveFormsModule,
     MaterialModuleBundle,
     LoadingSpinnerModule,
-    OrderTableNavModule
+    OrderTableNavModule,
+    OrderTableIconModule,
+    OrderTableUserInfoModule
   ],
 
   exports: [
