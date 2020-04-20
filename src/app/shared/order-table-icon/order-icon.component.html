@@ -1,4 +1,11 @@
 <div class="d-flex">
-  <img src="assets/images/main/icons/milk.png" class="icon-img d-inline-block" alt="series">
-  <img src="assets/images/main/icons/tea.png" class="icon-img d-inline-block" alt="tea">
+  <div class="icon-img-parent">
+    <img [src]="drinkTypeUrl" class="icon-img d-inline-block" alt="series">
+    <img *ngIf="showTeaIcon" src="assets/images/main/icons/tea.png"
+      [title]="'Contains tea'" class="icon-img d-inline-block mr-2" alt="tea">
+  </div>
+
+  <div class="icon-img-text comf">
+    <ng-content></ng-content>
+  </div>
 </div>

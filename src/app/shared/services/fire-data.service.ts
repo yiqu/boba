@@ -17,8 +17,9 @@ export class RestDataFireService {
 
   openOrders: AngularFireList<DrinkOrder>;
   closedOrders: AngularFireList<DrinkOrder>;
-
   openOrders$: Observable<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>(null);
+  openOrdersCount: number = null;
+  closedOrdersCount: number = null;
 
   constructor(public http: HttpClient, public firedb: AngularFireDatabase) {
 
@@ -40,6 +41,7 @@ export class RestDataFireService {
         val.forEach((val) => {
           res.push(new DrinkOrder(val.fireKey, +val.date, val.orders, val.user));
         })
+        this.openOrdersCount = val.length;
         console.log(res)
         return res;
       }))

@@ -1,6 +1,11 @@
-<div class="">
-  <div class="if user-label mr-1">customer #{{userNumber+1}}:</div>
-  <div class="comf user-name">{{userInfo.display}}
-    ({{ordersCount}} orders)
+<div class="comf mb-2">
+  <div class="order-label mb-1">Order #{{ orderNumber+1 }} of {{ totalOrdersCount }}:</div>
+  <div class="order-info">
+    <span class="customer-name">{{ order.orders.length}}</span>
+    {{'drink' |  pluralDisplay:order.orders.length }}
+    from
+    <span class="customer-name">{{ order.user.display }}</span>,
+    made on {{order.date | dateDisplay:'FULLDATE'}},
+    {{ order.date | dateDisplay:'FROMNOW' }}.
   </div>
 </div>

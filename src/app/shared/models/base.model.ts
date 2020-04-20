@@ -13,3 +13,13 @@ export enum DrinkSeries {
   FRUIT_TEA = "creativeMix",
   YOGURT = "yogurt"
 }
+
+export enum DrinkTopping {
+  COCONUT_JELLY = "coconutJelly",
+  BLK_PEARL = "pearls",
+  WHITE_PEARL = "whitePearls",
+  STRAWBERRY_PEARL = "strawberryPearls",
+  PUDDING = "pudding",
+  AIYU_JELLY = "aiyuJelly",
+  READBEAN = "redbean"
+}

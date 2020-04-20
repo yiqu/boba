@@ -13,36 +13,20 @@
   <ng-container *ngFor="let drinkOrder of openOrders; index as i; last as last" class="">
     <div class="row mb-1">
       <div class="col-sm-12">
-        <app-shared-order-user-info [userInfo]="drinkOrder.user" [userNumber]="i"
-          [ordersCount]="drinkOrder.orders.length">
+        <app-shared-order-user-info [orderNumber]="i"
+          [totalOrdersCount]="openOrders.length" [order]="drinkOrder">
         </app-shared-order-user-info>
       </div>
     </div>
-    <div class="row mb-3">
-      <div class="col-sm-12">
-        <mat-accordion [multi]="true">
-          <div class="row" *ngFor="let orderDetail of drinkOrder.orders; index as i;">
-            <div class="col-sm-12">
-              <mat-expansion-panel [expanded]="panelsExpanded">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <app-shared-order-table-icon
-                      [drinkSeries]="orderDetail.drinkType.seriesName"></app-shared-order-table-icon>
-                  </mat-panel-title>
 
-                  <mat-panel-description>
-                    middle descrp
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
-
-                <p>I'm visible because I am open</p>
-
-              </mat-expansion-panel>
-            </div>
-          </div>
-        </mat-accordion>
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-sm-12">
+          <app-shared-order-accordion [drinkOrder]="drinkOrder"></app-shared-order-accordion>
+        </div>
       </div>
     </div>
+
   </ng-container>
 </ng-container>
 

@@ -1,0 +1,31 @@
+<mat-accordion [multi]="true">
+  <div class="row" *ngFor="let orderDetail of drinkOrder.orders; index as i;">
+    <div class="col-sm-12">
+      <mat-expansion-panel [expanded]="panelsExpanded">
+        <mat-expansion-panel-header>
+
+          <!-- Drink Icon graphic -->
+          <mat-panel-title>
+            <app-shared-order-table-icon [drinkSeries]="orderDetail.drinkType.seriesName">
+              {{orderDetail.drinkType.display}}
+            </app-shared-order-table-icon>
+          </mat-panel-title>
+
+          <!-- Drink name -->
+          <mat-panel-description>
+            {{orderDetail.size.name | orderTableDrinkDetail}},
+            {{orderDetail.sugar.name | orderTableDrinkSugar}},
+            {{orderDetail.iceLevel.name | orderTableDrinkIce}},
+            {{orderDetail.toppings.length}} {{'topping' | pluralDisplay:orderDetail.toppings.length}}
+          </mat-panel-description>
+
+        </mat-expansion-panel-header>
+
+        <!-- Drink details when expanded -->
+        <app-shared-order-detail [orderDetail]="orderDetail">
+        </app-shared-order-detail>
+
+      </mat-expansion-panel>
+    </div>
+  </div>
+</mat-accordion>

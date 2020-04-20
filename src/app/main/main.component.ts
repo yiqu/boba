@@ -14,7 +14,7 @@ export class MainComponent implements OnInit {
   activeLink: NavItem;
 
   constructor(public router: Router, public route: ActivatedRoute,
-    public dfs: RestDataFireService) {
+    public fds: RestDataFireService) {
     this.tabLinks.push(
       new NavItem('open', "Open", "open-orders"),
       new NavItem('closed', "Completed", "completed-orders")
@@ -27,6 +27,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     this.setActiveTab();
+
   }
 
   setActiveTab() {

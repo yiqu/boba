@@ -11,18 +11,24 @@ import { LoadingSpinnerModule } from '../shared/loading/loading.module';
 import { OrderTableNavModule } from '../shared/order-table-nav/order-table-nav.module';
 import { OrderTableIconModule } from '../shared/order-table-icon/order-icon.module';
 import { OrderTableUserInfoModule } from '../shared/order-table-user-info/user-label.module';
+import { PipeBundleModule } from '../shared/pipes/pipe-bundle.module';
+import { OrderAccordionModule } from '../shared/order-table-accordion/order-accordion.module';
+import { OrderDetailDisplayModule } from '../shared/order-detail-display/order-detail-display.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     RouterModule,
+    PipeBundleModule,
     ReactiveFormsModule,
     MaterialModuleBundle,
     LoadingSpinnerModule,
     OrderTableNavModule,
     OrderTableIconModule,
-    OrderTableUserInfoModule
+    OrderTableUserInfoModule,
+    OrderAccordionModule,
+    OrderDetailDisplayModule
   ],
 
   exports: [

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DrinkSeries } from '../models/base.model';
 import { User } from '../models/user.model';
+import { DrinkOrder } from '../models/tea.models';
 
 @Component({
   selector: 'app-shared-order-user-info',
@@ -11,13 +12,13 @@ import { User } from '../models/user.model';
 export class OrderTableUserInfoComponent implements OnInit {
 
   @Input()
-  userInfo: User;
+  totalOrdersCount: number;
 
   @Input()
-  userNumber: number;
+  orderNumber: number;
 
   @Input()
-  ordersCount: number;
+  order: DrinkOrder
 
 
   constructor() {

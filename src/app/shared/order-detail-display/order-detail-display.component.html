@@ -1,0 +1,34 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 text-center">
+      <div class="icon-img-parent">
+        <img [src]="iconUrl" class="img-h-100" alt="tea icon">
+      </div>
+      <div>
+        {{ size }} {{ name }}
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div>
+        {{ iceLevel }}
+      </div>
+      <div>
+        {{ sugarLevel }}
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <ng-container *ngFor="let topping of toppings">
+        <span>
+          <div class="topping-img-parent">
+            <img [src]="topping.name | toppingUrl" class="img-h-100" alt="tea icon">
+          </div>
+          <div>
+            {{ topping.display }}
+          </div>
+
+        </span>
+      </ng-container>
+
+    </div>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row mt-2 mb-2 border-b">
     <div class="col-sm-12">
-      <button class="btn btn-primary btn-sm">New order</button>
+      <button class="btn btn-primary">New order</button>
     </div>
   </div>
 
@@ -12,7 +12,8 @@
           (click)="activeLink = link"
           [active]="activeLink == link"
           [routerLink]="[link.url]">
-            {{link.display}}
+            {{link.display}} {{link.id === 'open' ? (this.fds.openOrdersCount | countNumberDisplay)  :
+              (this.fds.closedOrdersCount | countNumberDisplay) }}
         </a>
       </nav>
     </div>

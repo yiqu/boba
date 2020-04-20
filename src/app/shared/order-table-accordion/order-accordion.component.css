@@ -1,0 +1,11 @@
+::ng-deep .mat-expansion-panel-header-description {
+  color: #000;
+  font-family: 'Comfortaa', cursive;
+}
+
+@media screen and (max-width: 600px) {
+  /* start of phone styles */
+  ::ng-deep .mat-expansion-panel-header-description {
+    display: none !important;
+  }
+}

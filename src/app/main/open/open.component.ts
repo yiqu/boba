@@ -34,7 +34,6 @@ export class MainOpenComponent implements OnInit, AfterViewInit, OnDestroy {
       takeUntil(this.compDestroy$)
     )
     .subscribe((val: QueryList<MatAccordion>) => {
-      console.log(val)
     });
   }
 
