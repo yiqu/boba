@@ -4,7 +4,7 @@
 
 body {
   /* margin: 0;  */
-  font-family: 'Comfortaa', cursive;
+  font-family: 'Roboto', sans-serif;
 }
 
 .wrapper {
@@ -72,3 +72,21 @@ a {
 
  /* Extra large devices (large laptops and desktops, 1200px and up) */
  @media only screen and (min-width: 1200px) {}
+
+.wavy-underline {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-underline-position: under;
+}
+
+.double-underline {
+  text-decoration: underline;
+  text-decoration-style: double;
+  text-underline-position: under;
+}
+
+.solid-underline {
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-underline-position: under;
+}

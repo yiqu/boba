@@ -1,5 +1,5 @@
 <div class="comf mb-2">
-  <div class="order-label mb-1">Order #{{ orderNumber+1 }} of {{ totalOrdersCount }}:</div>
+  <div class="order-label mb-3 double-underline">Order {{ orderNumber+1 }} of {{ totalOrdersCount }}:</div>
   <div class="order-info">
     <span class="customer-name">{{ order.orders.length}}</span>
     {{'drink' |  pluralDisplay:order.orders.length }}

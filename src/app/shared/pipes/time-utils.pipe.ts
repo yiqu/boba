@@ -12,7 +12,7 @@ export class DateDisplayPipe implements PipeTransform {
           return moment(dateMilli).fromNow();
         }
         case "FULLDATE": {
-          return moment(dateMilli).format("MM/DD/YY, h:mm A");
+          return moment(dateMilli).format("MM/DD/YY, h:mm a");
         }
         case "INPUTDATE": {
           return moment(dateMilli).format("MM/DD/YY, HH:mm");

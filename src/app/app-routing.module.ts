@@ -4,6 +4,7 @@ import { MainComponent } from './main/main.component';
 import { MainOpenComponent } from './main/open/open.component';
 import { MainClosedComponent } from './main/closed/closed.component';
 import { MainLandingComponent } from './main/landing/landing.component';
+import { NotFoundComponent } from './404/404.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -13,7 +14,8 @@ const routes: Routes = [
       { path: "open-orders", component: MainOpenComponent },
       { path: "completed-orders", component: MainClosedComponent }
     ]
-  }
+  },
+  { path: '**', component: NotFoundComponent}
 ];
 
 @NgModule({

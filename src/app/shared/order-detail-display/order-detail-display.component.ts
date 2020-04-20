@@ -10,7 +10,8 @@ import { DrinkSeries } from '../models/base.model';
 export class OrderDetailDisplayComponent implements OnInit {
 
   private baseIconSrcUrl: string = "assets/images/main/icons/";
-
+  iceIconSrcUrl: string = "assets/images/main/settings/ice.png";
+  sugarIconSrcUrl: string = "assets/images/main/settings/sugar.png";
 
   @Input()
   orderDetail: DrinkOrderDetail;

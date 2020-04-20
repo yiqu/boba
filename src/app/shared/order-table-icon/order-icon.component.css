@@ -9,7 +9,7 @@
 
 .icon-img-text {
   display: flex;
-  align-self: end;
+  align-self: flex-end;
 }
 
 @media screen and (max-width: 600px) {

@@ -1,34 +1,47 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-sm-3 text-center">
-      <div class="icon-img-parent">
+
+    <div class="col-sm-4 text-center mb-3">
+      <div class="detail-label solid-underline mb-2">
+        Drink:
+      </div>
+      <div class="icon-img-parent mb-1">
         <img [src]="iconUrl" class="img-h-100" alt="tea icon">
       </div>
       <div>
         {{ size }} {{ name }}
       </div>
     </div>
-    <div class="col-sm-3">
-      <div>
-        {{ iceLevel }}
+
+    <div class="col-sm-4 text-center mb-3">
+      <div class="detail-label solid-underline mb-2">
+        Settings:
       </div>
       <div>
-        {{ sugarLevel }}
+        <div class="setting-parent mb-2">
+          <img [src]="iceIconSrcUrl" class="img-h-100 mr-1" alt="ice icon">
+          {{ iceLevel }}
+        </div>
+        <div class="setting-parent">
+          <img [src]="sugarIconSrcUrl" class="img-h-100 mr-1" alt="sugar icon">
+          {{ sugarLevel }}
+        </div>
       </div>
     </div>
-    <div class="col-sm-6">
-      <ng-container *ngFor="let topping of toppings">
-        <span>
-          <div class="topping-img-parent">
-            <img [src]="topping.name | toppingUrl" class="img-h-100" alt="tea icon">
-          </div>
-          <div>
-            {{ topping.display }}
-          </div>
 
-        </span>
-      </ng-container>
-
+    <div class="col-sm-4 text-center mb-3">
+      <div class="detail-label solid-underline mb-2">
+        Toppings:
+      </div>
+      <div *ngFor="let topping of toppings" class="mb-1">
+        <div class="topping-img-parent mb-1">
+          <img [src]="topping.name | toppingUrl" class="img-h-100" alt="topping icon">
+        </div>
+        <div>
+          {{ topping.display }}
+        </div>
+      </div>
     </div>
+
   </div>
 </div>
