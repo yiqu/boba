@@ -4,6 +4,7 @@ import { RestDataFireService } from 'src/app/shared/services/fire-data.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { OrderAccordionComponent } from 'src/app/shared/order-table-accordion/order-accordion.component';
 
 @Component({
   selector: 'app-main-open',
@@ -12,16 +13,16 @@ import { Subject } from 'rxjs';
 })
 export class MainOpenComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChildren(MatAccordion)
-  ordersAccordionList: QueryList<MatAccordion>;
+  @ViewChildren(OrderAccordionComponent)
+  ordersAccordionList: QueryList<OrderAccordionComponent>;
 
   toggleExpandText: string = "Expand all";
-  panelsExpanded: boolean = true;
   ordersAccordion: MatAccordion;
   ordersExpanded: boolean = false;
   compDestroy$: Subject<any> = new Subject<any>();
+  allOrderAccordion: OrderAccordionComponent[] = [];
 
-  constructor(public fds: RestDataFireService, private cd: ChangeDetectorRef) {
+  constructor(public fds: RestDataFireService) {
 
   }
 
@@ -33,7 +34,10 @@ export class MainOpenComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ordersAccordionList.changes.pipe(
       takeUntil(this.compDestroy$)
     )
-    .subscribe((val: QueryList<MatAccordion>) => {
+    .subscribe((val: QueryList<OrderAccordionComponent>) => {
+      val.forEach((accord: OrderAccordionComponent) => {
+        this.allOrderAccordion.push(accord);
+      });
     });
   }
 
@@ -42,8 +46,15 @@ export class MainOpenComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleExpand() {
-    //this.ordersExpanded ? (this.ordersAccordion.closeAll()) : (this.ordersAccordion.openAll());
-    //this.ordersExpanded = !this.ordersExpanded;
+    this.allOrderAccordion.forEach((a) => {
+      if (this.ordersExpanded) {
+        a.collapseAccord();
+      } else {
+        a.expandAccord();
+      }
+
+    })
+    this.ordersExpanded = !this.ordersExpanded;
   }
 
   ngOnDestroy() {

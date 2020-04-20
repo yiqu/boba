@@ -23,3 +23,8 @@ export enum DrinkTopping {
   AIYU_JELLY = "aiyuJelly",
   READBEAN = "redbean"
 }
+
+export enum OrderStatusType {
+  OPEN = "open",
+  CLOSED = "closed"
+}
