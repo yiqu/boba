@@ -5,3 +5,18 @@
 .topping-img-parent {
   height: 40px;
 }
+
+.detail-label {
+  font-family: 'Comfortaa', cursive;
+  font-size: 17px;
+  color: #000;
+  font-weight: 800;
+}
+
+.setting-icon {
+  height: 20px;
+}
+
+.setting-parent {
+  height: 40px;
+}
