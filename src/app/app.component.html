@@ -8,8 +8,17 @@
       <div class="comf banner-text">{{ headerTitle }}</div>
     </a>
   </div>
-  <div>
-    <button mat-stroked-button>login</button>
+
+  <div class="d-flex">
+    <div>
+      <button mat-stroked-button matBadge="8" matBadgePosition="before" matBadgeColor="primary"
+        (click)="onCartClick()">
+        <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon>
+      </button>
+    </div>
+    <div>
+      <button mat-stroked-button>login</button>
+    </div>
   </div>
 </mat-toolbar>
 

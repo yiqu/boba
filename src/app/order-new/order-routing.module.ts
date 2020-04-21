@@ -1,0 +1,37 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { OrderNewComponent } from './order-new.component';
+import { OrderNewOrderComponent } from './order/order.component';
+import { OrderNewCreateComponent } from './create/create.component';
+import { OrderNewViewAllComponent } from './view-all/view-all.component';
+
+const routes: Routes = [
+  {
+    path: '', component: OrderNewComponent, data: {title: 'New Order'},
+    children: [
+      { path: 'new', component: OrderNewCreateComponent },
+      { path: 'all', component: OrderNewViewAllComponent,
+        children: [
+          { path: ':id', component: OrderNewOrderComponent }
+        ]
+      }
+    ]
+  }
+];
+
+
+/**
+ * Routing module.
+ */
+@NgModule({
+  imports: [
+    RouterModule.forChild(routes)
+  ],
+
+  exports: [
+    RouterModule
+  ],
+
+  declarations: []
+})
+export class OrderNewRoutingModule { }

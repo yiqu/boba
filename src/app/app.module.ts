@@ -11,7 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faFutbol } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { NotFoundComponentModule } from './404/404.module';
 import { MainComponent } from './main/main.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -60,4 +60,8 @@ import { MainComponentModule } from './main/main.module';
 
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private library: FaIconLibrary) {
+    library.addIcons(faShoppingCart);
+  }
+}

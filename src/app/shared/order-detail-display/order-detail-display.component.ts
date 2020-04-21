@@ -30,7 +30,6 @@ export class OrderDetailDisplayComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.orderDetail)
     this.createDetail(this.orderDetail);
   }
 

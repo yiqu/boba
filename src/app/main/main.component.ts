@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavItem } from '../shared/models/nav-item.model';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { RestDataFireService } from '../shared/services/fire-data.service';
 
 @Component({
@@ -22,19 +22,25 @@ export class MainComponent implements OnInit {
 
     this.route.url.subscribe((val) => {
       this.setActiveTab();
-    })
+    });
+
+    this.route.queryParamMap.subscribe((val: ParamMap) => {
+    });
   }
 
   ngOnInit() {
     this.setActiveTab();
+  }
 
+  onNewOrder() {
+    this.router.navigate(['../', 'new-order'], {relativeTo: this.route});
   }
 
   setActiveTab() {
     const segs = this.router.url.split("/");
-    const last = segs[segs.length-1];
+    const last: string = segs[segs.length-1];
     const current: number = this.tabLinks.findIndex((link: NavItem) => {
-      return link.url === last;
+      return last.includes(link.url);
     });
 
     if (current > -1) {

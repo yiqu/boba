@@ -1,0 +1,39 @@
+<ng-container *ngIf="(drinkOrderObs | async) as openOrders; else loading">
+
+  <div class="row">
+    <div class="col-sm-12 mb-2">
+      <app-shared-order-table-nav [noPadding]="true" (searchedVal)="onSearch($event)">
+        <button class="btn btn-sm btn-info my-2 my-sm-0 mr-3" type="submit" (click)="toggleExpand()">
+          {{ toggleExpandText }}
+        </button>
+      </app-shared-order-table-nav>
+    </div>
+  </div>
+
+  <ng-container *ngFor="let drinkOrder of openOrders; index as i; last as last" class="">
+    <div class="row mb-1">
+      <div class="col-sm-12">
+        <app-shared-order-user-info [orderNumber]="i"
+          [totalOrdersCount]="openOrders.length" [order]="drinkOrder">
+        </app-shared-order-user-info>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-sm-12">
+          <app-shared-order-accordion [drinkOrder]="drinkOrder"></app-shared-order-accordion>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <div class="row">
+    <div class="col-sm-12 center-loading pt-3">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+  </div>
+</ng-template>

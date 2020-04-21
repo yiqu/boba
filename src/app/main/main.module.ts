@@ -14,21 +14,17 @@ import { OrderTableUserInfoModule } from '../shared/order-table-user-info/user-l
 import { PipeBundleModule } from '../shared/pipes/pipe-bundle.module';
 import { OrderAccordionModule } from '../shared/order-table-accordion/order-accordion.module';
 import { OrderDetailDisplayModule } from '../shared/order-detail-display/order-detail-display.module';
+import { OrderTableModule } from '../shared/order-table/order-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     RouterModule,
+    OrderTableModule,
     PipeBundleModule,
     ReactiveFormsModule,
     MaterialModuleBundle,
-    LoadingSpinnerModule,
-    OrderTableNavModule,
-    OrderTableIconModule,
-    OrderTableUserInfoModule,
-    OrderAccordionModule,
-    OrderDetailDisplayModule
   ],
 
   exports: [

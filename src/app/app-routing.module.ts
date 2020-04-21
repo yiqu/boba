@@ -15,6 +15,9 @@ const routes: Routes = [
       { path: "completed-orders", component: MainClosedComponent }
     ]
   },
+  { path: 'new-order',
+    loadChildren: () => import('./order-new/order-new.module').then(m => m.OrderNewModule)
+  },
   { path: '**', component: NotFoundComponent}
 ];
 

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,11 @@ export class AppComponent {
   headerTitle: string = "BobaShop";
   footerTitle: string = "@KQ 2020";
 
-  constructor() {
+  constructor(public router: Router, public route: ActivatedRoute) {
 
+  }
+
+  onCartClick() {
+    this.router.navigate(['new-order', 'all']);
   }
 }
