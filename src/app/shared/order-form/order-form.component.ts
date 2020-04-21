@@ -1,13 +1,17 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { DrinkOrder, DrinkOrderDetail, DrinkTopping } from '../models/tea.models';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
 import * as fu from '../utils/form.utils';
 import { DrinkSeries } from '../models/base.model';
+import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-shared-order-form',
   templateUrl: 'order-form.component.html',
-  styleUrls: ['./order-form.component.css']
+  styleUrls: ['./order-form.component.css'],
+  providers: [{
+    provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}
+  }]
 })
 export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -19,8 +23,11 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
   orderFg: FormGroup;
 
-  constructor(public fb: FormBuilder) {
+  get drinkSeriesFc(): FormControl {
+    return <FormControl>this.orderFg.get("seriesName");
+  }
 
+  constructor(public fb: FormBuilder) {
   }
 
   ngOnChanges(changes) {
@@ -29,6 +36,12 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
       console.log(this.orderFg)
       console.log(this.orderFg.controls)
     }
+
+    this.orderFg.valueChanges.subscribe(
+      (val) => {
+        console.log("changes", val)
+      }
+    )
 
   }
 
