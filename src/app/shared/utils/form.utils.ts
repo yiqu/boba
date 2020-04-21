@@ -1,0 +1,9 @@
+import { FormControl } from '@angular/forms';
+
+export function createFormControl(value: any, disabled: boolean, validators: any[] = null, asyncValids: any[] = null): FormControl {
+  let fc = new FormControl({
+    value: value ? value : null,
+    disabled: disabled
+  }, validators, asyncValids);
+  return fc;
+}

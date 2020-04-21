@@ -9,6 +9,8 @@ import { OrderNewOrderComponent } from './order/order.component';
 import { OrderNewViewAllComponent } from './view-all/view-all.component';
 import { OrderNewCreateComponent } from './create/create.component';
 import { AdBannerModule } from '../shared/ad-banner/ad-banner.module';
+import { MaterialModuleBundle } from '../shared/material-bundle.module';
+import { OrderFormModule } from '../shared/order-form/order-form.module';
 
 @NgModule({
 
@@ -18,7 +20,9 @@ import { AdBannerModule } from '../shared/ad-banner/ad-banner.module';
     ReactiveFormsModule,
     HttpClientModule,
     AdBannerModule,
-    OrderNewRoutingModule
+    OrderNewRoutingModule,
+    OrderFormModule,
+    MaterialModuleBundle
   ],
 
   exports: [

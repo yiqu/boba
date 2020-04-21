@@ -51,7 +51,6 @@ export class AdBannerComponent implements OnInit, OnDestroy {
       takeUntil(this.compDest$)
     )
     .subscribe((val) => {
-      console.log(val)
       this.loadComponent();
     })
   }
