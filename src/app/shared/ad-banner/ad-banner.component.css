@@ -1,0 +1,35 @@
+.ad-banner-bg-img {
+  background-image: url("/assets/images/main/order/banner-bg.png");
+  background-color: #cccccc;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.icon-img-parent {
+  display: flex;
+  height: 100%;
+}
+
+.summer-banner {
+  justify-content: center;
+  display: flex;
+  padding: 5px;
+  border-radius: 100px;
+}
+
+.summer-banner-text {
+  align-self: flex-end;
+  font-size: 14px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.new-drink-banner-text {
+  align-self: flex-end;
+  font-size: 14px;
+  font-size: 12px;
+  font-weight: 800;
+}

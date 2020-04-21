@@ -8,6 +8,7 @@ import { OrderNewRoutingModule } from './order-routing.module';
 import { OrderNewOrderComponent } from './order/order.component';
 import { OrderNewViewAllComponent } from './view-all/view-all.component';
 import { OrderNewCreateComponent } from './create/create.component';
+import { AdBannerModule } from '../shared/ad-banner/ad-banner.module';
 
 @NgModule({
 
@@ -16,6 +17,7 @@ import { OrderNewCreateComponent } from './create/create.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    AdBannerModule,
     OrderNewRoutingModule
   ],
 
