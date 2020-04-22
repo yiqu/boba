@@ -1,34 +1,45 @@
 <mat-horizontal-stepper linear #stepper [formGroup]="orderFg">
-  <mat-step [stepControl]="drinkSeriesFc" errorMessage="Name is required.">
-    <ng-template matStepLabel>Select a series</ng-template>
 
-      <app-shared-order-form-series-desc [seriesCtrl]="this.drinkSeriesFc">
-      </app-shared-order-form-series-desc>
-
-
-    <!-- <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput placeholder="series" formControlName="seriesName">
-    </mat-form-field> -->
+  <mat-step [stepControl]="drinkSeriesFc" errorMessage="Pick a series!">
+    <ng-template matStepLabel >
+      <div title="Pick a drink series">Series</div>
+    </ng-template>
+    <app-shared-order-form-series-desc [seriesCtrl]="this.drinkSeriesFc">
+    </app-shared-order-form-series-desc>
     <div>
       <button mat-stroked-button color="primary" matStepperNext>Next</button>
     </div>
   </mat-step>
 
-  <!-- <mat-step [stepControl]="secondFormGroup" errorMessage="Address is required.">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Fill out your address</ng-template>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input matInput placeholder="Ex. 1 Main St, New York, NY" formControlName="secondCtrl"
-               required>
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step> -->
+  <mat-step [stepControl]="drinkNameFc" errorMessage="Drink type required">
+      <ng-template title="Pick a drink" matStepLabel>Drink</ng-template>
+    <app-shared-order-form-drink-desc [drinkNameCtrl]="drinkNameFc" [seriesSelection]="currentDrinkSeries">
+    </app-shared-order-form-drink-desc>
+    <div>
+      <button mat-stroked-button color="primary" class="mr-1" matStepperPrevious>Back</button>
+      <button mat-stroked-button color="primary" matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="drinkSettingsFg" errorMessage="Sugar & ice level required">
+    <ng-template title="Pick drink settings" matStepLabel>Size / Sugar / Ice</ng-template>
+    <app-shared-order-form-settings-desc [settingsFg]="drinkSettingsFg">
+    </app-shared-order-form-settings-desc>
+    <div>
+      <button mat-stroked-button color="primary" class="mr-1" matStepperPrevious>Back</button>
+      <button mat-stroked-button color="primary" matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [stepControl]="drinkToppingsFc">
+    <ng-template title="Pick drink settings" matStepLabel>Toppings</ng-template>
+
+    <div>
+      <button mat-stroked-button color="primary" class="mr-1" matStepperPrevious>Back</button>
+      <button mat-stroked-button color="primary" matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
 
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>

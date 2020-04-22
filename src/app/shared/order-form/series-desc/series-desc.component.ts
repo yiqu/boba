@@ -2,11 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IBaseItem, BaseItem, DrinkSeries } from '../../models/base.model';
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-shared-order-form-series-desc',
   templateUrl: 'series-desc.component.html',
-  styleUrls: ['./series-desc.component.css']
+  styleUrls: ['./series-desc.component.css', '../order-form.component.css']
 })
 export class SeriesDescComponent implements OnInit {
 
@@ -14,13 +15,12 @@ export class SeriesDescComponent implements OnInit {
   seriesCtrl: FormControl;
 
   drinkSeries: BaseItem[] = [];
+  compDest$: Subject<any> = new Subject<any>();
 
   constructor() {
-
   }
 
   ngOnInit() {
-    console.log(this.seriesCtrl.value)
     this.drinkSeries.push(
       new BaseItem(DrinkSeries.MILK_TEA, "Milk Tea"),
       new BaseItem(DrinkSeries.FRUIT_TEA, "Creative Mix"),
@@ -30,7 +30,9 @@ export class SeriesDescComponent implements OnInit {
   }
 
   setDefaultValue() {
-    const i: number = _.findIndex(this.drinkSeries, ['name', this.seriesCtrl.value['seriesDisplay']]);
-    this.seriesCtrl.setValue(this.drinkSeries[i]);
+    const i: number = _.findIndex(this.drinkSeries, ['name', this.seriesCtrl.value['name']]);
+    if (i > -1) {
+      this.seriesCtrl.setValue(this.drinkSeries[i]);
+    }
   }
 }

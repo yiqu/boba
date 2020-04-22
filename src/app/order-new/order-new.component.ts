@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AdBannerService } from '../shared/services/ad-banner.service';
 import { AdItem } from '../shared/ad-banner/banner/ad.item';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-order-new',
@@ -17,10 +18,16 @@ export class OrderNewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.ads = this.abs.getAds();
+    this.setupAds();
   }
 
   ngOnDestroy() {
 
+  }
+
+  setupAds() {
+    if (environment.adsOn) {
+      this.ads = this.abs.getAds();
+    }
   }
 }

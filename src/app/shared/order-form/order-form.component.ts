@@ -22,9 +22,22 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   onDrinkSubmit: EventEmitter<DrinkOrder> = new EventEmitter<DrinkOrder>();
 
   orderFg: FormGroup;
+  currentDrinkSeries: DrinkSeries;
 
   get drinkSeriesFc(): FormControl {
     return <FormControl>this.orderFg.get("seriesName");
+  }
+
+  get drinkNameFc(): FormControl {
+    return <FormControl>this.orderFg.get("drinkName");
+  }
+
+  get drinkSettingsFg(): FormGroup {
+    return <FormGroup>this.orderFg.get("settings");
+  }
+
+  get drinkToppingsFc(): FormArray {
+    return <FormArray>this.orderFg.get("toppings");
   }
 
   constructor(public fb: FormBuilder) {
@@ -33,13 +46,14 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes) {
     if (this.drinkOrder) {
       this.orderFg = this.createForm(this.drinkOrder);
-      console.log(this.orderFg)
-      console.log(this.orderFg.controls)
+      console.log("FG: ",this.orderFg)
+      console.log("controls: ",this.orderFg.controls)
     }
 
     this.orderFg.valueChanges.subscribe(
       (val) => {
         console.log("changes", val)
+        this.currentDrinkSeries = this.drinkSeriesFc.value.name;
       }
     )
 
@@ -53,8 +67,8 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     const fg = new FormGroup({});
 
     const dSeries = {
-      seriesName: dOrder.drinkType.seriesName,
-      seriesDisplay: dOrder.drinkType.seriesDisplay
+      name: dOrder.drinkType.seriesName,
+      display: dOrder.drinkType.seriesDisplay
     }
     fg.addControl("seriesName", fu.createFormControl(dSeries, false, [Validators.required]));
 
@@ -64,15 +78,22 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     }
     fg.addControl("drinkName", fu.createFormControl(drink, false, [Validators.required]));
     fg.addControl("size", fu.createFormControl(this.drinkOrder.size, false, [Validators.required]));
-    fg.addControl("ice", fu.createFormControl(this.drinkOrder.iceLevel, false, [Validators.required]));
-    fg.addControl("sugar", fu.createFormControl(this.drinkOrder.sugar, false, [Validators.required]));
+    // fg.addControl("ice", fu.createFormControl(this.drinkOrder.iceLevel, false, [Validators.required]));
+    // fg.addControl("sugar", fu.createFormControl(this.drinkOrder.sugar, false, [Validators.required]));
+
+    fg.addControl("settings", this.fb.group({
+      size: fu.createFormControl(this.drinkOrder.size, false, [Validators.required]),
+      ice: fu.createFormControl(this.drinkOrder.iceLevel, false, [Validators.required]),
+      sugar: fu.createFormControl(this.drinkOrder.sugar, false, [Validators.required])
+    }));
+
     let toppingFa: FormArray = new FormArray([]);
     let aTopping: DrinkTopping = new DrinkTopping("pearls", "Pearls");
     toppingFa.push(
-      fu.createFormControl(aTopping, false, [Validators.required]),
+      fu.createFormControl(aTopping, false),
     );
     toppingFa.push(
-      fu.createFormControl(aTopping, false, [Validators.required]),
+      fu.createFormControl(aTopping, false),
     );
     fg.addControl("toppings", toppingFa);
     return fg;

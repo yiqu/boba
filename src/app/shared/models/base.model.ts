@@ -28,3 +28,9 @@ export enum OrderStatusType {
   OPEN = "open",
   CLOSED = "closed"
 }
+
+export class DrinkItem {
+  constructor(public display: string, public name: string,
+    public seriesDisplay: string, public seriesName: string, public fireKey?: string) {
+  }
+}

@@ -1,0 +1,48 @@
+<div class="comf">
+  <label id="drink-size">Select drink size:</label>
+  <mat-radio-group aria-labelledby="drink-size" class="series-radio-group"
+    [formControl]="drinkSizeFc" color="primary">
+    <mat-radio-button class="series-radio-button" *ngFor="let ds of drinkSizes" [value]="ds">
+      {{ds.display}}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+<hr>
+<div class="comf">
+  <label id="drink-size" class="mb-3">Select sugar level ({{currentSugarLevel?.display | lowercase}}):</label>
+  <div class="setting-slider-parent">
+    <mat-slider
+      color="primary"
+      class="setting-slider"
+      [disabled]="false"
+      [max]="sugarSliderLimit.max"
+      [min]="sugarSliderLimit.min"
+      [step]="1"
+      [thumbLabel]="true"
+      [displayWith]="thumbDisplaySugarFn"
+      [(ngModel)]="sugarSliderVal"
+      (change)="onSugarLevelChange()"
+      [vertical]="false">
+    </mat-slider>
+  </div>
+</div>
+<hr>
+<div class="comf">
+  <label id="drink-size" class="mb-3">Select ice level ({{currentIceLevel?.display | lowercase}}):</label>
+  <div class="setting-slider-parent">
+    <mat-slider
+      color="primary"
+      class="setting-slider"
+      [disabled]="false"
+      [max]="3"
+      [min]="0"
+      [step]="1"
+      [thumbLabel]="true"
+      [displayWith]="thumbDisplayIceFn"
+      [(ngModel)]="iceSliderVal"
+      (change)="onIceLevelChange()"
+      [vertical]="false">
+    </mat-slider>
+  </div>
+</div>
+

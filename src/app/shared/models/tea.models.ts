@@ -51,8 +51,8 @@ export class DrinkType implements IBaseItem {
 
     this.name = name ? name : "blackMilkTea";
     this.display = display ? display : "Black Milk Tea (default)";
-    this.seriesName = seriesName ? seriesName : "Milk Tea";
-    this.seriesDisplay = seriesDisplay ? seriesDisplay : "milkTea";
+    this.seriesName = seriesName ? seriesName : "milkTea";
+    this.seriesDisplay = seriesDisplay ? seriesDisplay : "Milk Tea";
   }
 }
 

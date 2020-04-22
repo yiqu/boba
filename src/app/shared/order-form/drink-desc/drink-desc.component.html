@@ -1,0 +1,17 @@
+<div class="comf" *ngIf="drinkNames.length > 0; else noDrinks">
+  <p>Select a drink:</p>
+  <mat-radio-group class="series-radio-group" [formControl]="drinkNameCtrl" color="primary">
+    <mat-radio-button class="series-radio-button" *ngFor="let d of drinkNames" [value]="d">
+      {{d.display}}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+
+<ng-template #noDrinks>
+  <p class="mb-3">
+    We are sorry, there are currently no drinks available for the series you have selected.
+  </p>
+  <p>
+    Go back and try a different series!
+  </p>
+</ng-template>

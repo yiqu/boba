@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { MaterialModuleBundle } from '../material-bundle.module';
 import { PipeBundleModule } from '../pipes/pipe-bundle.module';
 import { SeriesDescComponent } from './series-desc/series-desc.component';
+import { DrinkDescComponent } from './drink-desc/drink-desc.component';
+import { SettingsDescComponent } from './settings-desc/settings-desc.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { SeriesDescComponent } from './series-desc/series-desc.component';
 
   declarations: [
     OrderFormComponent,
-    SeriesDescComponent
+    SeriesDescComponent,
+    DrinkDescComponent,
+    SettingsDescComponent
   ],
 
   providers: [
