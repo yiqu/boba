@@ -4,11 +4,12 @@
   </div>
   <hr>
   <div class="row mb-2">
-    <div class="col-sm-12">
+    <div class="col-sm-12 d-flex order-nav-group">
       <a [routerLink]="['new']" class="btn btn-outline-primary mr-2">Start new order</a>
       <a [routerLink]="['all']" class="btn btn-outline-info">Go to cart</a>
     </div>
   </div>
+  <hr>
 
   <router-outlet></router-outlet>
 </div>

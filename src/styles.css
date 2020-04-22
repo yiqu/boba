@@ -15,6 +15,10 @@ button {
   font-family: 'Comfortaa', cursive !important;
 }
 
+a.btn {
+  font-family: 'Comfortaa', cursive !important;
+}
+
 .roboto {
   font-family: 'Roboto', sans-serif;
 }
@@ -89,4 +93,8 @@ a {
   text-decoration: underline;
   text-decoration-style: solid;
   text-underline-position: under;
+}
+
+.l-item {
+
 }

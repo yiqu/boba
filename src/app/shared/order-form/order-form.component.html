@@ -1,12 +1,17 @@
 <mat-horizontal-stepper linear #stepper [formGroup]="orderFg">
   <mat-step [stepControl]="drinkSeriesFc" errorMessage="Name is required.">
-    <ng-template matStepLabel>Fill out your name</ng-template>
-    <mat-form-field>
+    <ng-template matStepLabel>Select a series</ng-template>
+
+      <app-shared-order-form-series-desc [seriesCtrl]="this.drinkSeriesFc">
+      </app-shared-order-form-series-desc>
+
+
+    <!-- <mat-form-field>
       <mat-label>Name</mat-label>
       <input matInput placeholder="series" formControlName="seriesName">
-    </mat-form-field>
+    </mat-form-field> -->
     <div>
-      <button mat-button matStepperNext>Next</button>
+      <button mat-stroked-button color="primary" matStepperNext>Next</button>
     </div>
   </mat-step>
 

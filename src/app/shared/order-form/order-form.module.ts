@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MaterialModuleBundle } from '../material-bundle.module';
 import { PipeBundleModule } from '../pipes/pipe-bundle.module';
+import { SeriesDescComponent } from './series-desc/series-desc.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { PipeBundleModule } from '../pipes/pipe-bundle.module';
   ],
 
   declarations: [
-    OrderFormComponent
+    OrderFormComponent,
+    SeriesDescComponent
   ],
 
   providers: [

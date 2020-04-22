@@ -1,0 +1,9 @@
+<div class="comf">
+  <p>Select a drink series to get started.</p>
+  <p>We currently have three tea series to choose from:</p>
+  <mat-radio-group class="series-radio-group" [formControl]="seriesCtrl">
+    <mat-radio-button class="series-radio-button" *ngFor="let s of drinkSeries" [value]="s">
+      {{s.display}}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
