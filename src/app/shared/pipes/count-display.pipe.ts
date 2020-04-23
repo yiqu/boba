@@ -10,7 +10,7 @@ export class CountNumberDisplayPipe implements PipeTransform {
 
   @memo()
   transform(value: number): any {
-    if (value == null) {
+    if (value == null || value == undefined) {
       return "";
     } else {
       return "(" + value + ")";

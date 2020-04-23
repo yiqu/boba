@@ -40,6 +40,7 @@ export class DrinkDescComponent implements OnInit, OnDestroy, OnChanges {
     ).subscribe(
       (val: DrinkItem[]) => {
         this.drinkNames = [...val];
+        this.drinkNames = _.sortBy(this.drinkNames , ['display']);
         this.setDefaultValue();
       }
     );

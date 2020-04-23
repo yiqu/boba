@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { DrinkOrder } from '../models/tea.models';
-import { OrderStatusType, DrinkSeries, DrinkItem } from '../models/base.model';
+import { OrderStatusType, DrinkSeries, DrinkItem, BaseItem } from '../models/base.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,7 @@ export class RestDataFireService {
   private SELECTIONS_ICE_LEVEL_URL: string = "/ice-level";
   private SELECTIONS_SUGAR_LEVEL_URL: string = "/sugar-level";
   private SELECTIONS_SIZE_LEVEL_URL: string = "/size";
+  private SELECTIONS_TOPPINGS_URL: string = "/toppings";
 
 
   openOrders$: Observable<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>(null);
@@ -32,6 +33,7 @@ export class RestDataFireService {
   currentOrdersCount: number;
 
   drinksBySeries$: Observable<DrinkItem[]> = new BehaviorSubject<DrinkItem[]>(null);
+  drinkToppingSeries$: Observable<BaseItem[]> = new BehaviorSubject<BaseItem[]>(null);
 
   constructor(public http: HttpClient, public firedb: AngularFireDatabase) {
     this.openOrders$ = this.getOrderStatusList(OrderStatusType.OPEN).snapshotChanges().pipe(
@@ -117,6 +119,14 @@ export class RestDataFireService {
     return of([]);
   }
 
+  getDrinkToppingObs(): Observable<DrinkItem[]> {
+    const toppings: AngularFireList<BaseItem> =
+      this.firedb.list(this.SELECTIONS_BASE_URL + this.SELECTIONS_TOPPINGS_URL);
+
+    return toppings.snapshotChanges().pipe(
+      map((changes) => this.addfireKey(changes))
+    );
+  }
 
 
   addfireKey(c: SnapshotAction<any>[]) {

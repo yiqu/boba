@@ -4,6 +4,7 @@ import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@ang
 import * as fu from '../utils/form.utils';
 import { DrinkSeries } from '../models/base.model';
 import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import { OrderFormService } from './order-form.service';
 
 @Component({
   selector: 'app-shared-order-form',
@@ -25,34 +26,45 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   currentDrinkSeries: DrinkSeries;
 
   get drinkSeriesFc(): FormControl {
-    return <FormControl>this.orderFg.get("seriesName");
+    //return <FormControl>this.orderFg.get("seriesName");
+    return <FormControl>this.ofs.orderFg.get("seriesName");
   }
 
   get drinkNameFc(): FormControl {
-    return <FormControl>this.orderFg.get("drinkName");
+    //return <FormControl>this.orderFg.get("drinkName");
+    return <FormControl>this.ofs.orderFg.get("drinkName");
   }
 
   get drinkSettingsFg(): FormGroup {
-    return <FormGroup>this.orderFg.get("settings");
+    //return <FormGroup>this.orderFg.get("settings");
+    return <FormGroup>this.ofs.orderFg.get("settings");
   }
 
-  get drinkToppingsFc(): FormArray {
-    return <FormArray>this.orderFg.get("toppings");
+  get drinkToppingsFa(): FormArray {
+    //return <FormArray>this.orderFg.get("toppings");
+    return <FormArray>this.ofs.orderFg.get("toppings");
   }
 
-  constructor(public fb: FormBuilder) {
+  constructor(public fb: FormBuilder, public ofs: OrderFormService) {
   }
 
   ngOnChanges(changes) {
     if (this.drinkOrder) {
-      this.orderFg = this.createForm(this.drinkOrder);
-      console.log("FG: ",this.orderFg)
-      console.log("controls: ",this.orderFg.controls)
+      //this.orderFg = this.createForm(this.drinkOrder);
+      this.ofs.orderFg = null;
+      this.ofs.orderFg = this.createForm(this.drinkOrder);
+      console.log("FG created: ",this.ofs.orderFg)
     }
 
-    this.orderFg.valueChanges.subscribe(
+    // this.orderFg.valueChanges.subscribe(
+    //   (val) => {
+    //     console.log("changes", val)
+    //     this.currentDrinkSeries = this.drinkSeriesFc.value.name;
+    //   }
+    // )
+    this.ofs.orderFg.valueChanges.subscribe(
       (val) => {
-        console.log("changes", val)
+        console.log("changes", this.ofs.orderFg.controls)
         this.currentDrinkSeries = this.drinkSeriesFc.value.name;
       }
     )
@@ -88,12 +100,13 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     }));
 
     let toppingFa: FormArray = new FormArray([]);
-    let aTopping: DrinkTopping = new DrinkTopping("pearls", "Pearls");
+    let aTopping: DrinkTopping = new DrinkTopping("pearls", "Coconut Jelly");
+    let bTopping: DrinkTopping = new DrinkTopping("coconutJelly", "Pearls");
     toppingFa.push(
       fu.createFormControl(aTopping, false),
     );
     toppingFa.push(
-      fu.createFormControl(aTopping, false),
+      fu.createFormControl(bTopping, false),
     );
     fg.addControl("toppings", toppingFa);
     return fg;

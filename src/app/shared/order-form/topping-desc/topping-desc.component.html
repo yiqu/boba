@@ -1,0 +1,17 @@
+<div class="comf">
+  <div class="top-label">Select toppings
+    {{selectedCount | countNumberDisplay}} :
+  </div>
+
+  <div class="row top-row">
+    <mat-selection-list (selectionChange)="onSelectionChange($event)"
+      [compareWith]="compareFn" [ngModel]="defaultSelected">
+      <mat-list-option *ngFor="let top of drinkToppings"
+        color="primary"
+        [value]="top"
+        [checkboxPosition]="'before'">
+          {{top.display}}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</div>

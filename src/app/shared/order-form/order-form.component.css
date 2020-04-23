@@ -3,3 +3,7 @@
   flex-direction: column;
   margin: 15px 0;
 }
+
+.series-radio-button {
+  margin-bottom: 5px;
+}

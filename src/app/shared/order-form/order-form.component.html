@@ -1,4 +1,4 @@
-<mat-horizontal-stepper linear #stepper [formGroup]="orderFg">
+<mat-horizontal-stepper linear #stepper [formGroup]="this.ofs.orderFg">
 
   <mat-step [stepControl]="drinkSeriesFc" errorMessage="Pick a series!">
     <ng-template matStepLabel >
@@ -31,8 +31,9 @@
     </div>
   </mat-step>
 
-  <mat-step [stepControl]="drinkToppingsFc">
+  <mat-step [stepControl]="drinkToppingsFa">
     <ng-template title="Pick drink settings" matStepLabel>Toppings</ng-template>
+    <app-shared-order-form-topping-desc [toppingFa]="drinkToppingsFa"></app-shared-order-form-topping-desc>
 
     <div>
       <button mat-stroked-button color="primary" class="mr-1" matStepperPrevious>Back</button>

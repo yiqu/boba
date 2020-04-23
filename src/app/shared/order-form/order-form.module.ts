@@ -8,6 +8,7 @@ import { PipeBundleModule } from '../pipes/pipe-bundle.module';
 import { SeriesDescComponent } from './series-desc/series-desc.component';
 import { DrinkDescComponent } from './drink-desc/drink-desc.component';
 import { SettingsDescComponent } from './settings-desc/settings-desc.component';
+import { ToppingDescComponent } from './topping-desc/topping-desc.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { SettingsDescComponent } from './settings-desc/settings-desc.component';
     OrderFormComponent,
     SeriesDescComponent,
     DrinkDescComponent,
-    SettingsDescComponent
+    SettingsDescComponent,
+    ToppingDescComponent
   ],
 
   providers: [
