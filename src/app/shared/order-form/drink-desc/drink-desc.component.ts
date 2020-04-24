@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { RestDataFireService } from '../../services/fire-data.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { OrderFormService } from '../order-form.service';
 
 @Component({
   selector: 'app-shared-order-form-drink-desc',
@@ -22,7 +23,7 @@ export class DrinkDescComponent implements OnInit, OnDestroy, OnChanges {
   drinkNames: DrinkItem[] = [];
   compDest$: Subject<any> = new Subject<any>();
 
-  constructor(public fds: RestDataFireService) {
+  constructor(public fds: RestDataFireService, public ofs: OrderFormService) {
 
   }
 
@@ -31,12 +32,12 @@ export class DrinkDescComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-
   }
 
   setUpDrinksBySeries() {
     this.fds.getDrinksBySeriesObs(this.seriesSelection).pipe(
-      takeUntil(this.compDest$)
+      takeUntil(this.compDest$),
+      takeUntil(this.ofs.refreshComponent$)
     ).subscribe(
       (val: DrinkItem[]) => {
         this.drinkNames = [...val];

@@ -1,0 +1,7 @@
+.name-field {
+  width: 20rem;
+}
+
+mat-error.err {
+  font-weight: 700;
+}

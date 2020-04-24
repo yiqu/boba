@@ -6,6 +6,7 @@
     </ng-template>
     <app-shared-order-form-series-desc [seriesCtrl]="this.drinkSeriesFc">
     </app-shared-order-form-series-desc>
+    <hr>
     <div>
       <button mat-stroked-button color="primary" matStepperNext>Next</button>
     </div>
@@ -15,6 +16,7 @@
       <ng-template title="Pick a drink" matStepLabel>Drink</ng-template>
     <app-shared-order-form-drink-desc [drinkNameCtrl]="drinkNameFc" [seriesSelection]="currentDrinkSeries">
     </app-shared-order-form-drink-desc>
+    <hr>
     <div>
       <button mat-stroked-button color="primary" class="mr-1" matStepperPrevious>Back</button>
       <button mat-stroked-button color="primary" matStepperNext>Next</button>
@@ -25,6 +27,7 @@
     <ng-template title="Pick drink settings" matStepLabel>Size / Sugar / Ice</ng-template>
     <app-shared-order-form-settings-desc [settingsFg]="drinkSettingsFg">
     </app-shared-order-form-settings-desc>
+    <hr>
     <div>
       <button mat-stroked-button color="primary" class="mr-1" matStepperPrevious>Back</button>
       <button mat-stroked-button color="primary" matStepperNext>Next</button>
@@ -34,20 +37,21 @@
   <mat-step [stepControl]="drinkToppingsFa">
     <ng-template title="Pick drink settings" matStepLabel>Toppings</ng-template>
     <app-shared-order-form-topping-desc [toppingFa]="drinkToppingsFa"></app-shared-order-form-topping-desc>
-
+    <hr>
     <div>
       <button mat-stroked-button color="primary" class="mr-1" matStepperPrevious>Back</button>
       <button mat-stroked-button color="primary" matStepperNext>Next</button>
     </div>
   </mat-step>
 
-
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
+    <ng-template matStepLabel>Confirmation</ng-template>
+    <app-shared-order-form-confirm-desc [userFc]="userFc"></app-shared-order-form-confirm-desc>
+    <hr>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-stroked-button matStepperPrevious class="mr-1">Back</button>
+      <button mat-stroked-button (click)="onOrderSubmit()">Submit order</button>
     </div>
   </mat-step>
+
 </mat-horizontal-stepper>

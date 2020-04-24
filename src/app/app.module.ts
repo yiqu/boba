@@ -16,6 +16,7 @@ import { NotFoundComponentModule } from './404/404.module';
 import { MainComponent } from './main/main.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MainComponentModule } from './main/main.module';
+import { SnackModule } from './shared/snackbar/snack.module';
 
 @NgModule({
 
@@ -51,6 +52,7 @@ import { MainComponentModule } from './main/main.module';
       }
     }),
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    SnackModule,
     AppRoutingModule
   ],
 

@@ -9,6 +9,9 @@ import { SeriesDescComponent } from './series-desc/series-desc.component';
 import { DrinkDescComponent } from './drink-desc/drink-desc.component';
 import { SettingsDescComponent } from './settings-desc/settings-desc.component';
 import { ToppingDescComponent } from './topping-desc/topping-desc.component';
+import { OrderDetailDisplayModule } from '../order-detail-display/order-detail-display.module';
+import { ConfirmDescComponent } from './confirm-desc/confirm-desc.component';
+import { DialogsModule } from '../dialogs/dialogs-bundle.module';
 
 
 @NgModule({
@@ -18,7 +21,9 @@ import { ToppingDescComponent } from './topping-desc/topping-desc.component';
     ReactiveFormsModule,
     RouterModule,
     MaterialModuleBundle,
-    PipeBundleModule
+    PipeBundleModule,
+    OrderDetailDisplayModule,
+    DialogsModule
   ],
 
   exports: [
@@ -30,7 +35,8 @@ import { ToppingDescComponent } from './topping-desc/topping-desc.component';
     SeriesDescComponent,
     DrinkDescComponent,
     SettingsDescComponent,
-    ToppingDescComponent
+    ToppingDescComponent,
+    ConfirmDescComponent
   ],
 
   providers: [

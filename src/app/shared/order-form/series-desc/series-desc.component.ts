@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { IBaseItem, BaseItem, DrinkSeries } from '../../models/base.model';
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
   templateUrl: 'series-desc.component.html',
   styleUrls: ['./series-desc.component.css', '../order-form.component.css']
 })
-export class SeriesDescComponent implements OnInit {
+export class SeriesDescComponent implements OnInit, OnChanges {
 
   @Input()
   seriesCtrl: FormControl;
@@ -21,6 +21,11 @@ export class SeriesDescComponent implements OnInit {
   }
 
   ngOnInit() {
+
+  }
+
+  ngOnChanges(c) {
+    this.drinkSeries = [];
     this.drinkSeries.push(
       new BaseItem(DrinkSeries.MILK_TEA, "Milk Tea"),
       new BaseItem(DrinkSeries.FRUIT_TEA, "Creative Mix"),

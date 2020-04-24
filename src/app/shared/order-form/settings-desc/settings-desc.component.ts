@@ -5,6 +5,7 @@ import { RestDataFireService } from '../../services/fire-data.service';
 import { Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
+import { OrderFormService } from '../order-form.service';
 
 @Component({
   selector: 'app-shared-order-form-settings-desc',
@@ -41,15 +42,16 @@ export class SettingsDescComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-  constructor(public fds: RestDataFireService) {
+  constructor(public fds: RestDataFireService, public ofs: OrderFormService) {
 
   }
 
   ngOnInit() {
-    this.setupSettingOptions2();
+
   }
 
   ngOnChanges(changes) {
+    this.setupSettingOptions2();
   }
 
   /**
@@ -69,7 +71,8 @@ export class SettingsDescComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     ).pipe(
-      takeUntil(this.compDest$)
+      takeUntil(this.compDest$),
+      takeUntil(this.ofs.refreshComponent$)
     )
     .subscribe(
       (val) => {

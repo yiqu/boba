@@ -3,6 +3,8 @@ import { FormBuilder } from '@angular/forms';
 import { RestDataFireService } from 'src/app/shared/services/fire-data.service';
 import { DrinkOrder, DrinkOrderDetail, DrinkIceLevel, DrinkSugarLevel, DrinkSize, DrinkType, DrinkTopping } from 'src/app/shared/models/tea.models';
 import { User } from 'src/app/shared/models/user.model';
+import { ActivatedRoute } from '@angular/router';
+import { OrderFormService } from 'src/app/shared/order-form/order-form.service';
 
 @Component({
   selector: 'app-order-new-create',
@@ -13,8 +15,12 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
 
   drinkOrder: DrinkOrderDetail;
 
-  constructor(public fds: RestDataFireService) {
-
+  constructor(public fds: RestDataFireService, public route: ActivatedRoute,
+      public ofs: OrderFormService) {
+    this.route.queryParamMap.subscribe((val) => {
+      this.ofs.refreshComponent$.next();
+      this.createDefaultDrink();
+    })
   }
 
   ngOnInit() {

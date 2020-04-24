@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, AfterViewChecked, AfterViewInit, OnChanges } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BaseItem } from '../../models/base.model';
@@ -15,7 +15,7 @@ import { OrderFormService } from '../order-form.service';
   templateUrl: 'topping-desc.component.html',
   styleUrls: ['./topping-desc.component.css']
 })
-export class ToppingDescComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ToppingDescComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @Input()
   toppingFa: FormArray;
@@ -33,6 +33,10 @@ export class ToppingDescComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+
+  }
+
+  ngOnChanges(c) {
     this.setupToppings();
     this.defaultSelected = this.getDefaultSelected();
     this.selectedCount = this.toppingFa.length;
@@ -51,11 +55,7 @@ export class ToppingDescComponent implements OnInit, OnDestroy, AfterViewInit {
   onSelectionChange(res: MatSelectionListChange) {
     const selected: any[] = this.toppingList._value;
     this.selectedCount = res.source.selectedOptions.selected.length;
-    console.log(selected)
-    //this.toppingFa.clear();
-    // selected.forEach((val: BaseItem) => {
-    //   this.toppingFa.push(fu.createFormControl(val, false));
-    // });
+
     let arrCtrls: FormControl[] = [];
     selected.forEach((val: BaseItem) => {
       arrCtrls.push(fu.createFormControl(val, false));
@@ -66,9 +66,9 @@ export class ToppingDescComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setupToppings() {
     this.fds.getDrinkToppingObs().pipe(
-      takeUntil(this.compDest$)
-    )
-    .subscribe(
+      takeUntil(this.compDest$),
+      takeUntil(this.ofs.refreshComponent$)
+    ).subscribe(
       (val: BaseItem[]) => {
         if (val) {
           this.drinkToppings = _.sortBy(val, ['display']);

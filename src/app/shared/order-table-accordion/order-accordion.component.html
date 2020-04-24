@@ -1,7 +1,7 @@
 <mat-accordion [multi]="true">
   <div class="row" *ngFor="let orderDetail of drinkOrder.orders; index as i;">
     <div class="col-sm-12">
-      <mat-expansion-panel [expanded]="panelsExpanded">
+      <mat-expansion-panel [expanded]="panelsExpanded" [hideToggle]="hideToggle">
         <mat-expansion-panel-header>
 
           <!-- Drink Icon graphic -->

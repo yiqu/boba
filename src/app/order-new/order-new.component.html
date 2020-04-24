@@ -5,7 +5,7 @@
   <hr>
   <div class="row mb-2">
     <div class="col-sm-12 d-flex order-nav-group">
-      <a [routerLink]="['new']" class="btn btn-outline-primary mr-2">Start new order</a>
+      <button (click)="goToNew()" class="btn btn-outline-primary mr-2">Start new order</button>
       <a [routerLink]="['all']" class="btn btn-outline-info">Go to cart</a>
     </div>
   </div>

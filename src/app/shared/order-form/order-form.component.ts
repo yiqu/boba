@@ -1,10 +1,13 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges, ViewChild } from '@angular/core';
 import { DrinkOrder, DrinkOrderDetail, DrinkTopping } from '../models/tea.models';
 import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
 import * as fu from '../utils/form.utils';
 import { DrinkSeries } from '../models/base.model';
 import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { OrderFormService } from './order-form.service';
+import { UserService } from '../services/user.service';
+import { MatHorizontalStepper } from '@angular/material/stepper';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-shared-order-form',
@@ -21,6 +24,9 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output()
   onDrinkSubmit: EventEmitter<DrinkOrder> = new EventEmitter<DrinkOrder>();
+
+  @ViewChild(MatHorizontalStepper)
+  orderStepper: MatHorizontalStepper;
 
   orderFg: FormGroup;
   currentDrinkSeries: DrinkSeries;
@@ -45,7 +51,12 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     return <FormArray>this.ofs.orderFg.get("toppings");
   }
 
-  constructor(public fb: FormBuilder, public ofs: OrderFormService) {
+  get userFc(): FormControl {
+    return <FormControl>this.ofs.orderFg.get("user");
+  }
+
+  constructor(public fb: FormBuilder, public ofs: OrderFormService,
+    public us: UserService) {
   }
 
   ngOnChanges(changes) {
@@ -54,21 +65,21 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
       this.ofs.orderFg = null;
       this.ofs.orderFg = this.createForm(this.drinkOrder);
       console.log("FG created: ",this.ofs.orderFg)
-    }
 
-    // this.orderFg.valueChanges.subscribe(
-    //   (val) => {
-    //     console.log("changes", val)
-    //     this.currentDrinkSeries = this.drinkSeriesFc.value.name;
-    //   }
-    // )
-    this.ofs.orderFg.valueChanges.subscribe(
-      (val) => {
-        console.log("changes", this.ofs.orderFg.controls)
-        this.currentDrinkSeries = this.drinkSeriesFc.value.name;
+      if (this.orderStepper) {
+        this.orderStepper.reset();
       }
-    )
 
+      this.ofs.orderFg.valueChanges.pipe(
+        takeUntil(this.ofs.refreshComponent$)
+      )
+      .subscribe(
+        (val) => {
+          console.log("changes", this.ofs.orderFg.controls)
+          this.currentDrinkSeries = this.drinkSeriesFc.value.name;
+        }
+      )
+    }
   }
 
   ngOnInit() {
@@ -89,10 +100,6 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
       display: dOrder.drinkType.display
     }
     fg.addControl("drinkName", fu.createFormControl(drink, false, [Validators.required]));
-    fg.addControl("size", fu.createFormControl(this.drinkOrder.size, false, [Validators.required]));
-    // fg.addControl("ice", fu.createFormControl(this.drinkOrder.iceLevel, false, [Validators.required]));
-    // fg.addControl("sugar", fu.createFormControl(this.drinkOrder.sugar, false, [Validators.required]));
-
     fg.addControl("settings", this.fb.group({
       size: fu.createFormControl(this.drinkOrder.size, false, [Validators.required]),
       ice: fu.createFormControl(this.drinkOrder.iceLevel, false, [Validators.required]),
@@ -109,7 +116,15 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
       fu.createFormControl(bTopping, false),
     );
     fg.addControl("toppings", toppingFa);
+    fg.addControl("user", fu.createFormControl(null, false, [Validators.required]));
+
     return fg;
+  }
+
+  onOrderSubmit() {
+    console.log("order status:",this.ofs.orderFg.status)
+    console.log("order value:",this.ofs.orderFg.value)
+    console.log("order fg", this.ofs.orderFg)
   }
 
   ngOnDestroy() {

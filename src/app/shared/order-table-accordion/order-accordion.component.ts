@@ -16,6 +16,9 @@ export class OrderAccordionComponent implements OnInit {
   @Input()
   drinkOrder: DrinkOrder;
 
+  @Input()
+  hideToggle: boolean = false;
+
   panelsExpanded: boolean = true;
 
   constructor() {

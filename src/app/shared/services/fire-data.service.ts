@@ -6,6 +6,8 @@ import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { DrinkOrder } from '../models/tea.models';
 import { OrderStatusType, DrinkSeries, DrinkItem, BaseItem } from '../models/base.model';
+import { User } from '../models/user.model';
+import { from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -27,13 +29,10 @@ export class RestDataFireService {
   private SELECTIONS_SIZE_LEVEL_URL: string = "/size";
   private SELECTIONS_TOPPINGS_URL: string = "/toppings";
 
+  currentOrdersCount: number;
 
   openOrders$: Observable<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>(null);
   closedOrders$: Observable<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>(null);
-  currentOrdersCount: number;
-
-  drinksBySeries$: Observable<DrinkItem[]> = new BehaviorSubject<DrinkItem[]>(null);
-  drinkToppingSeries$: Observable<BaseItem[]> = new BehaviorSubject<BaseItem[]>(null);
 
   constructor(public http: HttpClient, public firedb: AngularFireDatabase) {
     this.openOrders$ = this.getOrderStatusList(OrderStatusType.OPEN).snapshotChanges().pipe(
@@ -124,6 +123,27 @@ export class RestDataFireService {
       this.firedb.list(this.SELECTIONS_BASE_URL + this.SELECTIONS_TOPPINGS_URL);
 
     return toppings.snapshotChanges().pipe(
+      map((changes) => this.addfireKey(changes))
+    );
+  }
+
+  getDataObjValue(objName: string): Observable<any> {
+    return this.firedb.object(objName).valueChanges();
+  }
+
+  getDataObjSnapshot(objName: string): Observable<any> {
+    return this.firedb.object(objName).snapshotChanges();
+  }
+
+  updateData(objName: string, data: any) {
+    const itemRef = this.firedb.object(objName);
+    return from(itemRef.update(data));
+  }
+
+  getDatAsList(objName: string): Observable<any[]> {
+    let list$: AngularFireList<any>;
+    list$ = this.firedb.list(objName);
+    return list$.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes))
     );
   }
