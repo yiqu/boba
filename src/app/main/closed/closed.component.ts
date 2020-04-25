@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, OnDestroy } from '@angular/core';
-import { RestDataFireService } from 'src/app/shared/services/fire-data.service';
+import { RestDataFireService } from '../../shared/services/fire-data.service';
 import { Subject } from 'rxjs';
-import { OrderAccordionComponent } from 'src/app/shared/order-table-accordion/order-accordion.component';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({

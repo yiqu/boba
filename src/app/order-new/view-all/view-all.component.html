@@ -1,10 +1,58 @@
-your orders:
+<ng-container *ngIf="loading; else loading">
+  <ng-container *ngIf="listOfUsers.length > 0; else emptyCart">
+    <div class="row mb-3">
+      <div class="col-sm-12">
+        <div class="order-label mb-3 double-underline comf center-align">
+          Cart {{cartOrders.length | countNumberDisplay}}
+        </div>
+      </div>
+    </div>
 
-<div>
-  <a [routerLink]="['1']">1</a>
-  <a [routerLink]="['2']">2</a>
-</div>
+    <div class="row mb-3 comf">
+      <div class="col-sm-12">
+        There are currently {{cartOrders.length}} items made from
+        {{cartOrdersGrouped.length}} {{'person' | pluralDisplay:cartOrdersGrouped.length}}.
+      </div>
+    </div>
 
+    <ng-container *ngFor="let drinkOrder of cartOrdersGrouped; index as i; last as last" class="">
+      <div class="row mb-1">
+        <div class="col-sm-12">
+          <app-shared-order-user-info [orderNumber]="i" [showOrderedDate]="false"
+            [totalOrdersCount]="cartOrdersGrouped.length" [order]="drinkOrder">
+          </app-shared-order-user-info>
+        </div>
+      </div>
 
+      <div class="container-fluid">
+        <div class="row mb-3">
+          <div class="col-sm-12">
+            <app-shared-order-accordion [drinkOrder]="drinkOrder"
+              [startAsCollapsed]="true"></app-shared-order-accordion>
+          </div>
+        </div>
+      </div>
+    </ng-container>
 
-<router-outlet></router-outlet>
+    <div class="row mt-3 mb-3">
+      <div class="col-sm-12">
+        <div class="order-label mb-3 comf d-flex float-right">
+          Total cost: TBD
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+</ng-container>
+
+<ng-template #emptyCart>
+  <div class="comf">
+    Cart is empty.
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <div class="comf">
+    Loading your cart...
+  </div>
+</ng-template>

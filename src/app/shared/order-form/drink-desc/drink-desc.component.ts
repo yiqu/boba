@@ -48,9 +48,11 @@ export class DrinkDescComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   setDefaultValue() {
-    const i: number = _.findIndex(this.drinkNames, ['name', this.drinkNameCtrl.value['name']]);
-    if (i > -1) {
-      this.drinkNameCtrl.setValue(this.drinkNames[i]);
+    if (this.drinkNameCtrl.value) {
+      const i: number = _.findIndex(this.drinkNames, ['name', this.drinkNameCtrl.value['name']]);
+      if (i > -1) {
+        this.drinkNameCtrl.setValue(this.drinkNames[i]);
+      }
     }
   }
 

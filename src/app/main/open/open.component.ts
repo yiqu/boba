@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RestDataFireService } from 'src/app/shared/services/fire-data.service';
+import { RestDataFireService } from '../../shared/services/fire-data.service';
 
 @Component({
   selector: 'app-main-open',

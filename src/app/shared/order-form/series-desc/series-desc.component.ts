@@ -3,6 +3,7 @@ import { IBaseItem, BaseItem, DrinkSeries } from '../../models/base.model';
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
+import { OrderFormService } from '../order-form.service';
 
 @Component({
   selector: 'app-shared-order-form-series-desc',
@@ -17,7 +18,7 @@ export class SeriesDescComponent implements OnInit, OnChanges {
   drinkSeries: BaseItem[] = [];
   compDest$: Subject<any> = new Subject<any>();
 
-  constructor() {
+  constructor(public ofs: OrderFormService) {
   }
 
   ngOnInit() {
@@ -39,5 +40,9 @@ export class SeriesDescComponent implements OnInit, OnChanges {
     if (i > -1) {
       this.seriesCtrl.setValue(this.drinkSeries[i]);
     }
+  }
+
+  onSeriesChange() {
+    this.ofs.orderFg.get("drinkName").reset();
   }
 }

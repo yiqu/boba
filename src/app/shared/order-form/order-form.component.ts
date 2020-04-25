@@ -11,6 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { RestDataFireService } from '../services/fire-data.service';
 import { SnackbarService } from '../services/snackbar.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-shared-order-form',
@@ -55,7 +56,8 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   constructor(public fb: FormBuilder, public ofs: OrderFormService,
-    public us: UserService, public rdf: RestDataFireService, public sbs: SnackbarService) {
+    public us: UserService, public rdf: RestDataFireService, public sbs: SnackbarService,
+    public router: Router, public route: ActivatedRoute) {
   }
 
   ngOnChanges(changes) {
@@ -132,11 +134,21 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     console.log(order)
     this.rdf.getCartOrders().push(order).then(
       (val) => {
-        this.sbs.openSnackBar("Added order to cart.")
+        this.sbs.openSnackBar("Added order to cart.");
+        this.proceedToCart(formVal.isFavorite);
       },
       (err) => {
+        this.sbs.openSnackBar("There was an error adding this order to cart. Try again.")
       }
     );
+  }
+
+  proceedToCart(addingToFavorite: boolean) {
+    if (addingToFavorite) {
+
+    } else {
+      this.router.navigate(['../', 'all'], {relativeTo: this.route});
+    }
   }
 
   createCurrentDrinkOrderDetail(formVal: any): DrinkOrderDetail {

@@ -34,12 +34,12 @@ export class OrderDetailDisplayComponent implements OnInit {
   }
 
   createDetail(det: DrinkOrderDetail) {
-    this.name = det.drinkType.display;
-    this.seriesName = det.drinkType.seriesDisplay;
-    this.size = det.size.display;
-    this.iceLevel = det.iceLevel.display;
-    this.sugarLevel = det.sugar.display;
-    this.toppings = det.toppings;
+    this.name = det?.drinkType?.display;
+    this.seriesName = det?.drinkType?.seriesDisplay;
+    this.size = det?.size?.display;
+    this.iceLevel = det?.iceLevel?.display;
+    this.sugarLevel = det?.sugar?.display;
+    this.toppings = det?.toppings;
     this.iconUrl = this.getDrinkTypeIcon(det.drinkType.seriesName);
   }
 

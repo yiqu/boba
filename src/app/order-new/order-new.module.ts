@@ -11,6 +11,10 @@ import { OrderNewCreateComponent } from './create/create.component';
 import { AdBannerModule } from '../shared/ad-banner/ad-banner.module';
 import { MaterialModuleBundle } from '../shared/material-bundle.module';
 import { OrderFormModule } from '../shared/order-form/order-form.module';
+import { PipeBundleModule } from '../shared/pipes/pipe-bundle.module';
+import { OrderDetailDisplayModule } from '../shared/order-detail-display/order-detail-display.module';
+import { OrderAccordionModule } from '../shared/order-table-accordion/order-accordion.module';
+import { OrderTableUserInfoModule } from '../shared/order-table-user-info/user-label.module';
 
 @NgModule({
 
@@ -22,7 +26,11 @@ import { OrderFormModule } from '../shared/order-form/order-form.module';
     AdBannerModule,
     OrderNewRoutingModule,
     OrderFormModule,
-    MaterialModuleBundle
+    MaterialModuleBundle,
+    PipeBundleModule,
+    OrderDetailDisplayModule,
+    OrderAccordionModule,
+    OrderTableUserInfoModule
   ],
 
   exports: [

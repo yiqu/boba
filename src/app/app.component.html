@@ -11,8 +11,9 @@
 
   <div class="d-flex">
     <div>
-      <button mat-stroked-button matBadge="8" matBadgePosition="before" matBadgeColor="primary"
-        (click)="onCartClick()">
+      <button mat-stroked-button [matBadge]="cartItemsCount"
+        matBadgePosition="before" matBadgeColor="primary"
+        (click)="onCartClick()" [matBadgeHidden]="cartItemsCount<1">
         <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon>
       </button>
     </div>
@@ -22,7 +23,7 @@
   </div>
 </mat-toolbar>
 
-<div class="app-container">
+<div class="app-container mt-2">
   <div class="core">
     <router-outlet></router-outlet>
   </div>

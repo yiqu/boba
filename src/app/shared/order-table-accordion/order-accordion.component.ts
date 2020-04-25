@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterContentInit, AfterViewInit } from '@angular/core';
 import { DrinkOrder } from '../models/tea.models';
 import { MatAccordion } from '@angular/material/expansion';
 
@@ -8,7 +8,7 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./order-accordion.component.css']
 })
 
-export class OrderAccordionComponent implements OnInit {
+export class OrderAccordionComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatAccordion)
   matAccord: MatAccordion;
@@ -19,6 +19,9 @@ export class OrderAccordionComponent implements OnInit {
   @Input()
   hideToggle: boolean = false;
 
+  @Input()
+  startAsCollapsed: boolean = false;
+
   panelsExpanded: boolean = true;
 
   constructor() {
@@ -26,7 +29,15 @@ export class OrderAccordionComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.startAsCollapsed) {
+      this.panelsExpanded = false;
+    }
+  }
 
+  ngAfterViewInit() {
+    if (this.startAsCollapsed) {
+      this.collapseAccord();
+    }
   }
 
   collapseAccord() {

@@ -1,0 +1,9 @@
+.order-label {
+  font-size: 1.3rem;
+  color: #000;
+  font-weight: 800;
+}
+
+.float-right {
+  justify-content: flex-end;
+}

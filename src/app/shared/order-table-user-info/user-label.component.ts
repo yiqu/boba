@@ -20,6 +20,9 @@ export class OrderTableUserInfoComponent implements OnInit {
   @Input()
   order: DrinkOrder
 
+  @Input()
+  showOrderedDate: boolean = true;
+
 
   constructor() {
 
