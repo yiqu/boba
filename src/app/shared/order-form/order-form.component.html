@@ -48,9 +48,13 @@
     <ng-template matStepLabel>Confirmation</ng-template>
     <app-shared-order-form-confirm-desc [userFc]="userFc"></app-shared-order-form-confirm-desc>
     <hr>
-    <div>
+    <div class="d-flex">
       <button mat-stroked-button matStepperPrevious class="mr-1">Back</button>
-      <button mat-stroked-button (click)="onOrderSubmit()">Submit order</button>
+      <button mat-flat-button (click)="onOrderSubmit()" class="mr-2" color="primary"
+        [disabled]="this.ofs.orderFg && this.ofs.orderFg.invalid">Finish
+      </button>
+      <mat-checkbox color="accent" formControlName="isFavorite"
+        class="fav-check">Save as favorite</mat-checkbox>
     </div>
   </mat-step>
 

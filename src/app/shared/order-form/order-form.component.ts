@@ -1,13 +1,16 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges, ViewChild } from '@angular/core';
-import { DrinkOrder, DrinkOrderDetail, DrinkTopping } from '../models/tea.models';
+import { DrinkOrder, DrinkOrderDetail, DrinkTopping, DrinkIceLevel, DrinkType, DrinkSize, DrinkSugarLevel } from '../models/tea.models';
 import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
 import * as fu from '../utils/form.utils';
-import { DrinkSeries } from '../models/base.model';
+import { DrinkSeries, BaseItem } from '../models/base.model';
 import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { OrderFormService } from './order-form.service';
 import { UserService } from '../services/user.service';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { takeUntil } from 'rxjs/operators';
+import { User } from '../models/user.model';
+import { RestDataFireService } from '../services/fire-data.service';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-shared-order-form',
@@ -28,26 +31,22 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatHorizontalStepper)
   orderStepper: MatHorizontalStepper;
 
-  orderFg: FormGroup;
   currentDrinkSeries: DrinkSeries;
+  isFavorite: boolean = false;
 
   get drinkSeriesFc(): FormControl {
-    //return <FormControl>this.orderFg.get("seriesName");
     return <FormControl>this.ofs.orderFg.get("seriesName");
   }
 
   get drinkNameFc(): FormControl {
-    //return <FormControl>this.orderFg.get("drinkName");
     return <FormControl>this.ofs.orderFg.get("drinkName");
   }
 
   get drinkSettingsFg(): FormGroup {
-    //return <FormGroup>this.orderFg.get("settings");
     return <FormGroup>this.ofs.orderFg.get("settings");
   }
 
   get drinkToppingsFa(): FormArray {
-    //return <FormArray>this.orderFg.get("toppings");
     return <FormArray>this.ofs.orderFg.get("toppings");
   }
 
@@ -56,12 +55,11 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   constructor(public fb: FormBuilder, public ofs: OrderFormService,
-    public us: UserService) {
+    public us: UserService, public rdf: RestDataFireService, public sbs: SnackbarService) {
   }
 
   ngOnChanges(changes) {
     if (this.drinkOrder) {
-      //this.orderFg = this.createForm(this.drinkOrder);
       this.ofs.orderFg = null;
       this.ofs.orderFg = this.createForm(this.drinkOrder);
       console.log("FG created: ",this.ofs.orderFg)
@@ -72,8 +70,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
       this.ofs.orderFg.valueChanges.pipe(
         takeUntil(this.ofs.refreshComponent$)
-      )
-      .subscribe(
+      ).subscribe(
         (val) => {
           console.log("changes", this.ofs.orderFg.controls)
           this.currentDrinkSeries = this.drinkSeriesFc.value.name;
@@ -117,7 +114,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     );
     fg.addControl("toppings", toppingFa);
     fg.addControl("user", fu.createFormControl(null, false, [Validators.required]));
-
+    fg.addControl("isFavorite", fu.createFormControl(false, false));
     return fg;
   }
 
@@ -125,6 +122,34 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     console.log("order status:",this.ofs.orderFg.status)
     console.log("order value:",this.ofs.orderFg.value)
     console.log("order fg", this.ofs.orderFg)
+
+    const formVal: any = this.ofs.orderFg.value;
+    const reviewOrderDetail = this.createCurrentDrinkOrderDetail(formVal);
+
+    let order = new DrinkOrder(null, new Date().getTime(), [],
+      new User(formVal.user.id, formVal.user.display));
+    order.orders = [reviewOrderDetail];
+    console.log(order)
+    this.rdf.getCartOrders().push(order).then(
+      (val) => {
+        this.sbs.openSnackBar("Added order to cart.")
+      },
+      (err) => {
+      }
+    );
+  }
+
+  createCurrentDrinkOrderDetail(formVal: any): DrinkOrderDetail {
+    const ice = new DrinkIceLevel(formVal.settings.ice.name, formVal.settings.ice.display);
+    const type = new DrinkType(formVal.drinkName.name, formVal.drinkName.display,
+      formVal.seriesName.name, formVal.seriesName.display);
+    const size = new DrinkSize(formVal.settings.size.name, formVal.settings.size.display);
+    const sugar = new DrinkSugarLevel(formVal.settings.sugar.name, formVal.settings.sugar.display);
+    let toppings: DrinkTopping[] = [];
+    formVal.toppings.forEach((val: BaseItem) => {
+      toppings.push(new DrinkTopping(val.name, val.display));
+    });
+    return new DrinkOrderDetail(ice, type, size, sugar, toppings);
   }
 
   ngOnDestroy() {

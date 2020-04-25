@@ -1,3 +1,6 @@
+import { User } from './user.model';
+import { DrinkOrderDetail } from './tea.models';
+
 export class BaseItem implements IBaseItem {
   constructor(public name: string, public display: string) {
   }
@@ -32,5 +35,11 @@ export enum OrderStatusType {
 export class DrinkItem {
   constructor(public display: string, public name: string,
     public seriesDisplay: string, public seriesName: string, public fireKey?: string) {
+  }
+}
+
+export class DrinkFavorite {
+  constructor(user: User, drinkDetail: DrinkOrderDetail, date: number) {
+
   }
 }

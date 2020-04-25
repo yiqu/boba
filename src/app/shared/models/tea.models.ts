@@ -9,7 +9,7 @@ export class DrinkOrder {
   public user: User;
 
   constructor(fireKey: string, date: number, orders: DrinkOrderDetail[], user: User) {
-    this.fireKey = fireKey ? fireKey : undefined;
+    this.fireKey = fireKey ? fireKey : null;
     this.date = date ? date : new Date().getTime();
     this.user = user ? user : new User(null, null);
     this.orders = this.createOrderDetails(orders);
@@ -23,11 +23,19 @@ export class DrinkOrder {
         toppings.push(new DrinkTopping(top.name, top.display));
       });
 
+      const iLevel = (val['ice-level']!==undefined) ? val['ice-level'] : val.iceLevel;
+      const dType = (val['order']!==undefined) ? val['order'] : val.drinkType;
+      const sLevel = (val['sugar-level']!==undefined) ? val['sugar-level'] : val.sugar;
+
       res.push(new DrinkOrderDetail(
+
         new DrinkIceLevel(val['ice-level'].name, val['ice-level'].display),
+
         new DrinkType(val['order'].name, val['order'].display,
           val['order']['seriesName'], val['order']['seriesDisplay']),
+
         new DrinkSize(val['size'].name, val['size'].display),
+
         new DrinkSugarLevel(val['sugar-level'].name, val['sugar-level'].display),
         toppings
       ))

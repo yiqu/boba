@@ -15,12 +15,12 @@ import { from } from 'rxjs';
 export class RestDataFireService {
 
   // ORDERS related URLs
-  private ORDER_BASE_URL: string = "/orders";
+  private ORDER_BASE_URL: string = "orders";
   private ORDER_OPEN_URL: string = "/open";
   private ORDER_CLOSED_URL: string = "/closed";
 
   // SELECTIONS related URLs
-  private SELECTIONS_BASE_URL: string = "/selections";
+  private SELECTIONS_BASE_URL: string = "selections";
   private SELECTIONS_MILK_TEAS_URL: string = "/teas";
   private SELECTIONS_CREATIVE_MIX_URL: string = "/creative-mix";
   private SELECTIONS_YOGURT_URL: string = "/yogurt";
@@ -29,12 +29,23 @@ export class RestDataFireService {
   private SELECTIONS_SIZE_LEVEL_URL: string = "/size";
   private SELECTIONS_TOPPINGS_URL: string = "/toppings";
 
+  // Favorite
+  private FAV_BASE_URL: string = "favorites";
+  // Cart
+  private CART_BASE_URL: string = "cart";
+
   currentOrdersCount: number;
 
   openOrders$: Observable<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>(null);
   closedOrders$: Observable<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>(null);
 
+  ordersInCartFList: AngularFireList<DrinkOrder>;
+
   constructor(public http: HttpClient, public firedb: AngularFireDatabase) {
+    // create fire lists
+    this.ordersInCartFList = this.firedb.list<DrinkOrder>(this.CART_BASE_URL);
+
+    // create obs
     this.openOrders$ = this.getOrderStatusList(OrderStatusType.OPEN).snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes)),
       map((val: DrinkOrder[]) => this.createDrinkOrders(val))
@@ -125,6 +136,14 @@ export class RestDataFireService {
     return toppings.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes))
     );
+  }
+
+  getFavorites(): AngularFireList<any> {
+    return null
+  }
+
+  getCartOrders(): AngularFireList<DrinkOrder> {
+    return this.ordersInCartFList;
   }
 
   getDataObjValue(objName: string): Observable<any> {

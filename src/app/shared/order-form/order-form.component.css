@@ -7,3 +7,8 @@
 .series-radio-button {
   margin-bottom: 5px;
 }
+
+.fav-check {
+  display: flex;
+  align-self: flex-end;
+}
