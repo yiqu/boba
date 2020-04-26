@@ -4,12 +4,14 @@ import { OrderNewComponent } from './order-new.component';
 import { OrderNewOrderComponent } from './order/order.component';
 import { OrderNewCreateComponent } from './create/create.component';
 import { OrderNewViewAllComponent } from './view-all/view-all.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 const routes: Routes = [
   {
     path: '', component: OrderNewComponent, data: {title: 'New Order'},
     children: [
       { path: 'new', component: OrderNewCreateComponent },
+      { path: 'checkout', component: CheckoutComponent },
       { path: 'all', component: OrderNewViewAllComponent,
         children: [
           { path: ':id', component: OrderNewOrderComponent }

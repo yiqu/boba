@@ -1,0 +1,42 @@
+<div class="row mb-3">
+  <div class="col-sm-6 offset-md-3">
+    <div class="order-label mb-3 double-underline comf center-align">
+      Review and checkout
+    </div>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-sm-6 offset-md-3">
+    <div class="center-align">
+      <button type="button" class="btn btn-success checkout-btn">Place your order</button>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-sm-5">
+    <app-shared-checkout-items-display [cartOrders]="cartOrders"></app-shared-checkout-items-display>
+  </div>
+
+  <div class="col-sm-6 ml-md-auto">
+    <app-shared-delivery-comp></app-shared-delivery-comp>
+    <app-shared-payment-info></app-shared-payment-info>
+  </div>
+</div>
+
+
+<div class="">
+  <div class="row mb-3 comf">
+    <div class="col-sm-6">
+      Tax: $XX.XX
+    </div>
+  </div>
+
+  <div class="row mb-3 comf">
+    <div class="col-sm-6">
+      Total: $XX.XX
+    </div>
+  </div>
+</div>
+

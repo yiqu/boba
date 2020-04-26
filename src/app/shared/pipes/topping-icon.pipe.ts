@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import memo from 'memo-decorator';
-import { DrinkTopping } from '../models/base.model';
+import { DrinkTopping, DrinkSeries } from '../models/base.model';
 
 @Pipe({
   name: 'toppingUrl',
@@ -94,5 +94,40 @@ export class OrderTableDrinkSugarDisplayPipe implements PipeTransform {
   @memo()
   transform(value: any): any {
     return "sugar: " + value + "%";
+  }
+}
+
+@Pipe({
+  name: 'drinkTypeUrl',
+  pure: true
+})
+export class DrinkTypeUrlPipe implements PipeTransform {
+  private baseSrcUrl: string = "assets/images/main/icons/";
+
+  @memo()
+  transform(value: string): any {
+    return this.getDrinkTypeIcon(value);
+  }
+
+  getDrinkTypeIcon(drink: string): string {
+    let icon: string;
+    switch (drink) {
+      case DrinkSeries.FRUIT_TEA: {
+        icon = "fruit";
+        break;
+      }
+      case DrinkSeries.MILK_TEA: {
+        icon = "milk";
+        break;
+      }
+      case DrinkSeries.YOGURT: {
+        icon = "yogurt";
+        break;
+      }
+      default: {
+        icon = null;
+      }
+    }
+    return this.baseSrcUrl + icon + "-tea-icon.png";
   }
 }

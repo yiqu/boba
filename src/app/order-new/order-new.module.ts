@@ -15,6 +15,10 @@ import { PipeBundleModule } from '../shared/pipes/pipe-bundle.module';
 import { OrderDetailDisplayModule } from '../shared/order-detail-display/order-detail-display.module';
 import { OrderAccordionModule } from '../shared/order-table-accordion/order-accordion.module';
 import { OrderTableUserInfoModule } from '../shared/order-table-user-info/user-label.module';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { CheckoutItemsDisplayModule } from '../shared/checkout-items-display/checkout-items-display.module';
+import { DeliveryModule } from '../shared/delivery-info/delivery.module';
+import { PaymentModule } from '../shared/payment-info/payment.module';
 
 @NgModule({
 
@@ -30,7 +34,10 @@ import { OrderTableUserInfoModule } from '../shared/order-table-user-info/user-l
     PipeBundleModule,
     OrderDetailDisplayModule,
     OrderAccordionModule,
-    OrderTableUserInfoModule
+    OrderTableUserInfoModule,
+    CheckoutItemsDisplayModule,
+    DeliveryModule,
+    PaymentModule
   ],
 
   exports: [
@@ -41,7 +48,8 @@ import { OrderTableUserInfoModule } from '../shared/order-table-user-info/user-l
     OrderNewComponent,
     OrderNewOrderComponent,
     OrderNewViewAllComponent,
-    OrderNewCreateComponent
+    OrderNewCreateComponent,
+    CheckoutComponent
   ],
 
   providers: [

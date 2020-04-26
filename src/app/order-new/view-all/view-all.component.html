@@ -10,8 +10,17 @@
 
     <div class="row mb-3 comf">
       <div class="col-sm-12">
-        There are currently {{cartOrders.length}} items made from
-        {{cartOrdersGrouped.length}} {{'person' | pluralDisplay:cartOrdersGrouped.length}}.
+        <div class="cart-subtext">
+          <div>
+            There are currently {{cartOrders.length}} items made from
+            {{cartOrdersGrouped.length}} {{'person' | pluralDisplay:cartOrdersGrouped.length}}.
+          </div>
+          <div *ngIf="cartOrders.length > 0">
+            <button mat-flat-button color="primary" (click)="onCheckoutClick()">
+              <mat-icon matSuffix>credit_card</mat-icon>
+              Checkout</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -41,6 +50,20 @@
         </div>
       </div>
     </div>
+
+    <ng-container *ngIf="cartOrders.length > 0">
+      <hr>
+      <div class="row mt-4 mb-3">
+        <div class="col-sm-12">
+          <div>
+            <button mat-flat-button color="primary" (click)="onCheckoutClick()">
+              <mat-icon matSuffix>credit_card</mat-icon>
+              Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
 
   </ng-container>
 </ng-container>

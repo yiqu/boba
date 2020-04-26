@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-sm-12 order-label mb-3 solid-underline">
+    {{cartOrders.length}} items:
+  </div>
+</div>
+<div class="row roboto p-2" *ngFor="let order of cartOrders; last as isLast"
+  [ngClass]="{'border-bottom':true}">
+  <div class="col-sm-12">
+    <div class="d-flex">
+      <div class="icon-img-parent mb-1">
+        <img [src]="order.orders[0].drinkType.seriesName | drinkTypeUrl" class="img-h-100" alt="tea icon">
+      </div>
+      <div class="v-self-align-center ml-1 order-desc">
+        {{order.orders[0] | drinkOrderDetailText}}
+      </div>
+    </div>
+  </div>
+</div>

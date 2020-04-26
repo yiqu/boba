@@ -6,6 +6,7 @@ import { DrinkOrder } from '../../shared/models/tea.models';
 import { Subject } from 'rxjs';
 import * as _ from 'lodash';
 import { User } from '../../shared/models/user.model';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-order-new-view-all',
@@ -20,7 +21,8 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   cartOrdersGrouped: DrinkOrder[] = [];
 
-  constructor(public rdfs: RestDataFireService, public cs: CartService) {
+  constructor(public rdfs: RestDataFireService, public cs: CartService,
+    public router: Router, public route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -38,7 +40,7 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.createGroupByUser();
       }
-    )
+    );
   }
 
   createGroupByUser() {
@@ -67,6 +69,12 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
       });
     })
 
+  }
+
+  onCheckoutClick() {
+    if (this.cartOrders.length > 0) {
+      this.router.navigate(['../', 'checkout'], {relativeTo: this.route});
+    }
   }
 
   ngOnDestroy() {
