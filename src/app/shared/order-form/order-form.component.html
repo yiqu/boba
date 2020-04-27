@@ -50,10 +50,10 @@
     <hr>
     <div class="d-flex">
       <button mat-stroked-button matStepperPrevious class="mr-1">Back</button>
-      <button mat-flat-button (click)="onOrderSubmit()" class="mr-2" color="primary"
+      <button mat-flat-button (click)="onOrderSubmit()" class="mr-4 order-submit" color="primary"
         [disabled]="this.ofs.orderFg && this.ofs.orderFg.invalid">Finish
       </button>
-      <mat-checkbox color="accent" formControlName="isFavorite"
+      <mat-checkbox color="primary" formControlName="isFavorite"
         class="fav-check">Save as favorite</mat-checkbox>
     </div>
   </mat-step>

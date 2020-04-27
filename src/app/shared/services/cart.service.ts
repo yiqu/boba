@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList, SnapshotAction } from '@angular/fire/database';
-import { DrinkOrder } from '../models/tea.models';
+import { DrinkOrder, DrinkFavoriteItem } from '../models/tea.models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import * as _ from 'lodash';
+import { database } from 'firebase/app';
 
 
 @Injectable({
@@ -14,16 +15,26 @@ export class CartService {
 
   // Users related URLs
   private BASE_CART_URL: string = "cart";
+  private BASE_FAV_URL: string = "favorites"
 
   cartItemsListFire: AngularFireList<DrinkOrder>;
   cartItemList$: Observable<DrinkOrder[]>;
+  favItemsListFDB: AngularFireList<DrinkFavoriteItem>;
+  favItemsList$: Observable<DrinkFavoriteItem[]>;
 
   constructor(public firedb: AngularFireDatabase) {
     this.cartItemsListFire = this.firedb.list(this.BASE_CART_URL);
-    this.cartItemList$ = this.getCartItemObs();
+    this.cartItemList$ = this.getCartItemObs<DrinkOrder>();
+
+    this.favItemsListFDB = this.firedb.list(this.BASE_FAV_URL);
+    this.favItemsList$ = this.getCartItemObs<DrinkFavoriteItem>();
   }
 
-  private getCartItemObs(): Observable<DrinkOrder[]> {
+  getFDB(): database.Database {
+    return this.firedb.database;
+  }
+
+  private getCartItemObs<T>(): Observable<T[]> {
     return this.cartItemsListFire.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes)),
     );
@@ -37,6 +48,10 @@ export class CartService {
         }
       )}
     );
+  }
+
+  getFavorites(): AngularFireList<any> {
+    return null
   }
 
   /**

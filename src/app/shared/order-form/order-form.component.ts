@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges, ViewChild } from '@angular/core';
-import { DrinkOrder, DrinkOrderDetail, DrinkTopping, DrinkIceLevel, DrinkType, DrinkSize, DrinkSugarLevel } from '../models/tea.models';
+import { DrinkOrder, DrinkOrderDetail, DrinkTopping, DrinkIceLevel, DrinkType, DrinkSize, DrinkSugarLevel, DrinkFavoriteItem } from '../models/tea.models';
 import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
 import * as fu from '../utils/form.utils';
 import { DrinkSeries, BaseItem } from '../models/base.model';
@@ -7,11 +7,16 @@ import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { OrderFormService } from './order-form.service';
 import { UserService } from '../services/user.service';
 import { MatHorizontalStepper } from '@angular/material/stepper';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, switchMap } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { RestDataFireService } from '../services/fire-data.service';
 import { SnackbarService } from '../services/snackbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CartService } from '../services/cart.service';
+import { DialogSingleInputComponent, DialogSingleInputData } from '../dialogs/single-input/single-input-dialog.component';
+import { MatDialogRef } from '@angular/material/dialog';
+import { DialogService } from '../services/dialog.service';
+import { Subject, of } from 'rxjs';
 
 @Component({
   selector: 'app-shared-order-form',
@@ -34,6 +39,8 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
   currentDrinkSeries: DrinkSeries;
   isFavorite: boolean = false;
+  favoriteAddDialogRef: MatDialogRef<DialogSingleInputComponent>;
+  compDes$: Subject<any> = new Subject<any>();
 
   get drinkSeriesFc(): FormControl {
     return <FormControl>this.ofs.orderFg.get("seriesName");
@@ -57,7 +64,8 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(public fb: FormBuilder, public ofs: OrderFormService,
     public us: UserService, public rdf: RestDataFireService, public sbs: SnackbarService,
-    public router: Router, public route: ActivatedRoute) {
+    public router: Router, public route: ActivatedRoute, public cs: CartService,
+    public ds: DialogService) {
   }
 
   ngOnChanges(changes) {
@@ -127,11 +135,10 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
     const formVal: any = this.ofs.orderFg.value;
     const reviewOrderDetail = this.createCurrentDrinkOrderDetail(formVal);
+    const currentUser: User = this.getSelectedUser(formVal);
 
-    let order = new DrinkOrder(null, new Date().getTime(), [],
-      new User(formVal.user.id, formVal.user.display));
+    let order = new DrinkOrder(null, new Date().getTime(), [], currentUser);
     order.orders = [reviewOrderDetail];
-    console.log(order)
     this.rdf.getCartOrders().push(order).then(
       (val) => {
         this.sbs.openSnackBar("Added order to cart.");
@@ -145,7 +152,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
   proceedToCart(addingToFavorite: boolean) {
     if (addingToFavorite) {
-
+      this.onFavoriteAdd();
     } else {
       this.router.navigate(['../', 'all'], {relativeTo: this.route});
     }
@@ -164,7 +171,39 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     return new DrinkOrderDetail(ice, type, size, sugar, toppings);
   }
 
-  ngOnDestroy() {
+  onFavoriteAdd() {
+    const data: DialogSingleInputData = new DialogSingleInputData("Add new favorite",
+      "Name", null, "edit", "This will be the name of your favorite drink");
+    const favoriteAddDialogRef = this.ds.getFavDrinkAddDialog(data);
 
+    favoriteAddDialogRef.afterClosed().pipe(
+      takeUntil(this.compDes$),
+      switchMap((name: string) => {
+        if (name) {
+          const timeStamp: number = new Date().getTime();
+          let ref = this.cs.getFDB().ref("favorites/" + name);
+          const favItem: DrinkFavoriteItem = new DrinkFavoriteItem(ref.key,
+            this.getSelectedUser(this.ofs.orderFg.value), timeStamp,
+            this.createCurrentDrinkOrderDetail(this.ofs.orderFg.value));
+          return (ref.set(favItem));
+        }
+      })
+    ).subscribe((val) => {
+    },
+    (err) => {
+      this.sbs.openSnackBar("A favorite drink with that name already exists, try a different name.");
+    },
+    () => {
+      this.sbs.openSnackBar("Favorite drink saved!");
+      this.router.navigate(['../', 'all'], {relativeTo: this.route});
+    });
+  }
+
+  getSelectedUser(fgVal: any): User {
+    return new User(fgVal.user.id, fgVal.user.display);
+  }
+
+  ngOnDestroy() {
+    this.compDes$.next();
   }
 }

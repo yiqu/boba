@@ -91,3 +91,11 @@ export class DrinkTopping implements IBaseItem {
     this.display = display ? display : "Black Pearls";
   }
 }
+
+
+export class DrinkFavoriteItem {
+  constructor(public fireKey: string, public user: User, public date: number,
+    public favDrink: DrinkOrderDetail) {
+
+  }
+}

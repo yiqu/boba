@@ -1,0 +1,25 @@
+<div class="comf">
+  <h1 mat-dialog-title>{{ data.title }}</h1>
+
+  <div mat-dialog-content>
+    <div class="input-ff mb-3">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ data.label }}</mat-label>
+        <input matInput [placeholder]="data.label" [formControl]="inputFc"
+          [errorStateMatcher]="matcher">
+        <mat-icon matSuffix>{{data.inputIcon}}</mat-icon>
+        <mat-hint>{{data.hint}}</mat-hint>
+        <mat-error *ngIf="inputFc.hasError('required')">Invalid {{data.label}}.</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-stroked-button color="primary" class="mr-2"
+      (click)="onCancel()">Cancel</button>
+
+    <button mat-flat-button color="primary"
+      (click)="onSubmit()" [disabled]="this.inputFc.invalid">Save</button>
+  </div>
+</div>
+

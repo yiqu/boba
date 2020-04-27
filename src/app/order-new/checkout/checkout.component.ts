@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { Subject, from, of, Observable } from 'rxjs';
 import { takeUntil, map, switchMap, delay, concatAll, concatMap } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: 'checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent implements OnInit, OnDestroy {
+export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
   compDest$: Subject<any> = new Subject<any>();
   cartOrders: DrinkOrder[] = [];
@@ -31,6 +31,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.cartOrders = [...val];
       }
     );
+  }
+
+  ngAfterViewInit() {
+    this.scrollToTopView();
   }
 
   onPlaceOrder() {
@@ -67,6 +71,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   goToCart() {
     this.router.navigate(['../', 'all'], {relativeTo: this.route});
+  }
+
+  scrollToTopView() {
+    const elmnt = document.getElementById("checkout-heading");
+    elmnt.scrollIntoView(false);
   }
 
   ngOnDestroy() {

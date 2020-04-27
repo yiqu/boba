@@ -143,10 +143,6 @@ export class RestDataFireService {
     );
   }
 
-  getFavorites(): AngularFireList<any> {
-    return null
-  }
-
   getCartOrders(): AngularFireList<DrinkOrder> {
     return this.ordersInCartFList;
   }

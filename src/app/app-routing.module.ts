@@ -5,6 +5,7 @@ import { MainOpenComponent } from './main/open/open.component';
 import { MainClosedComponent } from './main/closed/closed.component';
 import { MainLandingComponent } from './main/landing/landing.component';
 import { NotFoundComponent } from './404/404.component';
+import { NetworkAwarePreloadStrategy } from './shared/preload-strategies/preload-network';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -23,7 +24,12 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes,
+      {
+        preloadingStrategy: NetworkAwarePreloadStrategy,
+        //scrollPositionRestoration: "top"
+      }
+    )
   ],
   exports: [
     RouterModule

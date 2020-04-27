@@ -12,3 +12,7 @@
   display: flex;
   align-self: flex-end;
 }
+
+button.order-submit {
+  background-color: #009933;
+}
