@@ -67,14 +67,17 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
           this.cartOrdersGrouped[i].orders.push(o.orders[0]);
         }
       });
-    })
-
+    });
   }
 
   onCheckoutClick() {
     if (this.cartOrders.length > 0) {
       this.router.navigate(['../', 'checkout'], {relativeTo: this.route});
     }
+  }
+
+  onAddAnother() {
+    this.router.navigate(['../', 'new'], {relativeTo: this.route});
   }
 
   ngOnDestroy() {

@@ -3,6 +3,9 @@ import { AngularFireDatabase, AngularFireList, SnapshotAction } from '@angular/f
 import { DrinkOrder } from '../models/tea.models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { User } from '../models/user.model';
+import * as _ from 'lodash';
+
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +37,42 @@ export class CartService {
         }
       )}
     );
+  }
+
+  /**
+   * Returns Drink orders grouped by unique user ID
+   */
+  createGroupByUser(cartOrders: DrinkOrder[]): DrinkOrder[] {
+    let cartOrdersGrouped: DrinkOrder[] = [];
+    const users: User[] = [];
+    const timeStamp: number = new Date().getTime();
+
+    // group the orders by Users and put into a list
+    const uniqOrdersbyUser: DrinkOrder[] = _.uniqBy(cartOrders, (order: DrinkOrder) => {
+      return order.user.id;
+    });
+
+    // make the unique users list
+    uniqOrdersbyUser.forEach((val: DrinkOrder) => {
+      users.push(val.user);
+    });
+
+    // loop through each unique user, distribute the orders to each user
+    users.forEach((user: User) => {
+      let drinkOrderByUser: DrinkOrder = new DrinkOrder(null, timeStamp, [], user);
+      cartOrdersGrouped.push(drinkOrderByUser);
+
+      cartOrders.forEach((o: DrinkOrder) => {
+        if (o.user.id === user.id) {
+          const i = cartOrdersGrouped.findIndex((val: DrinkOrder) => {
+            return val.user.id === o.user.id;
+          });
+          cartOrdersGrouped[i].orders.push(o.orders[0]);
+        }
+      });
+    });
+
+    return cartOrdersGrouped;
   }
 
 }

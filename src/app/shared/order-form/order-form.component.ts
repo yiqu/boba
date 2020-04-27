@@ -106,8 +106,8 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     }));
 
     let toppingFa: FormArray = new FormArray([]);
-    let aTopping: DrinkTopping = new DrinkTopping("pearls", "Coconut Jelly");
-    let bTopping: DrinkTopping = new DrinkTopping("coconutJelly", "Pearls");
+    let aTopping: DrinkTopping = new DrinkTopping("pearls", "Pearls");
+    let bTopping: DrinkTopping = new DrinkTopping("coconutJelly", "Coconut Jelly");
     toppingFa.push(
       fu.createFormControl(aTopping, false),
     );

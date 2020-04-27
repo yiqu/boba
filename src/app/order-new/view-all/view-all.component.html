@@ -16,9 +16,8 @@
             {{cartOrdersGrouped.length}} {{'person' | pluralDisplay:cartOrdersGrouped.length}}.
           </div>
           <div *ngIf="cartOrders.length > 0">
-            <button mat-flat-button color="primary" (click)="onCheckoutClick()">
-              <mat-icon matSuffix>credit_card</mat-icon>
-              Checkout</button>
+            <button class="btn btn-outline-primary" (click)="onAddAnother()">
+              Add another</button>
           </div>
         </div>
       </div>

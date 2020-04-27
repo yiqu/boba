@@ -39,19 +39,24 @@ export class RestDataFireService {
   openOrders$: Observable<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>(null);
   closedOrders$: Observable<DrinkOrder[]> = new BehaviorSubject<DrinkOrder[]>(null);
 
+  openOrdersFDB: AngularFireList<DrinkOrder>;
+  closedOrdersFDB: AngularFireList<DrinkOrder>;
+
   ordersInCartFList: AngularFireList<DrinkOrder>;
 
   constructor(public http: HttpClient, public firedb: AngularFireDatabase) {
     // create fire lists
     this.ordersInCartFList = this.firedb.list<DrinkOrder>(this.CART_BASE_URL);
+    this.openOrdersFDB = this.getOrderStatusList(OrderStatusType.OPEN);
+    this.closedOrdersFDB = this.getOrderStatusList(OrderStatusType.CLOSED);
 
     // create obs
-    this.openOrders$ = this.getOrderStatusList(OrderStatusType.OPEN).snapshotChanges().pipe(
+    this.openOrders$ = this.openOrdersFDB.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes)),
       map((val: DrinkOrder[]) => this.createDrinkOrders(val))
     );
 
-    this.closedOrders$ = this.getOrderStatusList(OrderStatusType.CLOSED).snapshotChanges().pipe(
+    this.closedOrders$ = this.closedOrdersFDB.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes)),
       map((val: DrinkOrder[]) => this.createDrinkOrders(val))
     );

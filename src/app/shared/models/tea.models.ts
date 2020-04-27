@@ -29,14 +29,14 @@ export class DrinkOrder {
 
       res.push(new DrinkOrderDetail(
 
-        new DrinkIceLevel(val['ice-level'].name, val['ice-level'].display),
+        new DrinkIceLevel(iLevel.name, iLevel.display),
 
-        new DrinkType(val['order'].name, val['order'].display,
-          val['order']['seriesName'], val['order']['seriesDisplay']),
+        new DrinkType(dType.name, dType.display,
+          dType['seriesName'], dType['seriesDisplay']),
 
         new DrinkSize(val['size'].name, val['size'].display),
 
-        new DrinkSugarLevel(val['sugar-level'].name, val['sugar-level'].display),
+        new DrinkSugarLevel(sLevel.name, sLevel.display),
         toppings
       ))
     });

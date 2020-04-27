@@ -17,7 +17,7 @@ export class DrinkOrderDetailDisplayPipe implements PipeTransform {
     const toppings = value.toppings;
     let toppingStr = "";
     toppings.forEach((val, index) => {
-      let end = (index === toppings.length-1) ? "" : ","
+      let end = (index === toppings.length-1) ? "" : ", "
       toppingStr = toppingStr + val.display + end;
     })
 
