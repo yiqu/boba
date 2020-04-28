@@ -19,9 +19,11 @@ export class DrinkOrder {
     let res: DrinkOrderDetail[] = [];
     ord.forEach((val: {[k: string]: IBaseItem & any[]}, i: number) => {
       let toppings: DrinkTopping[] = [];
-      val['toppings'].forEach((top: IBaseItem) => {
-        toppings.push(new DrinkTopping(top.name, top.display));
-      });
+      if (val['toppings']) {
+        val['toppings'].forEach((top: IBaseItem) => {
+          toppings.push(new DrinkTopping(top.name, top.display));
+        });
+      }
 
       const iLevel = (val['ice-level']!==undefined) ? val['ice-level'] : val.iceLevel;
       const dType = (val['order']!==undefined) ? val['order'] : val.drinkType;
@@ -58,16 +60,16 @@ export class DrinkType implements IBaseItem {
   constructor(public name: string, public display: string,
     public seriesName: string, public seriesDisplay: string) {
 
-    this.name = name ? name : "blackMilkTea";
-    this.display = display ? display : "Black Milk Tea (default)";
-    this.seriesName = seriesName ? seriesName : "milkTea";
-    this.seriesDisplay = seriesDisplay ? seriesDisplay : "Milk Tea";
+    this.name = name ? name : null;
+    this.display = display ? display : null;
+    this.seriesName = seriesName ? seriesName : null;
+    this.seriesDisplay = seriesDisplay ? seriesDisplay : null;
   }
 }
 
 export class DrinkIceLevel implements IBaseItem{
   constructor(public name: string, public display: string) {
-    this.name = name ? name : "none";
+    this.name = name ? name : "0";
     this.display = display ? display : "No Ice";
   }
 }
@@ -88,8 +90,8 @@ export class DrinkSugarLevel implements IBaseItem {
 
 export class DrinkTopping implements IBaseItem {
   constructor(public name: string, public display: string) {
-    this.name = name ? name : "pearls";
-    this.display = display ? display : "Black Pearls";
+    this.name = name ? name : null;
+    this.display = display ? display : null;
   }
 }
 

@@ -3,10 +3,10 @@ import { DrinkOrder, DrinkOrderDetail, DrinkTopping, DrinkIceLevel, DrinkType, D
 import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
 import * as fu from '../utils/form.utils';
 import { DrinkSeries, BaseItem } from '../models/base.model';
-import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import { STEPPER_GLOBAL_OPTIONS, CdkStep} from '@angular/cdk/stepper';
 import { OrderFormService } from './order-form.service';
 import { UserService } from '../services/user.service';
-import { MatHorizontalStepper } from '@angular/material/stepper';
+import { MatHorizontalStepper, MatStep } from '@angular/material/stepper';
 import { takeUntil, switchMap } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { RestDataFireService } from '../services/fire-data.service';
@@ -17,6 +17,7 @@ import { DialogSingleInputComponent, DialogSingleInputData } from '../dialogs/si
 import { MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '../services/dialog.service';
 import { Subject, of } from 'rxjs';
+import * as fv from '../validators/general-form.validator';
 
 @Component({
   selector: 'app-shared-order-form',
@@ -41,6 +42,10 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   isFavorite: boolean = false;
   favoriteAddDialogRef: MatDialogRef<DialogSingleInputComponent>;
   compDes$: Subject<any> = new Subject<any>();
+
+  labelPosition: string = "bottom";
+  isStepperLinear: boolean = false;
+  selectionFcNames: string[] = ["seriesName", "drinkName", "settings"];
 
   get drinkSeriesFc(): FormControl {
     return <FormControl>this.ofs.orderFg.get("seriesName");
@@ -83,16 +88,23 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
       this.ofs.orderFg = null;
       this.ofs.orderFg = this.createForm(this.drinkOrder);
       console.log("FG created: ",this.drinkOrder, this.ofs.orderFg)
+      this.setFormValidStatus(this.ofs.orderFg.status);
 
       this.ofs.orderFg.valueChanges.pipe(
         takeUntil(this.ofs.refreshComponent$)
       ).subscribe(
         (val) => {
-          console.log("changes", this.ofs.orderFg.controls);
+          this.setFormValidStatus(this.ofs.orderFg.status);
+          this.ofs.fgErrorMsgs = this.examineFgErrors();
+          console.log("changes", this.ofs.orderFg);
           this.currentDrinkSeries = this.drinkSeriesFc.value.name;
         }
       )
     }
+  }
+
+  setFormValidStatus(valid: string) {
+    this.ofs.formValid = (valid==="VALID") ? true : false;
   }
 
   ngOnInit() {
@@ -106,17 +118,17 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
       name: dOrder.drinkType.seriesName,
       display: dOrder.drinkType.seriesDisplay
     }
-    fg.addControl("seriesName", fu.createFormControl(dSeries, false, [Validators.required]));
+    fg.addControl("seriesName", fu.createFormControl(dSeries, false, [fv.customRequiredValidator]));
 
     const drink = {
       name: dOrder.drinkType.name,
       display: dOrder.drinkType.display
     }
-    fg.addControl("drinkName", fu.createFormControl(drink, false, [Validators.required]));
+    fg.addControl("drinkName", fu.createFormControl(drink, false, [fv.customRequiredValidator]));
     fg.addControl("settings", this.fb.group({
-      size: fu.createFormControl(this.drinkOrder.size, false, [Validators.required]),
-      ice: fu.createFormControl(this.drinkOrder.iceLevel, false, [Validators.required]),
-      sugar: fu.createFormControl(this.drinkOrder.sugar, false, [Validators.required])
+      size: fu.createFormControl(this.drinkOrder.size, false, [fv.customRequiredValidator]),
+      ice: fu.createFormControl(this.drinkOrder.iceLevel, false, [fv.customRequiredValidator]),
+      sugar: fu.createFormControl(this.drinkOrder.sugar, false, [fv.customRequiredValidator])
     }));
 
     let toppingFa: FormArray = new FormArray([]);
@@ -126,7 +138,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     fg.addControl("toppings", toppingFa);
 
     const user: User = dOrder['user'] ? dOrder['user'] : null;
-    fg.addControl("user", fu.createFormControl(user, false, [Validators.required]));
+    fg.addControl("user", fu.createFormControl(user, false, [Validators.required, fv.customRequiredValidator]));
     fg.addControl("isFavorite", fu.createFormControl(null, false));
     return fg;
   }
@@ -204,6 +216,22 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
   getSelectedUser(fgVal: any): User {
     return new User(fgVal.user.id, fgVal.user.display);
+  }
+
+  onFixGoBack(slideIndex: number) {
+    if (slideIndex !== null) {
+      this.orderStepper.selectedIndex = slideIndex;
+    }
+  }
+
+  examineFgErrors(): any[] {
+    let errs: any[] = [];
+    this.orderStepper.steps.forEach((s: CdkStep) => {
+      if (s && s.stepControl && s.stepControl.invalid) {
+        errs.push(s.errorMessage);
+      }
+    });
+    return errs;
   }
 
   ngOnDestroy() {

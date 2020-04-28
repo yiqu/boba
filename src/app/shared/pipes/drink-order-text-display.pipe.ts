@@ -16,15 +16,17 @@ export class DrinkOrderDetailDisplayPipe implements PipeTransform {
     const sugar = value.sugar.display;
     const toppings = value.toppings;
     let toppingStr = "";
-    toppings.forEach((val, index) => {
-      let end = (index === toppings.length-1) ? "" : ", "
-      toppingStr = toppingStr + val.display + end;
-    })
-
+    if (toppings) {
+      toppings.forEach((val, index) => {
+        let end = (index === toppings.length-1) ? "" : ", "
+        toppingStr = toppingStr + val.display + end;
+      })
+    } else {
+      toppingStr = " No toppings";
+    }
     res = size.toUpperCase() + ", " + drink + ", " +
       ice.toLowerCase() + ", " + sugar.toLowerCase() + ", " +
       toppingStr;
     return res;
-
   }
 }

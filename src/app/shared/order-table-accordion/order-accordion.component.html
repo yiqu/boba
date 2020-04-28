@@ -15,8 +15,13 @@
           <mat-panel-description>
             {{orderDetail.size.name | orderTableDrinkDetail}},
             {{orderDetail.sugar.name | orderTableDrinkSugar}},
-            {{orderDetail.iceLevel.name | orderTableDrinkIce}},
-            {{orderDetail.toppings.length}} {{'topping' | pluralDisplay:orderDetail.toppings.length}}
+            {{orderDetail.iceLevel.name | orderTableDrinkIce}}, &nbsp;
+            <span *ngIf="orderDetail.toppings && orderDetail.toppings.length > 0; else noToppings">
+              {{orderDetail.toppings.length}} {{'topping' | pluralDisplay:orderDetail.toppings.length}}
+            </span>
+            <ng-template #noToppings>
+              <span>no toppings</span>
+            </ng-template>
           </mat-panel-description>
 
         </mat-expansion-panel-header>

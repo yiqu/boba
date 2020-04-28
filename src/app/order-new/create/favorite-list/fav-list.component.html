@@ -1,11 +1,14 @@
-<div class="dropdown" dropDownShow (isShowState)="onIsShowChange($event)">
-  <button class="btn btn-outline-primary dropdown-toggle" type="button"
-    id="dropdownMenuButton">
-    Saved favorites ({{favItems.length}})
-  </button>
-  <div class="dropdown-menu" [ngClass]="{'show': isShown}" aria-labelledby="dropdownMenuButton">
-    <div class="dropdown-item" *ngFor="let fav of favItems" (click)="onFavClick(fav)">
-      {{fav.fireKey}} ({{fav.user.display}})
+<ng-container *ngIf="favItems.length > 0">
+  <div class="dropdown" dropDownShow (isShowState)="onIsShowChange($event)">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button"
+      id="dropdownMenuButton">
+      Favorites ({{favItems.length}})
+    </button>
+    <div class="dropdown-menu mild-dropshadow" [ngClass]="{'show': isShown}"
+      aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-item" *ngFor="let fav of favItems" (click)="onFavClick(fav)">
+        {{fav.fireKey}} ({{fav.user.display}})
+      </div>
     </div>
   </div>
-</div>
+</ng-container>

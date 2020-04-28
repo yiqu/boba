@@ -1,6 +1,7 @@
-<mat-horizontal-stepper linear #stepper [formGroup]="this.ofs.orderFg">
+<mat-horizontal-stepper [linear]="isStepperLinear" #stepper [labelPosition]="labelPosition"
+  [formGroup]="this.ofs.orderFg">
 
-  <mat-step [stepControl]="drinkSeriesFc" errorMessage="Pick a series!">
+  <mat-step [stepControl]="drinkSeriesFc" errorMessage="Drink series required">
     <ng-template matStepLabel >
       <div title="Pick a drink series">Series</div>
     </ng-template>
@@ -44,9 +45,10 @@
     </div>
   </mat-step>
 
-  <mat-step>
+  <mat-step [stepControl]="userFc" errorMessage="User name required">
     <ng-template matStepLabel>Confirmation</ng-template>
-    <app-shared-order-form-confirm-desc [userFc]="userFc"></app-shared-order-form-confirm-desc>
+    <app-shared-order-form-confirm-desc [userFc]="userFc"
+      (fixGoBack)="onFixGoBack($event)"></app-shared-order-form-confirm-desc>
     <hr>
     <div class="d-flex">
       <button mat-stroked-button matStepperPrevious class="mr-1">Back</button>

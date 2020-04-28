@@ -47,6 +47,10 @@ export class DrinkDescComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
+  get isDrinkSeriesSelected(): boolean {
+    return this.ofs.orderFg.get("seriesName").valid;
+  }
+
   setDefaultValue() {
     if (this.drinkNameCtrl.value) {
       const i: number = _.findIndex(this.drinkNames, ['name', this.drinkNameCtrl.value['name']]);

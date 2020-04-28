@@ -1,3 +1,4 @@
 .dropdown-menu .dropdown-item {
   cursor: pointer;
+  padding: .45rem 1.5rem;
 }

@@ -8,10 +8,10 @@
 </div>
 
 <ng-template #noDrinks>
-  <p class="mb-3">
+  <p class="mb-3" *ngIf="isDrinkSeriesSelected">
     We are sorry, there are currently no drinks available for the series you have selected.
   </p>
-  <p>
-    Go back and try a different series!
+  <p class="mb-3" *ngIf="!isDrinkSeriesSelected">
+    Please go back and select a drink series first!
   </p>
 </ng-template>

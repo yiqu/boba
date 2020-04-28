@@ -43,6 +43,6 @@ export class SeriesDescComponent implements OnInit, OnChanges {
   }
 
   onSeriesChange() {
-    this.ofs.orderFg.get("drinkName").reset(null, {onlySelf: false, emitEvent: false});
+    this.ofs.orderFg.get("drinkName").reset(null, {onlySelf: false, emitEvent: true});
   }
 }

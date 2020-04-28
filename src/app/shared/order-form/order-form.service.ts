@@ -9,6 +9,10 @@ export class OrderFormService {
 
   orderFg: FormGroup;
   refreshComponent$: Subject<any> = new Subject<any>();
+  formValid: boolean = false;
+  selectionsInvalid: boolean = true;
+  userNameInvalid: boolean = true;
+  fgErrorMsgs: string[] = [];
 
   constructor() {
 

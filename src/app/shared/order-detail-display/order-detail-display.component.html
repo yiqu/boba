@@ -33,15 +33,22 @@
       <div class="detail-label solid-underline mb-2">
         Toppings:
       </div>
-      <div *ngFor="let topping of toppings" class="mb-1">
-        <div class="topping-img-parent mb-1">
-          <img [src]="topping.name | toppingUrl" class="img-h-100" alt="topping icon">
+      <ng-container *ngIf="(toppings && toppings.length > 0); else noToppings">
+        <div *ngFor="let topping of toppings" class="mb-1">
+          <div class="topping-img-parent mb-1">
+            <img [src]="topping.name | toppingUrl" class="img-h-100" alt="topping icon">
+          </div>
+          <div>
+            {{ topping.display }}
+          </div>
         </div>
+      </ng-container>
+      <ng-template #noToppings>
         <div>
-          {{ topping.display }}
+          None
         </div>
-      </div>
-    </div>
+      </ng-template>
 
+    </div>
   </div>
 </div>

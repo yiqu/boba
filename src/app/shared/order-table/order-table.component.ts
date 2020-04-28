@@ -22,19 +22,18 @@ export class OrderTableComponent implements OnInit, OnDestroy {
   @Output()
   searchOutput: EventEmitter<string> = new EventEmitter<string>();
 
-  toggleExpandText: string = "Expand all";
+  toggleExpandText: string = "";
   ordersAccordion: MatAccordion;
   ordersExpanded: boolean = false;
   compDestroy$: Subject<any> = new Subject<any>();
   allOrderAccordion: OrderAccordionComponent[] = [];
-
 
   constructor() {
 
   }
 
   ngOnInit() {
-
+    this.toggleExpandText = this.ordersExpanded ? "Collapse all" : "Expand all";
   }
 
   ngAfterViewInit() {
@@ -56,8 +55,10 @@ export class OrderTableComponent implements OnInit, OnDestroy {
     this.allOrderAccordion.forEach((a) => {
       if (this.ordersExpanded) {
         a.collapseAccord();
+        this.toggleExpandText = "Expand all";
       } else {
         a.expandAccord();
+        this.toggleExpandText = "Collapse all";
       }
 
     })

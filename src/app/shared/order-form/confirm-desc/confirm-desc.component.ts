@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, EventEmitter, Output } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
@@ -23,9 +23,14 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
   @Input()
   userFc: FormControl;
 
+  @Output()
+  fixGoBack: EventEmitter<number> = new EventEmitter<number>();
+
   users: User[] = [];
   matcher: ErrorStateMatcher = new em.InstantErrorStateMatcher();
   userAddDialogRef: MatDialogRef<DialogAddUserComponent>;
+  missingSelectionAlert: string = "Please fix your selections.";
+  missingUserName: string = "Please pick a user name";
 
   constructor(public us: UserService, public ds: DialogService,
     public rdf: RestDataFireService, public sbs: SnackbarService,
@@ -35,6 +40,14 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
+  }
+
+  get showTakeMeThere(): boolean {
+    if (this.ofs.fgErrorMsgs.length === 1 &&
+      this.ofs.fgErrorMsgs[0] === "User name required") {
+        return false;
+    }
+    return true;
   }
 
   ngOnChanges() {
@@ -78,6 +91,18 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
       }
     }
   }
+
+  onFixGoBack() {
+    let slide: number = null;
+    if (this.ofs.orderFg.get("seriesName").invalid) {
+      slide = 0;
+    } else if (this.ofs.orderFg.get("drinkName").invalid) {
+      slide = 1;
+    }
+    this.fixGoBack.emit(slide);
+  }
+
+
 
 }
 

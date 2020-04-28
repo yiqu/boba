@@ -5,3 +5,12 @@
 mat-error.err {
   font-weight: 700;
 }
+
+div .alert {
+  font-size: 13px;
+}
+
+.alert .nav-back {
+  text-decoration: underline;
+  cursor: pointer;
+}

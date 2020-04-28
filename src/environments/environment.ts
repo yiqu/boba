@@ -5,14 +5,14 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyBOp-onAK3BJkYryXEUzOjxgnlZuAucAVA",
-    authDomain: "boba-store.firebaseapp.com",
-    databaseURL: "https://boba-store.firebaseio.com",
-    projectId: "boba-store",
-    storageBucket: "boba-store.appspot.com",
-    messagingSenderId: "270625697342",
-    appId: "1:270625697342:web:23b7fbd16aeac9c3256b6f",
-    measurementId: "G-3X73F851QP"
+    apiKey: "AIzaSyBSZiipwTH5VcqviTnZX9O0fzevyXv1E3U",
+    authDomain: "boba-store-dev.firebaseapp.com",
+    databaseURL: "https://boba-store-dev.firebaseio.com",
+    projectId: "boba-store-dev",
+    storageBucket: "boba-store-dev.appspot.com",
+    messagingSenderId: "151356472114",
+    appId: "1:151356472114:web:c25aad8fe089f50e49f52b",
+    measurementId: "G-CRM944MDJE"
   },
   adBannerInterval: 999999,
   adsOn: true

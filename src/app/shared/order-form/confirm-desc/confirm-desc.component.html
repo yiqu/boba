@@ -1,4 +1,14 @@
-<div class="comf">
+<div class="roboto">
+  <div *ngIf="!this.ofs.formValid" class="alert alert-danger">
+    <p>Oops! You are missing a few things:</p>
+    <ul>
+      <li *ngFor="let err of this.ofs.fgErrorMsgs">
+        {{err}}
+      </li>
+    </ul>
+    <span *ngIf="showTakeMeThere" class="nav-back" (click)="onFixGoBack()">Take me there.</span>
+  </div>
+
   <mat-form-field class="name-field mb-3">
     <mat-label>Select your name</mat-label>
     <mat-select [formControl]="userFc" [errorStateMatcher]="matcher">
@@ -12,7 +22,7 @@
     </mat-error>
   </mat-form-field>
 
-  <div class="">
+  <div>
     Or add a new name
     <button mat-stroked-button color="primary"
       (click)="onNameAdd()">here</button>

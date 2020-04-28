@@ -41,6 +41,9 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Create the default Drink Detail when new order is clicked
+   */
   createDefaultDrink() {
     const createDate: number = new Date().getTime();
     const user: User = new User("kevin", "Kevin");
