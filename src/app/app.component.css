@@ -38,6 +38,7 @@
 .banner-text {
   display: inline-block;
   vertical-align: sub;
+  font-weight: 800;
 }
 
 .core {

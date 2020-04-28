@@ -11,9 +11,9 @@ const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "home", component: MainComponent,
     children: [
-      { path: "", component: MainLandingComponent },
-      { path: "open-orders", component: MainOpenComponent },
-      { path: "completed-orders", component: MainClosedComponent }
+      { path: "", component: MainLandingComponent, data: {title: 'Home'} },
+      { path: "open-orders", component: MainOpenComponent,  data: {title: 'Working'} },
+      { path: "completed-orders", component: MainClosedComponent,  data: {title: 'Delivered'} }
     ]
   },
   { path: 'new-order',

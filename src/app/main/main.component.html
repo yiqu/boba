@@ -1,9 +1,14 @@
 <div class="container">
-  <div class="row mt-2 mb-2 border-b">
+  <div class="deals-banner mt-2">
+    <app-shared-ad-banner [ads]="ads"></app-shared-ad-banner>
+  </div>
+  <hr>
+  <div class="row mt-2 mb-2">
     <div class="col-sm-12">
       <button class="btn btn-outline-primary" (click)="onNewOrder()">New order</button>
     </div>
   </div>
+  <hr>
 
   <div class="row mb-2">
     <div class="col-sm-12">

@@ -1,35 +1,50 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavItem } from '../shared/models/nav-item.model';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, NavigationStart, NavigationEnd } from '@angular/router';
 import { RestDataFireService } from '../shared/services/fire-data.service';
+import { filter, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { AdBannerService } from '../shared/services/ad-banner.service';
+import { AdItem } from '../shared/ad-banner/banner/ad.item';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-main',
   templateUrl: 'main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
 
   tabLinks: NavItem[] = [];
   activeLink: NavItem;
+  compDest$: Subject<any> = new Subject<any>();
+  ads: AdItem[];
 
   constructor(public router: Router, public route: ActivatedRoute,
-    public fds: RestDataFireService) {
+    public fds: RestDataFireService, public abs: AdBannerService) {
     this.tabLinks.push(
-      new NavItem('open', "Open", "open-orders"),
-      new NavItem('closed', "Completed", "completed-orders")
+      new NavItem('open', "Working", "open-orders"),
+      new NavItem('closed', "Delivered", "completed-orders")
     );
 
     this.route.url.subscribe((val) => {
       this.setActiveTab();
     });
 
-    this.route.queryParamMap.subscribe((val: ParamMap) => {
-    });
+    this.router.events.pipe(
+      filter((val) => {
+        return (val instanceof NavigationEnd);
+      }),
+      takeUntil(this.compDest$)
+    )
+    .subscribe((val) => {
+      this.setActiveTab();
+    })
   }
 
   ngOnInit() {
     this.setActiveTab();
+    this.setupAds();
   }
 
   onNewOrder() {
@@ -48,5 +63,15 @@ export class MainComponent implements OnInit {
     } else {
       this.activeLink = null;
     }
+  }
+
+  setupAds() {
+    if (environment.adsOn) {
+      this.ads = this.abs.getAds();
+    }
+  }
+
+  ngOnDestroy() {
+    this.compDest$.next();
   }
 }

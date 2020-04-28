@@ -20,6 +20,7 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
   listOfUsers: User[] = [];
   loading: boolean = false;
   cartOrdersGrouped: DrinkOrder[] = [];
+  bgUrl: string = "assets/images/bg/long-bg-bears.png";
 
   constructor(public rdfs: RestDataFireService, public cs: CartService,
     public router: Router, public route: ActivatedRoute) {

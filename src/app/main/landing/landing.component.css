@@ -1,0 +1,24 @@
+.home-landing-parent {
+  display: flex;
+  height: 50rem;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.home-banner-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+
+.b-r-10 {
+  border-radius: 10%;
+}
+
+@media screen and (max-width: 600px) {
+  /* start of phone styles */
+  .b-r-10 {
+    border-top-left-radius: 100%;
+    border-top-right-radius: 100%;
+  }
+}

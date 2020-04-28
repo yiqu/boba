@@ -1,1 +1,14 @@
-See Open or Closed orders!
+<div class="home-banner-text comf center-align mb-3 mt-3">
+  {{homeBannerText}}
+</div>
+<div class="comf center-align mb-3">
+  {{homeBannerSub}}
+</div>
+<div class="home-banner-sub-text comf center-align mb-3">
+  See your&nbsp;<a [routerLink]="['open-orders']"> current orders</a>
+  , or your&nbsp;<a [routerLink]="['completed-orders']">past orders.</a>
+</div>
+
+<div class="home-landing-parent">
+  <img [src]="bgUrl" class="img-h-100 b-r-10" alt="home bg">
+</div>

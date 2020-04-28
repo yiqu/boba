@@ -10,6 +10,7 @@ const routes: Routes = [
   {
     path: '', component: OrderNewComponent, data: {title: 'New Order'},
     children: [
+      { path: '', redirectTo: 'new', pathMatch: 'full' },
       { path: 'new', component: OrderNewCreateComponent },
       { path: 'checkout', component: CheckoutComponent },
       { path: 'all', component: OrderNewViewAllComponent,

@@ -13,3 +13,17 @@
   align-items: center;
   justify-content: space-between;
 }
+
+
+.bg-parent {
+  display: flex;
+  height: 50rem;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 0.3;
+}
+
+.banner-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
