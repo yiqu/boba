@@ -7,7 +7,7 @@ import * as em from '../../error-matchers/error-state.matcher';
 import { DialogService } from '../../services/dialog.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DialogAddUserComponent } from '../../dialogs/add-user/add-user.component';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, switchMap } from 'rxjs/operators';
 import { RestDataFireService } from '../../services/fire-data.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { OrderFormService } from '../order-form.service';
@@ -64,16 +64,22 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
   onNameAdd() {
     this.userAddDialogRef = this.ds.getUserAddDialog();
     this.userAddDialogRef.afterClosed().pipe(
-      takeUntil(this.ofs.refreshComponent$)
+      takeUntil(this.ofs.refreshComponent$),
+      switchMap((u: User) => {
+        if (u) {
+          let ref = this.us.getFDB().ref("users/" + u.id);
+          const user: User = new User(u.id, u.display);
+          return (ref.set(user));
+        }
+      })
     )
     .subscribe((val: User) => {
-      if (val) {
-        this.us.usersListFDB.push(val).then(
-          (val) => this.onPushComplete(val),
-          (er) => {
-          }
-        );
-      }
+    },
+    (err) => {
+      this.sbs.openSnackBar("A user with that ID already exists, try a different ID.", 10000);
+    },
+    () => {
+      this.sbs.openSnackBar("User added!");
     });
   }
 

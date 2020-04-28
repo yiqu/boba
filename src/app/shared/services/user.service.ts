@@ -4,6 +4,7 @@ import { RestDataFireService } from './fire-data.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AngularFireDatabase, AngularFireList, SnapshotAction } from '@angular/fire/database';
+import { database } from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,10 @@ export class UserService {
 
   getSingleUser(userId) {
 
+  }
+
+  getFDB(): database.Database {
+    return this.firedb.database;
   }
 
   addfireKey(c: SnapshotAction<any>[]) {

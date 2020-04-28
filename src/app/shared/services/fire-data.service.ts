@@ -53,12 +53,18 @@ export class RestDataFireService {
     // create obs
     this.openOrders$ = this.openOrdersFDB.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes)),
-      map((val: DrinkOrder[]) => this.createDrinkOrders(val))
+      map((val: DrinkOrder[]) => this.createDrinkOrders(val)),
+      map((val: DrinkOrder[]) => {
+        return val.reverse()
+      })
     );
 
     this.closedOrders$ = this.closedOrdersFDB.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes)),
-      map((val: DrinkOrder[]) => this.createDrinkOrders(val))
+      map((val: DrinkOrder[]) => this.createDrinkOrders(val)),
+      map((val: DrinkOrder[]) => {
+        return val.reverse()
+      })
     );
   }
 

@@ -5,18 +5,18 @@
     <form [formGroup]="userFg">
       <div class="input-ff mb-3">
         <mat-form-field appearance="outline" >
-          <mat-label>User name</mat-label>
-          <input matInput placeholder="John Doe" [formControl]="userNameFc">
-          <mat-icon matSuffix>face</mat-icon>
-          <mat-hint>Enter a user name</mat-hint>
-        </mat-form-field>
-      </div>
-      <div class="input-ff mb-3">
-        <mat-form-field appearance="outline" >
           <mat-label>User ID</mat-label>
           <input matInput placeholder="johndoe" formControlName="userId">
           <mat-icon matSuffix>account_box</mat-icon>
           <mat-hint>Enter a user ID</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="input-ff mb-3">
+        <mat-form-field appearance="outline" >
+          <mat-label>Display name</mat-label>
+          <input matInput placeholder="John Doe" [formControl]="userNameFc">
+          <mat-icon matSuffix>face</mat-icon>
+          <mat-hint>Enter your full name</mat-hint>
         </mat-form-field>
       </div>
     </form>

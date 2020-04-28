@@ -14,9 +14,9 @@ export class SnackbarService {
 
   }
 
-  openSnackBar(message: string) {
+  openSnackBar(message: string, time: number = 5000) {
     this.sbr = this._snackBar.openFromComponent(SnackBarComponent, {
-      duration: 5 * 1000,
+      duration: time,
       data: message
     });
 
