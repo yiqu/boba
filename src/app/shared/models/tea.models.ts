@@ -48,7 +48,8 @@ export class DrinkOrder {
 
 export class DrinkOrderDetail {
   constructor(public iceLevel: DrinkIceLevel, public drinkType: DrinkType,
-    public size: DrinkSize, public sugar: DrinkSugarLevel, public toppings: DrinkTopping[]) {
+    public size: DrinkSize, public sugar: DrinkSugarLevel, public toppings: DrinkTopping[],
+    public user: User = null) {
 
   }
 }

@@ -1,5 +1,11 @@
 <div class="row">
   <div class="col-sm-12">
+    <app-order-new-create-fav-list [favItems]="favItems"
+      (onFavSelect)="onFavSelect($event)"></app-order-new-create-fav-list>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
     <div class="order-label mb-3 double-underline comf center-align">
       Current order
     </div>

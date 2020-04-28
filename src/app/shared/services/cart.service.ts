@@ -27,7 +27,7 @@ export class CartService {
     this.cartItemList$ = this.getCartItemObs<DrinkOrder>();
 
     this.favItemsListFDB = this.firedb.list(this.BASE_FAV_URL);
-    this.favItemsList$ = this.getCartItemObs<DrinkFavoriteItem>();
+    this.favItemsList$ = this.getFavItemObs<DrinkFavoriteItem>();
   }
 
   getFDB(): database.Database {
@@ -36,6 +36,12 @@ export class CartService {
 
   private getCartItemObs<T>(): Observable<T[]> {
     return this.cartItemsListFire.snapshotChanges().pipe(
+      map((changes) => this.addfireKey(changes)),
+    );
+  }
+
+  private getFavItemObs<T>(): Observable<T[]> {
+    return this.favItemsListFDB.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes)),
     );
   }

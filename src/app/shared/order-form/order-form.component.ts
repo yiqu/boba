@@ -62,6 +62,10 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     return <FormControl>this.ofs.orderFg.get("user");
   }
 
+  get isFavoriteFc(): FormControl {
+    return <FormControl>this.ofs.orderFg.get("isFavorite");
+  }
+
   constructor(public fb: FormBuilder, public ofs: OrderFormService,
     public us: UserService, public rdf: RestDataFireService, public sbs: SnackbarService,
     public router: Router, public route: ActivatedRoute, public cs: CartService,
@@ -70,19 +74,21 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes) {
     if (this.drinkOrder) {
-      this.ofs.orderFg = null;
-      this.ofs.orderFg = this.createForm(this.drinkOrder);
-      console.log("FG created: ",this.ofs.orderFg)
+      this.ofs.refreshComponent$.next();
 
       if (this.orderStepper) {
         this.orderStepper.reset();
       }
 
+      this.ofs.orderFg = null;
+      this.ofs.orderFg = this.createForm(this.drinkOrder);
+      console.log("FG created: ",this.drinkOrder, this.ofs.orderFg)
+
       this.ofs.orderFg.valueChanges.pipe(
         takeUntil(this.ofs.refreshComponent$)
       ).subscribe(
         (val) => {
-          console.log("changes", this.ofs.orderFg.controls)
+          console.log("changes", this.ofs.orderFg.controls);
           this.currentDrinkSeries = this.drinkSeriesFc.value.name;
         }
       )
@@ -114,17 +120,14 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     }));
 
     let toppingFa: FormArray = new FormArray([]);
-    let aTopping: DrinkTopping = new DrinkTopping("pearls", "Pearls");
-    let bTopping: DrinkTopping = new DrinkTopping("coconutJelly", "Coconut Jelly");
-    toppingFa.push(
-      fu.createFormControl(aTopping, false),
-    );
-    toppingFa.push(
-      fu.createFormControl(bTopping, false),
-    );
+    dOrder.toppings.forEach((val) => {
+      toppingFa.push(fu.createFormControl(val, false));
+    });
     fg.addControl("toppings", toppingFa);
-    fg.addControl("user", fu.createFormControl(null, false, [Validators.required]));
-    fg.addControl("isFavorite", fu.createFormControl(false, false));
+
+    const user: User = dOrder['user'] ? dOrder['user'] : null;
+    fg.addControl("user", fu.createFormControl(user, false, [Validators.required]));
+    fg.addControl("isFavorite", fu.createFormControl(null, false));
     return fg;
   }
 

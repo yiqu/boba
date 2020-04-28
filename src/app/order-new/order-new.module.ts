@@ -19,6 +19,8 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutItemsDisplayModule } from '../shared/checkout-items-display/checkout-items-display.module';
 import { DeliveryModule } from '../shared/delivery-info/delivery.module';
 import { PaymentModule } from '../shared/payment-info/payment.module';
+import { OrderNewFavListComponent } from './create/favorite-list/fav-list.component';
+import { DirectivesBundleModule } from '../shared/directives/directives-bundle.module';
 
 @NgModule({
 
@@ -37,7 +39,8 @@ import { PaymentModule } from '../shared/payment-info/payment.module';
     OrderTableUserInfoModule,
     CheckoutItemsDisplayModule,
     DeliveryModule,
-    PaymentModule
+    PaymentModule,
+    DirectivesBundleModule
   ],
 
   exports: [
@@ -49,7 +52,8 @@ import { PaymentModule } from '../shared/payment-info/payment.module';
     OrderNewOrderComponent,
     OrderNewViewAllComponent,
     OrderNewCreateComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    OrderNewFavListComponent
   ],
 
   providers: [

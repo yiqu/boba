@@ -11,6 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 import { RestDataFireService } from '../../services/fire-data.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { OrderFormService } from '../order-form.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-shared-order-form-confirm-desc',
@@ -42,6 +43,7 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
     ).subscribe(
       (users: User[]) => {
         this.users = [...users];
+        this.setDefaultValue();
       }
     );
   }
@@ -64,6 +66,17 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
 
   onPushComplete(val: any) {
     this.sbs.openSnackBar("User added!")
+  }
+
+  setDefaultValue() {
+    if (this.userFc.value) {
+      const i: number = _.findIndex(this.users, ['id', this.userFc.value['id']]);
+      if (i > -1) {
+        this.userFc.setValue(this.users[i]);
+      } else {
+        this.userFc.reset(null);
+      }
+    }
   }
 
 }
