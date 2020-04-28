@@ -12,6 +12,7 @@ export class AppComponent {
   headerTitle: string = "BobaShop";
   footerTitle: string = "@KQ 2020";
   cartItemsCount: number = 0;
+  myUrl: string = "https://yiqu.github.io/";
 
   constructor(public router: Router, public route: ActivatedRoute,
     public cs: CartService) {

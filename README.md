@@ -2,7 +2,8 @@
 
 Boba Shop [![Build Status](https://travis-ci.com/yiqu/boba.svg?branch=master)](https://travis-ci.com/yiqu/boba)
 
-Firebase URL: https://boba-store.web.app/
+Firebase Prod: https://boba-store.web.app/
+Latest: https://yiqu.github.io/boba/
 
 ## Development server
 
