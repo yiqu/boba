@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <ng-container *ngFor="let drinkOrder of openOrders; index as i; last as last" class="">
+  <ng-container *ngFor="let drinkOrder of (openOrders.reverse()); index as i; last as last" class="">
     <div class="row mb-1">
       <div class="col-sm-12">
         <app-shared-order-user-info [orderNumber]="i"

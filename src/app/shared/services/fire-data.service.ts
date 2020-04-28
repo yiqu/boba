@@ -66,11 +66,11 @@ export class RestDataFireService {
     let list$: AngularFireList<DrinkOrder>;
     switch (listType) {
       case OrderStatusType.OPEN: {
-        list$ = this.firedb.list(this.ORDER_BASE_URL + this.ORDER_OPEN_URL);
+        list$ = this.firedb.list(this.ORDER_BASE_URL + this.ORDER_OPEN_URL, (ref)=> {return ref.orderByChild("date")});
         break;
       }
       case OrderStatusType.CLOSED: {
-        list$ = this.firedb.list(this.ORDER_BASE_URL + this.ORDER_CLOSED_URL);
+        list$ = this.firedb.list(this.ORDER_BASE_URL + this.ORDER_CLOSED_URL, (ref)=> {return ref.orderByChild("date")});
         break;
       }
 
