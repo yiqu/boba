@@ -69,8 +69,11 @@
 
 <ng-template #emptyCart>
   <div class="comf">
-    <div class="banner-text center-align mb-5">
+    <div class="banner-text center-align mb-4">
       Cart is empty.
+    </div>
+    <div class="comf center-align mb-5">
+      <a [routerLink]="['/home/open-orders']">Go see my open orders.</a>
     </div>
     <div class="bg-parent center-align">
       <img [src]="bgUrl" class="img-h-100 b-r-10" alt="bg">
