@@ -1,12 +1,20 @@
-<div class="home-banner-text comf center-align mb-3 mt-3">
-  {{homeBannerText}}
+<div class="row comf text-center mb-3 mt-3 home-banner-text">
+  <div class="col">
+    {{homeBannerText}}
+  </div>
 </div>
-<div class="comf center-align mb-3">
-  {{homeBannerSub}}
+
+<div class="row text-center comf mb-3">
+  <div class="col">
+    {{homeBannerSub}}
+  </div>
 </div>
-<div class="home-banner-sub-text comf center-align mb-3">
-  See your&nbsp;<a [routerLink]="['open-orders']"> current orders</a>
-  , or your&nbsp;<a [routerLink]="['completed-orders']">past orders.</a>
+
+<div class="row text-center comf mb-3">
+  <div class="col">
+    See your&nbsp;<a [routerLink]="['open-orders']"> current orders</a>
+    , or your&nbsp;<a [routerLink]="['completed-orders']">past orders.</a>
+  </div>
 </div>
 
 <div class="home-landing-parent">
