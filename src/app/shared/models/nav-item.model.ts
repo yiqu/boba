@@ -4,3 +4,18 @@ export class NavItem {
 
   }
 }
+
+export class NavHeaderList {
+  constructor(public header: NavHeader, public links: NavHeaderLink[]) {
+  }
+}
+
+export class NavHeader {
+  constructor(public display: string) {
+  }
+}
+
+export class NavHeaderLink {
+  constructor(public display: string, public iconName: string, public url: string[]) {
+  }
+}

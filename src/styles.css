@@ -43,6 +43,10 @@ a {
   font-size: 12px;
 }
 
+.fs-13 {
+  font-size: 13px !important;
+}
+
 .fs-14 {
   font-size: 14px;
 }
@@ -51,6 +55,10 @@ a {
   height: 100%;
 }
 
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
 
 .center-loading {
   display: flex;
@@ -121,4 +129,10 @@ a {
 
 .deals-banner {
   height: 30px;
+}
+
+.app-is-mobile .app-toolbar {
+  position: fixed;
+  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+  z-index: 2;
 }

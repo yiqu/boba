@@ -1,0 +1,23 @@
+<mat-nav-list>
+  <div class="nav-title-container comf">
+    <div class="nav-title">
+      {{navTitle}}
+    </div>
+    <div class="button-container">
+      <button mat-icon-button class="mat-elevation-z0" (click)="onNavClose()">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+  </div>
+  <ng-container *ngFor="let hl of headerList">
+    <div mat-subheader>{{hl.header.display}}</div>
+    <ng-container *ngFor="let hlc of hl.links">
+      <mat-list-item>
+        <mat-icon mat-list-icon>{{hlc.iconName}}</mat-icon>
+        <a class="comf fs-13" mat-line [routerLink]="hlc.url">{{hlc.display}}</a>
+      </mat-list-item>
+    </ng-container>
+  </ng-container>
+</mat-nav-list>
+
+

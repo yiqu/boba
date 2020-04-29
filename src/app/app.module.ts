@@ -17,6 +17,8 @@ import { MainComponent } from './main/main.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MainComponentModule } from './main/main.module';
 import { SnackModule } from './shared/snackbar/snack.module';
+import { TopNavModule } from './top-nav/top-nav.module';
+import { SideNavModule } from './side-nav/side-nav.module';
 
 @NgModule({
 
@@ -53,6 +55,8 @@ import { SnackModule } from './shared/snackbar/snack.module';
     }),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     SnackModule,
+    TopNavModule,
+    SideNavModule,
     AppRoutingModule
   ],
 

@@ -1,0 +1,22 @@
+<mat-toolbar class="app-toolbar app-header">
+  <button mat-icon-button color="primary" (click)="onMenuClick()" class="mat-elevation-z0">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <div class="d-flex">
+    <a [routerLink]="'/'" class="">
+      <img src="assets/images/banner/banner-tea.png" class="logo-img d-inline-block" alt="logo">
+      <div class="comf banner-text">{{ headerTitle }}</div>
+    </a>
+  </div>
+
+  <div class="d-flex">
+    <button mat-icon-button color="primary" [matBadge]="cartItemsCount" class="mat-elevation-z0"
+      matBadgePosition="before" matBadgeColor="accent" (click)="onCartClick()"
+      [matBadgeHidden]="cartItemsCount<1">
+        <mat-icon>shopping_cart</mat-icon>
+    </button>
+    <button mat-icon-button color="primary" class="mat-elevation-z0">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
