@@ -18,7 +18,7 @@ export class DialogSingleInputComponent implements OnInit, OnDestroy {
 
   inputModel: string;
 
-  constructor( public dialogRef: MatDialogRef<DialogSingleInputComponent>,
+  constructor(public dialogRef: MatDialogRef<DialogSingleInputComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogSingleInputData, public fb: FormBuilder) {
      this.inputModel = (this.data.initValue);
      this.inputFc = fu.createFormControl(data.initValue, false, [Validators.required]);

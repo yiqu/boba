@@ -9,6 +9,7 @@ import { OrderFormService } from '../..//shared/order-form/order-form.service';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 
 @Component({
   selector: 'app-order-new-create',
@@ -22,7 +23,7 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
   compDest$: Subject<any> = new Subject<any>();
 
   constructor(public fds: RestDataFireService, public route: ActivatedRoute,
-    public ofs: OrderFormService, public cs: CartService) {
+    public ofs: OrderFormService, public cs: CartService, public sbs: SnackbarService) {
     this.route.queryParamMap.subscribe((val) => {
       this.ofs.refreshComponent$.next();
       this.createDefaultDrink();
@@ -69,6 +70,7 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
     });
     const u: User = d.user;
     this.drinkOrder = new DrinkOrderDetail(ice, drinkType, size, sugar, toppings, u);
+    this.sbs.openSnackBar('"' + d.fireKey + '" has been applied.')
   }
 
   // 1 Grab ID from query param

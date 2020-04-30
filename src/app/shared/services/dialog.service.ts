@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { DrinkFavorite } from '../models/base.model';
 import { DrinkFavoriteItem } from '../models/tea.models';
 import { DialogSingleInputComponent, DialogSingleInputData } from '../dialogs/single-input/single-input-dialog.component';
+import { DialogConfirmData, ConfirmDialogComponent } from '../dialogs/confirm/confirm.component';
 
 @Injectable({
   providedIn: 'root'
@@ -41,4 +42,11 @@ export class DialogService {
     });
   }
 
+  getConfirmDialog(data: DialogConfirmData) : MatDialogRef<ConfirmDialogComponent> {
+    return this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      minWidth: '250px',
+      data: data,
+      disableClose: false
+    });
+  }
 }

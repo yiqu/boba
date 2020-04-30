@@ -7,12 +7,16 @@ export class DrinkOrder {
   public date: number;
   public orders: DrinkOrderDetail[];
   public user: User;
+  public groupedOrders?: DrinkOrder[];
 
-  constructor(fireKey: string, date: number, orders: DrinkOrderDetail[], user: User) {
+  constructor(fireKey: string, date: number, orders: DrinkOrderDetail[], user: User,
+    groupedOrders?: DrinkOrder[]) {
+
     this.fireKey = fireKey ? fireKey : null;
     this.date = date ? date : new Date().getTime();
     this.user = user ? user : new User(null, null);
     this.orders = this.createOrderDetails(orders);
+    this.groupedOrders = groupedOrders;
   }
 
   createOrderDetails(ord: any[]) {

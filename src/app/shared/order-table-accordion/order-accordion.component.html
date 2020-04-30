@@ -30,6 +30,11 @@
         <app-shared-order-detail [orderDetail]="orderDetail">
         </app-shared-order-detail>
 
+        <mat-action-row *ngIf="editable">
+          <button mat-stroked-button color="primary" (click)="onEditOrderClick(i, false)">Edit</button>
+          <button mat-stroked-button color="warn" (click)="onEditOrderClick(i, true)">Remove</button>
+        </mat-action-row>
+
       </mat-expansion-panel>
     </div>
   </div>

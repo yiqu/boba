@@ -3,11 +3,20 @@ import { RestDataFireService } from '../../shared/services/fire-data.service';
 import { CartService } from '../../shared/services/cart.service';
 import { map, takeUntil } from 'rxjs/operators';
 import { DrinkOrder } from '../../shared/models/tea.models';
-import { Subject } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import * as _ from 'lodash';
 import { User } from '../../shared/models/user.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 
+
+/**
+ * Cart component
+ *
+ * Items in cart are fetched from Firebase "/cart" ref.
+ * Each order from "/cart" ref consists of user, date, and ONE SINGLE order
+ * To remove X item from cart, remove X item from the "/cart" ref.
+ */
 @Component({
   selector: 'app-order-new-view-all',
   templateUrl: 'view-all.component.html',
@@ -17,28 +26,30 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
 
   compDest$: Subject<any> = new Subject<any>();
   cartOrders: DrinkOrder[] = [];
-  listOfUsers: User[] = [];
-  loading: boolean = false;
+  listOfUsers: User[] = null
+  //loading: boolean = false;
   cartOrdersGrouped: DrinkOrder[] = [];
   bgUrl: string = "assets/images/bg/long-bg-bears.png";
 
   constructor(public rdfs: RestDataFireService, public cs: CartService,
-    public router: Router, public route: ActivatedRoute) {
+    public router: Router, public route: ActivatedRoute, public sbs: SnackbarService) {
   }
 
   ngOnInit() {
     this.cs.cartItemList$.pipe(
       takeUntil(this.compDest$),
       map((val: DrinkOrder[]) => {
-        this.loading = true;
-        this.cartOrders = [...val];
-        this.listOfUsers = [];
-        this.cartOrdersGrouped = [];
+        //this.loading = true;
         return val;
       })
     ).subscribe(
-      (res) => {
-        this.loading = false;
+      (res: DrinkOrder[]) => {
+        this.cartOrders = [...res];
+        this.listOfUsers = [];
+        this.cartOrdersGrouped = [];
+
+        console.log("cart orders:", this.cartOrders)
+        //this.loading = false;
         this.createGroupByUser();
       }
     );
@@ -57,7 +68,7 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
 
     // loop through each unique user, distribute the orders to each user
     this.listOfUsers.forEach((user: User) => {
-      let drinkOrderByUser: DrinkOrder = new DrinkOrder(null, new Date().getTime(), [], user);
+      let drinkOrderByUser: DrinkOrder = new DrinkOrder(null, new Date().getTime(), [], user, []);
       this.cartOrdersGrouped.push(drinkOrderByUser);
 
       this.cartOrders.forEach((o: DrinkOrder) => {
@@ -66,6 +77,7 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
             return val.user.id === o.user.id;
           });
           this.cartOrdersGrouped[i].orders.push(o.orders[0]);
+          this.cartOrdersGrouped[i].groupedOrders.push(o);
         }
       });
     });
@@ -79,6 +91,20 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
 
   onAddAnother() {
     this.router.navigate(['../', 'new'], {relativeTo: this.route});
+  }
+
+  onOrderRemove(drinkOrder: DrinkOrder) {
+    if (drinkOrder && drinkOrder.fireKey) {
+      this.cs.cartItemsListFire.remove(drinkOrder.fireKey).then((val) => {
+        this.sbs.openSnackBar("Item removed from cart.");
+      },
+      (err) => {
+        this.sbs.openSnackBar("Server Error: something went wrong while removing this item.");
+      })
+    } else {
+      this.sbs.openSnackBar("Error occured removing this item: Item does not exist anymore.");
+    }
+
   }
 
   ngOnDestroy() {

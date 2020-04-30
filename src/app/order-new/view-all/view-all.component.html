@@ -1,4 +1,4 @@
-<ng-container *ngIf="loading; else loading">
+<ng-container *ngIf="listOfUsers; else loading">
   <ng-container *ngIf="listOfUsers.length > 0; else emptyCart">
     <div class="row mb-3">
       <div class="col-sm-12">
@@ -35,8 +35,8 @@
       <div class="container-fluid">
         <div class="row mb-3">
           <div class="col-sm-12">
-            <app-shared-order-accordion [drinkOrder]="drinkOrder"
-              [startAsCollapsed]="true"></app-shared-order-accordion>
+            <app-shared-order-accordion [drinkOrder]="drinkOrder" [editable]="true"
+              [startAsCollapsed]="true" (orderRemove)="onOrderRemove($event)"></app-shared-order-accordion>
           </div>
         </div>
       </div>

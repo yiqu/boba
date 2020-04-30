@@ -5,6 +5,7 @@ import { MaterialModuleBundle } from '../material-bundle.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogSingleInputComponent } from './single-input/single-input-dialog.component';
 import { CommonModule } from '@angular/common';
+import { ConfirmDialogComponent } from './confirm/confirm.component';
 
 @NgModule({
   imports: [
@@ -16,12 +17,14 @@ import { CommonModule } from '@angular/common';
 
   exports: [
     DialogAddUserComponent,
-    DialogSingleInputComponent
+    DialogSingleInputComponent,
+    ConfirmDialogComponent
   ],
 
   declarations: [
     DialogAddUserComponent,
-    DialogSingleInputComponent
+    DialogSingleInputComponent,
+    ConfirmDialogComponent
   ],
 
   providers: [],
