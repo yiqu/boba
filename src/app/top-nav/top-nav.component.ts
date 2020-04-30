@@ -1,19 +1,28 @@
-import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CartService } from '../shared/services/cart.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, timer } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
+import { headShakeAnimation, rotateAnimation, tadaAnimation } from 'angular-animations';
 
 @Component({
   selector: 'app-top-nav',
   templateUrl: 'top-nav.component.html',
-  styleUrls: ['./top-nav.component.css']
+  styleUrls: ['./top-nav.component.css'],
+  animations: [
+    headShakeAnimation(),
+    rotateAnimation(),
+    tadaAnimation()
+  ]
 })
-export class TopNavComponent implements OnInit, OnDestroy {
+export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   headerTitle: string = "BobaShop";
   cartItemsCount: number = 0;
   compDest$: Subject<any> = new Subject<any>();
+  logoShakeState: boolean = false;
+  leftNavMenuState: boolean = false;
+  swingState: boolean = false;
 
   @Output()
   navToggle: EventEmitter<any> = new EventEmitter<any>();
@@ -30,7 +39,15 @@ export class TopNavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.animateLogoOnStart();
+  }
 
+  ngAfterViewInit() {
+    ;
+  }
+
+  onLogoClick() {
+    this.logoShakeState = !this.logoShakeState;
   }
 
   onCartClick() {
@@ -38,7 +55,17 @@ export class TopNavComponent implements OnInit, OnDestroy {
   }
 
   onMenuClick() {
+    this.leftNavMenuState = !this.leftNavMenuState;
     this.navToggle.emit(true);
+  }
+
+  animateLogoOnStart() {
+    const logoAnimateTimer = timer(600);
+    logoAnimateTimer.pipe(
+      take(1)
+    ).subscribe((val) => {
+      this.swingState = true;
+    })
   }
 
   ngOnDestroy() {

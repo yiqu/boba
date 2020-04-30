@@ -37,19 +37,12 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cs.cartItemList$.pipe(
-      takeUntil(this.compDest$),
-      map((val: DrinkOrder[]) => {
-        //this.loading = true;
-        return val;
-      })
+      takeUntil(this.compDest$)
     ).subscribe(
       (res: DrinkOrder[]) => {
         this.cartOrders = [...res];
         this.listOfUsers = [];
         this.cartOrdersGrouped = [];
-
-        console.log("cart orders:", this.cartOrders)
-        //this.loading = false;
         this.createGroupByUser();
       }
     );

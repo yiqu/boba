@@ -16,7 +16,7 @@ export class DrinkOrder {
     this.date = date ? date : new Date().getTime();
     this.user = user ? user : new User(null, null);
     this.orders = this.createOrderDetails(orders);
-    this.groupedOrders = groupedOrders;
+    this.groupedOrders = groupedOrders ? groupedOrders : null;
   }
 
   createOrderDetails(ord: any[]) {

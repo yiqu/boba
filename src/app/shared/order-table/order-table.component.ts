@@ -6,7 +6,6 @@ import { OrderAccordionComponent } from '../order-table-accordion/order-accordio
 import { MatAccordion } from '@angular/material/expansion';
 import { takeUntil } from 'rxjs/operators';
 
-
 /**
  * Open / Closed Orders display component
  */

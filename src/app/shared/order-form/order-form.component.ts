@@ -152,11 +152,11 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     const reviewOrderDetail = this.createCurrentDrinkOrderDetail(formVal);
     const currentUser: User = this.getSelectedUser(formVal);
 
-    let order = new DrinkOrder(null, new Date().getTime(), [], currentUser);
+    let order = new DrinkOrder(null, new Date().getTime(), [], currentUser, null);
     order.orders = [reviewOrderDetail];
     this.rdf.getCartOrders().push(order).then(
       (val) => {
-        this.sbs.openSnackBar("Added order to cart.");
+        this.sbs.openSnackBar("Order added to cart.");
         this.proceedToCart(formVal.isFavorite);
       },
       (err) => {

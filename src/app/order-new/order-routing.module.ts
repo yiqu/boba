@@ -5,6 +5,7 @@ import { OrderNewOrderComponent } from './order/order.component';
 import { OrderNewCreateComponent } from './create/create.component';
 import { OrderNewViewAllComponent } from './view-all/view-all.component';
 import { CheckoutComponent } from './checkout/checkout.component';
+import { CheckoutRouteGuard } from '../shared/route-guards/checkout-guard.service';
 
 const routes: Routes = [
   {
@@ -12,7 +13,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'new', pathMatch: 'full' },
       { path: 'new', component: OrderNewCreateComponent },
-      { path: 'checkout', component: CheckoutComponent },
+      { path: 'checkout', component: CheckoutComponent, canActivate: [CheckoutRouteGuard] },
       { path: 'all', component: OrderNewViewAllComponent,
         children: [
           { path: ':id', component: OrderNewOrderComponent }

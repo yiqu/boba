@@ -57,7 +57,6 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
   }
 
   onFavSelect(d: DrinkFavoriteItem) {
-    console.log(d)
     const ice = new DrinkIceLevel(d.favDrink.iceLevel.name,
       d.favDrink.iceLevel.display);
     const sugar = new DrinkSugarLevel(d.favDrink.sugar.name, d.favDrink.sugar.display);

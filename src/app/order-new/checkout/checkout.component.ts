@@ -50,8 +50,6 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
       (err) => {
       },
       () => {
-        this.sbs.openSnackBar("We have received your orders!");
-
         from(this.cartOrders).pipe(
           map((val: DrinkOrder) => {
             return of(this.cs.cartItemsListFire.remove(val.fireKey))
@@ -63,7 +61,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
           (err) => {
           },
           () => {
-            this.sbs.openSnackBar("We have received your orders.");
+            this.sbs.openSnackBar("We have received your orders!");
             this.goToCart();
           })
       })

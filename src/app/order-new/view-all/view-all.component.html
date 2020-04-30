@@ -15,10 +15,6 @@
             There are currently {{cartOrders.length}} items made from
             {{cartOrdersGrouped.length}} {{'person' | pluralDisplay:cartOrdersGrouped.length}}.
           </div>
-          <div *ngIf="cartOrders.length > 0">
-            <button class="btn btn-outline-primary" (click)="onAddAnother()">
-              Add another</button>
-          </div>
         </div>
       </div>
     </div>

@@ -46,7 +46,6 @@ export class OrderAccordionComponent implements OnInit, AfterViewInit, OnChanges
   }
 
   ngOnChanges(c) {
-    console.log("in o", this.drinkOrder)
   }
 
   ngOnInit() {

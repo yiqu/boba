@@ -1,10 +1,12 @@
 <mat-toolbar class="app-toolbar app-header">
-  <button mat-icon-button color="primary" (click)="onMenuClick()" class="mat-elevation-z0">
+  <button mat-icon-button color="primary" (click)="onMenuClick()"
+    class="mat-elevation-z0" [@rotate]="leftNavMenuState">
     <mat-icon>menu</mat-icon>
   </button>
-  <div class="d-flex">
+  <div class="d-flex" (click)="onLogoClick()" [@tada]="swingState">
     <a [routerLink]="'/'" class="">
-      <img src="assets/images/banner/banner-tea.png" class="logo-img d-inline-block" alt="logo">
+      <img src="assets/images/banner/banner-tea.png" [@headShake]="logoShakeState"
+        class="logo-img d-inline-block" alt="logo">
       <div class="comf banner-text">{{ headerTitle }}</div>
     </a>
   </div>
