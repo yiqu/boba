@@ -1,1 +1,35 @@
-Inventory
+<div class="row mb-3">
+  <div class="col-sm-6 offset-md-3">
+    <div class="order-label mb-3 comf center-align" id="checkout-heading">
+      Inventory
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6">
+    <mat-list>
+      <ng-container *ngFor="let catagory of allDrinksList; last as last">
+        <div mat-subheader>{{catagory.header.display}}</div>
+        <ng-container *ngFor="let drink of catagory.links">
+          <mat-list-item >
+            <mat-icon mat-list-icon *ngIf="!this.fds.mobileQuery.matches">local_cafe</mat-icon>
+            <div mat-line>{{drink | inventoryDrinkDisplay}}</div>
+            <div mat-line class="text-muted fs-10"> {{drink.fireKey}} </div>
+          </mat-list-item>
+        </ng-container>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </ng-container>
+    </mat-list>
+  </div>
+  <div class="col-6">
+    <div class="row">
+      <div class="col-12">
+        <div mat-subheader>
+          Drink Detail
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,5 @@
+import { DrinkItem } from './base.model';
+
 export class NavItem {
   constructor(public id: string, public display: string,
     public url: string, public disabled: boolean = false) {
@@ -17,5 +19,10 @@ export class NavHeader {
 
 export class NavHeaderLink {
   constructor(public display: string, public iconName: string, public url: string[]) {
+  }
+}
+
+export class DrinkInventoryList {
+  constructor(public header: NavHeader, public links: DrinkItem[]) {
   }
 }

@@ -36,7 +36,7 @@ a {
 }
 
 .fs-10 {
-  font-size: 10px;
+  font-size: 10px !important;
 }
 
 .fs-12 {
@@ -55,6 +55,9 @@ a {
   height: 100%;
 }
 
+h2 {
+  font-size: 1.5rem !important;
+}
 
 .toolbar-spacer {
   flex: 1 1 auto;
@@ -139,4 +142,13 @@ a {
 
 .list-group .link-act a {
   color: #fff;
+}
+
+.list-group li a {
+  padding: .75rem 1.25rem;
+  display: block;
+}
+
+.list-group-item.links {
+  padding: 0 !important;
 }

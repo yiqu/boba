@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CartService } from './shared/services/cart.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
+import { RestDataFireService } from './shared/services/fire-data.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,8 @@ export class AppComponent implements OnDestroy {
   private _mobileQueryListener: () => void;
 
   constructor(public router: Router, public route: ActivatedRoute,
-    public cs: CartService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+    public cs: CartService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
+    public fds: RestDataFireService) {
 
       /**
        * Detect if deive is mobile size, then re-run detection change
@@ -29,6 +31,7 @@ export class AppComponent implements OnDestroy {
       this.mobileQuery = media.matchMedia('(max-width: 600px)');
       this._mobileQueryListener = () => changeDetectorRef.detectChanges();
       this.mobileQuery.addListener(this._mobileQueryListener);
+      this.fds.mobileQuery = this.mobileQuery;
   }
 
   onCartClick() {

@@ -11,8 +11,8 @@ export class ManagementComponent implements OnInit {
 
   constructor() {
     this.managementLinks.push(
-      new NavItem("inventory", "Shop Inventory", "inventory"),
-      new NavItem("users", "Shop Users", "users"),
+      new NavItem("inventory", "Inventory", "inventory"),
+      new NavItem("users", "Users", "users"),
       new NavItem("archives", "Order Archives", "archives")
     )
   }

@@ -14,6 +14,8 @@ import { from } from 'rxjs';
 })
 export class RestDataFireService {
 
+  mobileQuery: MediaQueryList;
+
   // ORDERS related URLs
   private ORDER_BASE_URL: string = "orders";
   private ORDER_OPEN_URL: string = "/open";

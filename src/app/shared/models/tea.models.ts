@@ -1,5 +1,5 @@
 import { User } from './user.model';
-import { IBaseItem } from './base.model';
+import { IBaseItem, DrinkItem } from './base.model';
 
 
 export class DrinkOrder {
@@ -103,6 +103,13 @@ export class DrinkTopping implements IBaseItem {
 export class DrinkFavoriteItem {
   constructor(public fireKey: string, public user: User, public date: number,
     public favDrink: DrinkOrderDetail) {
+
+  }
+}
+
+export class AllDrinkCatagoryMap {
+  constructor(public milkTeas: DrinkItem[], public creativeMixTeas: DrinkItem[],
+    public yogurtDrinks: DrinkItem[]) {
 
   }
 }
