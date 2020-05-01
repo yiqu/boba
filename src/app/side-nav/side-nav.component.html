@@ -12,10 +12,12 @@
   <ng-container *ngFor="let hl of headerList">
     <div mat-subheader>{{hl.header.display}}</div>
     <ng-container *ngFor="let hlc of hl.links">
-      <mat-list-item>
-        <mat-icon mat-list-icon>{{hlc.iconName}}</mat-icon>
-        <a class="comf fs-13" mat-line [routerLink]="hlc.url">{{hlc.display}}</a>
-      </mat-list-item>
+      <a class="comf fs-13" mat-line [routerLink]="hlc.url">
+        <mat-list-item [routerLinkActive]="'link-active'">
+          <mat-icon mat-list-icon>{{hlc.iconName}}</mat-icon>
+          <div class="comf fs-13" mat-line>{{hlc.display}}</div>
+        </mat-list-item>
+      </a>
     </ng-container>
   </ng-container>
 </mat-nav-list>

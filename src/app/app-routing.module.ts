@@ -19,6 +19,9 @@ const routes: Routes = [
   { path: 'new-order',
     loadChildren: () => import('./order-new/order-new.module').then(m => m.OrderNewModule)
   },
+  { path: 'management',
+    loadChildren: () => import('./management/management.module').then(m => m.ManagementModule)
+  },
   { path: '**', component: NotFoundComponent}
 ];
 

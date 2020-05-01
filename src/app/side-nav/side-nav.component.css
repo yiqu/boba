@@ -17,3 +17,9 @@
   justify-content: center;
   align-items: center;
 }
+
+mat-list-item.link-active {
+  background-color: #cccccc;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
