@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ManagementInventoryService } from '../../shared/services/management-inv.service';
-import { Subject } from 'rxjs';
+import { Subject, combineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NavHeaderList, NavHeader, NavHeaderLink, DrinkInventoryList } from '../../shared/models/nav-item.model';
 import { AllDrinkCatagoryMap } from '../../shared/models/tea.models';
@@ -17,6 +17,8 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
   compDest$: Subject<any> = new Subject<any>();
   allDrinksList: DrinkInventoryList[] = [];
+  inventorySubText: string = "This is a list of all the selections of our drinks on the menu. " +
+    "Click on a drink below to edit."
 
   constructor(public mis: ManagementInventoryService, public fds: RestDataFireService,
     public router: Router, public route: ActivatedRoute) {
@@ -27,6 +29,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
       takeUntil(this.compDest$)
     )
     .subscribe(([m, f, y]) => {
+      this.allDrinksList = [];
       const drinkMap: AllDrinkCatagoryMap = new AllDrinkCatagoryMap(m, f, y);
       this.createAllDrinksList(drinkMap);
     },

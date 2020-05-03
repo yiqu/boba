@@ -1,3 +1,14 @@
 .drink-item {
   cursor: pointer;
 }
+
+.list-group-item-primary {
+  color: #004085;
+  background-color: #cce6ff;
+  cursor: pointer;
+}
+
+.list-group-item-primary:hover {
+  color: #004085;
+  background-color: #b8daff;
+}

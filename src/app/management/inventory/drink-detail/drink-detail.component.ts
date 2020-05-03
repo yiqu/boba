@@ -8,6 +8,7 @@ import * as fu from '../../../shared/utils/form.utils';
 import * as gu from '../../../shared/utils/utils';
 import * as _ from 'lodash';
 import * as fv from '../../../shared/validators/general-form.validator';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-inventory-drink-detail',
@@ -21,9 +22,11 @@ export class InventoryDrinkDetailComponent implements OnInit {
   detailFg: FormGroup;
   seriesList: DrinkSeriesObject[] = gu.getAllDrinkTypes();
   lastUpdated: number;
+  currentDrinkFireKey: string;
 
   constructor(public router: Router, public route: ActivatedRoute,
-    public is: ManagementInventoryService, public fb: FormBuilder) {
+    public is: ManagementInventoryService, public fb: FormBuilder,
+    public sbs: SnackbarService) {
 
     this.route.paramMap.pipe(
       switchMap((pm: ParamMap) => {
@@ -36,7 +39,6 @@ export class InventoryDrinkDetailComponent implements OnInit {
       if (this.isDrinkDetailValid(res)) {
         this.currentDrink = res;
         this.createDetailFg();
-        console.log(this.detailFg)
         this.lastUpdated = this.getLastUpdated();
       } else {
         this.currentDrink = null;
@@ -83,7 +85,44 @@ export class InventoryDrinkDetailComponent implements OnInit {
   }
 
   onUpdate() {
-    console.log(this.detailFg.value)
+    const item = this.createDrinkItemToUpdate();
+    if (item) {
+      const seriesSame: boolean = this.isSeriesSame(item);
+      this.is.getDrinkDetail(this.getFirebaseDrinkSeries(item.seriesName),
+        this.currentDrink.fireKey).set(item).then((res) => {
+          this.sbs.openSnackBar(item.display + " saved!");
+          if (!seriesSame) {
+            this.is.getDrinkDetail(this.getFirebaseDrinkSeries(this.currentDrink.seriesName),
+              this.currentDrink.fireKey).remove();
+          }
+        },
+        (err) => {
+          this.sbs.openSnackBar(item.display + " could not be saved, error occured: " +  err);
+        }).finally(() => {
+          this.router.navigate(['../../'], {relativeTo: this.route});
+        });
+    }
+  }
+
+  /**
+   * If series was updated, then remove the item from its previous series
+   */
+  isSeriesSame(currItem: DrinkItem): boolean {
+    if (this.currentDrink) {
+      const prev = this.currentDrink.seriesName;
+      const curr = currItem.seriesName;
+      return prev === curr;
+    }
+    return null;
+  }
+
+  createDrinkItemToUpdate(): DrinkItem {
+    const val = this.detailFg.value;
+    if (this.detailFg.valid) {
+      const item: DrinkItem = new DrinkItem(val.display, val.name, val.drinkSeries.seriesDisplay,
+        val.drinkSeries.seriesName, null, val.drinkCost, new Date().getTime());
+      return item;
+    }
   }
 
   getFirebaseDrinkSeries(series: string): string {

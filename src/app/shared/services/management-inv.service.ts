@@ -40,7 +40,7 @@ export class ManagementInventoryService {
 
     this.allDrinksList$ = combineLatest(this.milkTeasList$,
       this.creativeMixTeasList$,
-      this.yogurtTeasList$)
+      this.yogurtTeasList$);
   }
 
   getFDB(): database.Database {

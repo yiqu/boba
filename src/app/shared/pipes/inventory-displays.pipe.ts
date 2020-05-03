@@ -10,7 +10,8 @@ export class InventoryDrinkDisplayPipe implements PipeTransform {
 
   transform(value: DrinkItem): string {
     let res: string = "";
-    res += (value.display + " - " + value.seriesDisplay);
+    const price = value.price ? value.price : 'Not set';
+    res += (value.display + " - $" + price);
     return res;
   }
 }

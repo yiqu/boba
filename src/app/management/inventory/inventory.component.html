@@ -7,19 +7,24 @@
 </div>
 
 <div class="row">
-  <div class="col-12">
-    <mat-list>
-      <ng-container *ngFor="let catagory of allDrinksList; last as last">
-        <div mat-subheader>{{catagory.header.display}}</div>
-        <ng-container *ngFor="let drink of catagory.links">
-          <mat-list-item class="drink-item" (click)="onDrinkItemClick(drink)">
-            <mat-icon mat-list-icon *ngIf="!this.fds.mobileQuery.matches">edit</mat-icon>
-            <div mat-line>{{drink | inventoryDrinkDisplay}}</div>
-            <div mat-line class="text-muted fs-10"> {{drink.fireKey}} </div>
-          </mat-list-item>
-        </ng-container>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </ng-container>
-    </mat-list>
+  <div class="col-sm-12 roboto mb-3">
+    {{inventorySubText}}
   </div>
 </div>
+
+<div class="row">
+  <div *ngFor="let catagory of allDrinksList; last as last" class="col-sm-4">
+    <ul class="list-group">
+      <li class="list-group-item">{{catagory.header.display}}
+        {{catagory.links.length | countNumberDisplay}}</li>
+      <li *ngFor="let drink of catagory.links" (click)="onDrinkItemClick(drink)"
+        class="list-group-item list-group-item-primary roboto">
+          {{drink | inventoryDrinkDisplay}}
+      </li>
+    </ul>
+  </div>
+</div>
+
+<ng-template #loading>
+  Loading drink inventory...
+</ng-template>
