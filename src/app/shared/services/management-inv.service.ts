@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList, SnapshotAction } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireList, SnapshotAction, AngularFireObject } from '@angular/fire/database';
 import { DrinkOrder, DrinkFavoriteItem } from '../models/tea.models';
 import { Observable, forkJoin, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -51,6 +51,26 @@ export class ManagementInventoryService {
     return fl.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes)),
     );
+  }
+
+  getDrinkDetailObs(series: string, id: string): Observable<any> {
+    let fireObj = this.firedb.object(this.BASE_SELECTIONS_URL + series + "/" + id);
+    return fireObj.snapshotChanges().pipe(
+      map((changes) => this.addFireKeySingle(changes)),
+    );
+  }
+
+  getDrinkDetail(series: string, id: string): AngularFireObject<any> {
+    return this.firedb.object(this.BASE_SELECTIONS_URL + series + "/" + id);
+  }
+
+  addFireKeySingle(c: SnapshotAction<any>) {
+    return (
+      {
+        fireKey: c.payload.key,
+        ...c.payload.val()
+      }
+    )
   }
 
   addfireKey(c: SnapshotAction<any>[]) {

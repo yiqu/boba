@@ -1,0 +1,90 @@
+<ng-container *ngIf="currentDrink !==undefined; else loadingDrink">
+  <ng-container *ngIf="currentDrink !==null; else drinkInvalid">
+    <div class="row mb-3">
+      <div class="col-sm-12 text-center">
+        <div class="order-label mb-3 comf center-align">
+          Drink Detail
+        </div>
+        <div>Last updated: {{lastUpdated | dateDisplay:'FROMNOW'}}</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <form class="detail-form" [formGroup]="detailFg">
+          <table class="full-w">
+            <tr>
+              <td>
+                <mat-form-field class="full-w">
+                  <mat-label>Drink Display Name</mat-label>
+                  <input matInput formControlName="display">
+                  <mat-error *ngIf="this.detailFg.get('display').hasError('lettersOnly') &&
+                    !this.detailFg.get('display').hasError('required')">
+                      Please enter only unaccented alphabetical letters, A–Z or a–z.
+                  </mat-error>
+                  <mat-error *ngIf="this.detailFg.get('display').hasError('required')">
+                    Field is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <mat-form-field class="full-w">
+                  <mat-label>Drink ID</mat-label>
+                  <input matInput formControlName="name">
+                  <mat-error *ngIf="this.detailFg.get('name').hasError('lettersOnly') &&
+                    !this.detailFg.get('name').hasError('required')">
+                      Please enter only unaccented alphabetical letters, A–Z or a–z.
+                  </mat-error>
+                  <mat-error *ngIf="this.detailFg.get('name').hasError('required')">
+                    Field is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <mat-form-field class="full-w">
+                  <mat-label>Drink Series</mat-label>
+                  <mat-select formControlName="drinkSeries">
+                    <mat-option *ngFor="let serie of seriesList" [value]="serie">
+                      {{serie.seriesDisplay}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <mat-form-field class="full-w">
+                  <mat-label>Drink Cost</mat-label>
+                  <input matInput class="field-right-align" formControlName="drinkCost">
+                  <mat-error *ngIf="this.detailFg.get('drinkCost').hasError('numbersOnly')">
+                      Please enter only integers and decimals.
+                  </mat-error>
+                  <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">
+        <button mat-flat-button color="primary" (click)="onUpdate()" [disabled]="detailFg.invalid">Update</button>
+      </div>
+    </div>
+
+  </ng-container>
+</ng-container>
+
+<ng-template #drinkInvalid>
+  Drink item is invalid.
+</ng-template>
+<ng-template #loadingDrink>
+  Loading drink item...
+</ng-template>
+
+

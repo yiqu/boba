@@ -1,0 +1,13 @@
+.detail-card {
+}
+
+.detail-form {
+  min-width: 150px;
+  max-width: 400px;
+  width: 100%;
+}
+
+
+.field-right-align {
+  text-align: right;
+}

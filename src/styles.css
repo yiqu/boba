@@ -55,6 +55,10 @@ a {
   height: 100%;
 }
 
+.full-w {
+  width: 100%;
+}
+
 h2 {
   font-size: 1.5rem !important;
 }

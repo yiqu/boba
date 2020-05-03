@@ -5,7 +5,7 @@ import * as moment from 'moment';
 export class DateDisplayPipe implements PipeTransform {
 
   transform(value: any, displayType: string): any {
-    if (value) {
+    if (value || (value === 0)) {
       const dateMilli = +value;
       switch (displayType) {
         case "FROMNOW": {
@@ -22,7 +22,7 @@ export class DateDisplayPipe implements PipeTransform {
         }
       }
     }
-    return "BAD DATE";
+    return "BAD DATE / NO DATE";
 
   }
 }

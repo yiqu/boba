@@ -7,3 +7,11 @@ export function createFormControl(value: any, disabled: boolean, validators: any
   }, validators, asyncValids);
   return fc;
 }
+
+export function createFormControl2(value: any, disabled: boolean, validators: any[] = null, asyncValids: any[] = null): FormControl {
+  let fc = new FormControl({
+    value: value,
+    disabled: disabled
+  }, validators, asyncValids);
+  return fc;
+}

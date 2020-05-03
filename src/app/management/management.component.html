@@ -7,7 +7,7 @@
 
   <div class="row mb-2 mt-2">
     <div class="col-12">
-      <ul class="list-group list-group-horizontal">
+      <ul class="list-group list-group-horizontal comf">
         <li *ngFor="let link of managementLinks" class="list-group-item links"
           [routerLinkActive]="'active link-act'">
           <a [routerLink]="[link.url]">{{link.display}}</a>

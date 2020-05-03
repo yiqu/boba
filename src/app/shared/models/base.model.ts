@@ -34,12 +34,18 @@ export enum OrderStatusType {
 
 export class DrinkItem {
   constructor(public display: string, public name: string,
-    public seriesDisplay: string, public seriesName: string, public fireKey?: string) {
+    public seriesDisplay: string, public seriesName: string, public fireKey?: string,
+    public price?: any, public lastUpdated?: number) {
   }
 }
 
 export class DrinkFavorite {
   constructor(user: User, drinkDetail: DrinkOrderDetail, date: number) {
 
+  }
+}
+
+export class DrinkSeriesObject {
+  constructor(public seriesDisplay: string, public seriesName: DrinkSeries | string) {
   }
 }
