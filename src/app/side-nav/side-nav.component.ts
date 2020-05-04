@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { NavHeaderList, NavHeader, NavHeaderLink } from '../shared/models/nav-item.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-side-nav',
@@ -14,7 +15,7 @@ export class SideNavComponent implements OnInit {
   @Output()
   navClose: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() {
+  constructor(public router: Router) {
     this.headerList.push(
       new NavHeaderList(new NavHeader("Management"), [
         new NavHeaderLink("Inventory", "assignment", ["/", "management", "inventory"]),
@@ -36,6 +37,15 @@ export class SideNavComponent implements OnInit {
   }
 
   onNavClose() {
+    this.navClose.emit(true);
+  }
+
+  onNavItemClick() {
+    this.navClose.emit(true);
+  }
+
+  onTitleClick() {
+    this.router.navigate(['/']);
     this.navClose.emit(true);
   }
 }

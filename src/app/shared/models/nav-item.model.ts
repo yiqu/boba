@@ -2,7 +2,7 @@ import { DrinkItem } from './base.model';
 
 export class NavItem {
   constructor(public id: string, public display: string,
-    public url: string, public disabled: boolean = false) {
+    public url: string, public disabled: boolean = false, public iconName?: string) {
 
   }
 }

@@ -39,6 +39,13 @@ export class DrinkItem {
   }
 }
 
+export class ToppingItem {
+  constructor(public display: string, public name: string,
+    public fireKey?: string,
+    public price?: any, public lastUpdated?: number) {
+  }
+}
+
 export class DrinkFavorite {
   constructor(user: User, drinkDetail: DrinkOrderDetail, date: number) {
 

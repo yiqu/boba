@@ -1,19 +1,19 @@
-<div class="row mb-3">
+<div class="row mt-3 mb-3">
   <div class="col-sm-6 offset-md-3">
-    <div class="order-label mb-3 comf center-align" id="checkout-heading">
+    <div class="order-label comf center-align" id="checkout-heading">
       Inventory
     </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-12 roboto mb-3">
+<div class="row mb-3">
+  <div class="col-sm-12 roboto">
     {{inventorySubText}}
   </div>
 </div>
 
 <div class="row">
-  <div *ngFor="let catagory of allDrinksList; last as last" class="col-sm-4">
+  <div *ngFor="let catagory of allDrinksList; last as last" class="col-sm-4 mb-3">
     <ul class="list-group">
       <li class="list-group-item">{{catagory.header.display}}
         {{catagory.links.length | countNumberDisplay}}</li>

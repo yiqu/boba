@@ -6,17 +6,25 @@
   </div>
 
   <div class="row mb-2 mt-2">
-    <div class="col-12">
-      <ul class="list-group list-group-horizontal comf">
+    <div class="col-sm-12">
+      <!-- <ul class="list-group list-group-horizontal comf">
         <li *ngFor="let link of managementLinks" class="list-group-item links"
           [routerLinkActive]="'active link-act'">
           <a [routerLink]="[link.url]">{{link.display}}</a>
         </li>
-      </ul>
+      </ul> -->
+      <nav mat-tab-nav-bar [backgroundColor]="undefined">
+        <a mat-tab-link *ngFor="let link of tabLinks"
+          (click)="activeLink = link"
+          routerLinkActive #rla="routerLinkActive"
+          [active]="rla.isActive"
+          [routerLink]="[link.url]">
+          <mat-icon mat-list-icon class="mr-1">{{link.iconName}}</mat-icon>
+          {{link.display}}
+        </a>
+      </nav>
     </div>
   </div>
-
-  <hr>
 
   <router-outlet></router-outlet>
 </div>

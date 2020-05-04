@@ -3,18 +3,26 @@ import { NavItem } from '../shared/models/nav-item.model';
 
 @Component({
   selector: 'app-management',
-  templateUrl: 'management.component.html'
+  templateUrl: 'management.component.html',
+  styleUrls: ['./management.component.css']
 })
 export class ManagementComponent implements OnInit {
 
   managementLinks: NavItem[] = [];
 
+  tabLinks: NavItem[] = [];
+  activeLink: NavItem;
+
   constructor() {
     this.managementLinks.push(
-      new NavItem("inventory", "Inventory", "inventory"),
-      new NavItem("users", "Users", "users"),
-      new NavItem("archives", "Order Archives", "archives")
+
     )
+
+    this.tabLinks.push(
+      new NavItem("inventory", "Inventory", "inventory", false, 'assignment'),
+      new NavItem("users", "Users", "users", false, 'people'),
+      new NavItem("archives", "Order Archives", "archives", false, 'poll')
+    );
   }
 
   ngOnInit() { }

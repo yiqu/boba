@@ -1,5 +1,5 @@
 import { User } from './user.model';
-import { IBaseItem, DrinkItem } from './base.model';
+import { IBaseItem, DrinkItem, ToppingItem } from './base.model';
 
 
 export class DrinkOrder {
@@ -107,9 +107,9 @@ export class DrinkFavoriteItem {
   }
 }
 
-export class AllDrinkCatagoryMap {
+export class InventoryCatagoryMap {
   constructor(public milkTeas: DrinkItem[], public creativeMixTeas: DrinkItem[],
-    public yogurtDrinks: DrinkItem[]) {
+    public yogurtDrinks: DrinkItem[], public toppings: ToppingItem[]) {
 
   }
 }

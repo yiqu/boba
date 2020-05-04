@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import * as _ from 'lodash';
 import { database } from 'firebase/app';
-import { DrinkItem } from '../models/base.model';
+import { DrinkItem, ToppingItem } from '../models/base.model';
 
 
 @Injectable({
@@ -19,13 +19,17 @@ export class ManagementInventoryService {
   private MILK_TEAS_URL: string = "teas";
   private FRUIT_TEAS_URL: string = "creative-mix";
   private YOGURT_TEAS_URL: string = "yogurt";
+  private TOPPINGS_URL: string = "toppings";
 
   milkTeasListFire: AngularFireList<DrinkItem>;
   creativeMixTeasListFire: AngularFireList<DrinkItem>;
   yogurtTeasListFire: AngularFireList<DrinkItem>;
+  toppingsListFire: AngularFireList<ToppingItem>;
+
   milkTeasList$: Observable<DrinkItem[]>;
   creativeMixTeasList$: Observable<DrinkItem[]>;
   yogurtTeasList$: Observable<DrinkItem[]>;
+  toppingsList$: Observable<ToppingItem[]>;
 
   allDrinksList$: Observable<any>;
 
@@ -33,14 +37,19 @@ export class ManagementInventoryService {
     this.milkTeasListFire = this.firedb.list(this.BASE_SELECTIONS_URL + this.MILK_TEAS_URL);
     this.creativeMixTeasListFire = this.firedb.list(this.BASE_SELECTIONS_URL + this.FRUIT_TEAS_URL);
     this.yogurtTeasListFire = this.firedb.list(this.BASE_SELECTIONS_URL + this.YOGURT_TEAS_URL);
+    this.toppingsListFire = this.firedb.list(this.BASE_SELECTIONS_URL + this.TOPPINGS_URL);
 
     this.milkTeasList$ = this.getCartItemObs<DrinkItem>(this.milkTeasListFire);
     this.creativeMixTeasList$ = this.getCartItemObs<DrinkItem>(this.creativeMixTeasListFire);
     this.yogurtTeasList$ = this.getCartItemObs<DrinkItem>(this.yogurtTeasListFire);
+    this.toppingsList$ = this.getCartItemObs<ToppingItem>(this.toppingsListFire);
 
-    this.allDrinksList$ = combineLatest(this.milkTeasList$,
+    this.allDrinksList$ = combineLatest(
+      this.milkTeasList$,
       this.creativeMixTeasList$,
-      this.yogurtTeasList$);
+      this.yogurtTeasList$,
+      this.toppingsList$
+    );
   }
 
   getFDB(): database.Database {

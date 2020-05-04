@@ -3,7 +3,7 @@
     <div class="row mb-3">
       <div class="col-sm-12 text-center">
         <div class="order-label mb-3 comf center-align">
-          Drink Detail
+          Item Detail
         </div>
         <div>Last updated: {{lastUpdated | dateDisplay:'FROMNOW'}}</div>
       </div>
@@ -43,7 +43,7 @@
                 </mat-form-field>
               </td>
             </tr>
-            <tr>
+            <tr *ngIf="this.detailFg.controls['drinkSeries']">
               <td>
                 <mat-form-field class="full-w">
                   <mat-label>Drink Series</mat-label>

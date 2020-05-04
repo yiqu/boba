@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { DrinkItem, DrinkSeriesObject } from '../../../shared/models/base.model';
+import { DrinkItem, DrinkSeriesObject, ToppingItem } from '../../../shared/models/base.model';
 import { ManagementInventoryService } from '../../../shared/services/management-inv.service';
 import { switchMap } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -51,16 +51,22 @@ export class InventoryDrinkDetailComponent implements OnInit {
   }
 
   isDrinkDetailValid(res: any) {
-    return res['display'] && res['name'] && res['seriesDisplay'] && res['seriesName'];
+    return res['display'] && res['name'];
   }
 
   createDetailFg() {
     this.detailFg = this.fb.group({
       display: fu.createFormControl(this.currentDrink.display, false, [Validators.required, fv.customOnlyLettersValidator]),
       name: fu.createFormControl(this.currentDrink.name, false, [Validators.required, fv.customOnlyLettersValidator]),
-      drinkSeries: fu.createFormControl(this.getFetchedDrinkSeriesValue(), false, [Validators.required]),
+      //drinkSeries: fu.createFormControl(this.getFetchedDrinkSeriesValue(), false, [Validators.required]),
       drinkCost: fu.createFormControl2(this.getDrinkCost(), false, [fv.customOnlyNumbersValidator])
-    })
+    });
+    if (this.currentDrink.seriesName) {
+      this.detailFg.addControl("drinkSeries", fu.createFormControl(this.getFetchedDrinkSeriesValue(), false, [Validators.required]));
+    }
+    if (this.currentDrink['itemType']) {
+      this.detailFg.addControl("itemType", fu.createFormControl(this.currentDrink['itemType'], false, [Validators.required]));
+    }
   }
 
   getFetchedDrinkSeriesValue(): DrinkSeriesObject {
@@ -88,19 +94,26 @@ export class InventoryDrinkDetailComponent implements OnInit {
     const item = this.createDrinkItemToUpdate();
     if (item) {
       const seriesSame: boolean = this.isSeriesSame(item);
-      this.is.getDrinkDetail(this.getFirebaseDrinkSeries(item.seriesName),
-        this.currentDrink.fireKey).set(item).then((res) => {
-          this.sbs.openSnackBar(item.display + " saved!");
-          if (!seriesSame) {
-            this.is.getDrinkDetail(this.getFirebaseDrinkSeries(this.currentDrink.seriesName),
-              this.currentDrink.fireKey).remove();
-          }
-        },
-        (err) => {
-          this.sbs.openSnackBar(item.display + " could not be saved, error occured: " +  err);
-        }).finally(() => {
-          this.router.navigate(['../../'], {relativeTo: this.route});
-        });
+
+      let itemType: string;
+      if (item['itemType']) {
+        itemType = item['itemType'];
+      } else if (item.seriesName) {
+        itemType = this.getFirebaseDrinkSeries(item.seriesName);
+      }
+
+      this.is.getDrinkDetail(itemType, this.currentDrink.fireKey).set(item).then((res) => {
+        this.sbs.openSnackBar(item.display + " saved!", 1000);
+        if (!seriesSame) {
+          this.is.getDrinkDetail(this.getFirebaseDrinkSeries(this.currentDrink.seriesName),
+            this.currentDrink.fireKey).remove();
+        }
+      },
+      (err) => {
+        this.sbs.openSnackBar(item.display + " could not be saved, error occured: " +  err);
+      }).finally(() => {
+        this.router.navigate(['../../'], {relativeTo: this.route});
+      });
     }
   }
 
@@ -108,19 +121,25 @@ export class InventoryDrinkDetailComponent implements OnInit {
    * If series was updated, then remove the item from its previous series
    */
   isSeriesSame(currItem: DrinkItem): boolean {
-    if (this.currentDrink) {
+    if (this.currentDrink && this.currentDrink.seriesName) {
       const prev = this.currentDrink.seriesName;
       const curr = currItem.seriesName;
       return prev === curr;
     }
-    return null;
+    return true;
   }
 
   createDrinkItemToUpdate(): DrinkItem {
     const val = this.detailFg.value;
+    const sd = val.drinkSeries ? val.drinkSeries.seriesDisplay : null;
+    const sn = val.drinkSeries ? val.drinkSeries.seriesName : null;
+
     if (this.detailFg.valid) {
-      const item: DrinkItem = new DrinkItem(val.display, val.name, val.drinkSeries.seriesDisplay,
-        val.drinkSeries.seriesName, null, val.drinkCost, new Date().getTime());
+      let item: DrinkItem = new DrinkItem(val.display, val.name, sd,
+        sn, null, val.drinkCost, new Date().getTime());
+      if (val.itemType) {
+        item['itemType'] = val.itemType;
+      }
       return item;
     }
   }
@@ -138,6 +157,10 @@ export class InventoryDrinkDetailComponent implements OnInit {
       }
       case "yogurt": {
         res = "yogurt";
+        break;
+      }
+      case "toppings": {
+        res = "toppings";
         break;
       }
     }
