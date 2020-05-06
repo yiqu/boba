@@ -4,6 +4,7 @@ import * as fu from '../../shared/utils/form.utils';
 import { AuthInfo, IAuthInfo } from '../../shared/models/user.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import * as firebase from 'firebase/app';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth-signin',
@@ -27,9 +28,9 @@ export class AuthSigninComponent implements OnInit {
     return <FormControl>this.signFg.get("password");
   }
 
-  constructor(public fb: FormBuilder, public as: AuthService) {
+  constructor(public fb: FormBuilder, public as: AuthService, public router: Router) {
     this.signFg = this.fb.group({
-      id: fu.createFormControl("hi@test.com", false, [Validators.required, Validators.email]),
+      id: fu.createFormControl("t1@test.com", false, [Validators.required, Validators.email]),
       password: fu.createFormControl("123456", false),
     });
   }
@@ -41,7 +42,6 @@ export class AuthSigninComponent implements OnInit {
   }
 
   onSignInClick() {
-    console.log(this.signFg.value)
     if (this.passwordFc.value && this.passwordFc.value.trim()!=="") {
       const auth: AuthInfo = new AuthInfo(this.signFg.value.id, this.signFg.value.password);
       this.signIn(auth);
@@ -51,13 +51,13 @@ export class AuthSigninComponent implements OnInit {
   }
 
   signIn(a: AuthInfo) {
+    this.errMsg = null;
     this.loading = true;
-    this.as.userSignIn(a).then(
+    this.as.loginUser(a).then(
       (res) => {
-        console.log("res", res)
+        this.router.navigate(['/']);
       },
       (rej) => {
-        console.log("rej", rej)
         this.errMsg = this.as.getFirebaseErrorMsg(rej);
       }
     ).finally(() => {

@@ -4,6 +4,7 @@ import * as fu from '../../shared/utils/form.utils';
 import { AuthInfo, IAuthInfo } from '../../shared/models/user.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import * as firebase from 'firebase/app';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth-signup',
@@ -22,19 +23,45 @@ export class AuthSignupComponent implements OnInit {
     return <FormControl>this.signFg.get("email");
   }
 
-  constructor(public fb: FormBuilder) {
+  constructor(public fb: FormBuilder, public as: AuthService, public router: Router) {
     this.signFg = this.fb.group({
-      email: fu.createFormControl(null, false, [Validators.required, Validators.email]),
-      password: fu.createFormControl(null, false, [Validators.required]),
-      repassword: fu.createFormControl(null, false, [Validators.required])
+      email: fu.createFormControl("t@test.com", false, [Validators.required, Validators.email]),
+      password: fu.createFormControl("123456", false, [Validators.required]),
+      repassword: fu.createFormControl("123456", false, [Validators.required])
     })
   }
 
   ngOnInit() {
+    this.signFg.valueChanges.subscribe((val) => {
+      this.errMsg = null;
 
+    })
   }
 
   onSignupClick() {
+    const res = this.signFg.value;
+    if (res.password !== res.repassword) {
+      this.errMsg = "Password does not match.";
+    } else {
+      const auth: AuthInfo = new AuthInfo(res.email, res.password);
+      this.signup(auth);
+    }
+  }
 
+  signup(a: AuthInfo) {
+    this.errMsg = null;
+    this.loading = true;
+    this.as.createUser(a).then(
+      (res: firebase.auth.UserCredential) => {
+        this.router.navigate(['/']);
+      },
+      (rej) => {
+        this.errMsg = this.as.getFirebaseErrorMsg(rej);
+      }
+    ).finally(
+      () => {
+        this.loading = false;
+      }
+    )
   }
 }

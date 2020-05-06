@@ -25,16 +25,18 @@
             </mat-form-field>
           </div>
 
-          <mat-form-field appearance="outline" class="password-input">
-            <mat-label>Password</mat-label>
-            <input matInput placeholder="Password" [formControlName]="'password'">
-            <mat-icon matSuffix>https</mat-icon>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="repassword-input">
-            <mat-label>Confirm</mat-label>
-            <input matInput placeholder="Confirm password" [formControlName]="'repassword'">
-            <mat-icon matSuffix>https</mat-icon>
-          </mat-form-field>
+          <div>
+            <mat-form-field appearance="outline" class="password-input">
+              <mat-label>Password</mat-label>
+              <input matInput placeholder="Password" [formControlName]="'password'">
+              <mat-icon matSuffix>https</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="repassword-input">
+              <mat-label>Confirm</mat-label>
+              <input matInput placeholder="Confirm password" [formControlName]="'repassword'">
+              <mat-icon matSuffix>https</mat-icon>
+            </mat-form-field>
+          </div>
 
           <div *ngIf="errMsg">
             <div class="alert alert-warning">

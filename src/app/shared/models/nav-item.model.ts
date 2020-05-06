@@ -26,3 +26,9 @@ export class DrinkInventoryList {
   constructor(public header: NavHeader, public links: DrinkItem[]) {
   }
 }
+
+export class MenuItem {
+  constructor(public iconName: string, public display: string) {
+
+  }
+}

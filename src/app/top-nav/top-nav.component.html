@@ -17,8 +17,15 @@
       [matBadgeHidden]="cartItemsCount<1">
         <mat-icon>shopping_cart</mat-icon>
     </button>
-    <button mat-icon-button color="primary" class="mat-elevation-z0" (click)="onAuthClick()">
-      <mat-icon>account_circle</mat-icon>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" color="primary">
+      <mat-icon>{{userMenuIcon}}</mat-icon>
     </button>
+    <mat-menu #menu="matMenu">
+      <button *ngFor="let item of userMenuItems" mat-menu-item (click)="onMenuItemClick(item)">
+        <mat-icon>{{item.iconName}}</mat-icon>
+        <span>{{item.display}}</span>
+      </button>
+    </mat-menu>
   </div>
 </mat-toolbar>

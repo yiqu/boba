@@ -4,6 +4,9 @@ import { CartService } from '../shared/services/cart.service';
 import { Subject, timer } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { headShakeAnimation, rotateAnimation, tadaAnimation } from 'angular-animations';
+import { AuthService } from '../shared/services/auth.service';
+import { VerifiedUser } from '../shared/models/user.model';
+import { MenuItem } from '../shared/models/nav-item.model';
 
 @Component({
   selector: 'app-top-nav',
@@ -23,18 +26,33 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
   logoShakeState: boolean = false;
   leftNavMenuState: boolean = false;
   swingState: boolean = false;
+  userMenuIcon: string; //account_circle
+  currentUser: VerifiedUser;
+  userMenuItems: MenuItem[] = [];
 
   @Output()
   navToggle: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(public router: Router, public route: ActivatedRoute,
-    public cs: CartService,) {
-
+    public cs: CartService, public as: AuthService) {
       this.cs.cartItemList$.pipe(
         takeUntil(this.compDest$)
       )
       .subscribe((val) => {
         this.cartItemsCount = val ? val.length : 0;
+      });
+
+      this.as.currentUser$.pipe(
+        takeUntil(this.compDest$)
+      ).subscribe((val: VerifiedUser) => {
+        if (val) {
+          this.currentUser = val;
+          this.userMenuIcon = "account_circle";
+        } else {
+          this.currentUser = null;
+          this.userMenuIcon = "more_vert";
+        }
+        this.buildUserMenuItems();
       });
   }
 
@@ -43,7 +61,6 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    ;
   }
 
   onLogoClick() {
@@ -70,6 +87,41 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onAuthClick() {
     this.router.navigate(['auth']);
+  }
+
+  onSignoutClick() {
+    this.as.signoutUser().then(
+      (res) => {
+        this.router.navigate(['/']);
+      },
+      (rej) => {
+
+      }
+    );
+  }
+
+  onMenuItemClick(item: MenuItem) {
+    if (item.display === "My account") {
+      this.router.navigate(['/', 'my-account']);
+    } else if (item.display === "Sign out") {
+      this.onSignoutClick();
+    } else if (item.display === "Sign in") {
+      this.onAuthClick();
+    }
+  }
+
+  buildUserMenuItems() {
+    this.userMenuItems = [];
+    if (this.currentUser) {
+      this.userMenuItems.push(
+        new MenuItem("person", "My account"),
+        new MenuItem("power_settings_new", "Sign out")
+      );
+    } else {
+      this.userMenuItems.push(
+        new MenuItem("record_voice_over", "Sign in")
+      )
+    }
   }
 
   ngOnDestroy() {

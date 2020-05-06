@@ -1,6 +1,6 @@
 @media only screen and (min-width: 630px) {
   .signin-card {
-    min-width: 30rem;
+    width: 30rem;
   }
 }
 

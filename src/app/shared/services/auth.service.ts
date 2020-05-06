@@ -5,11 +5,12 @@ import { map, catchError, delay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { Router } from '@angular/router';
-import { User, AuthInfo } from '../models/user.model';
+import { User, AuthInfo, VerifiedUser } from '../models/user.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 // import the firebase under firebase/app, then we need to manually import the auth package
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import { SnackbarService } from './snackbar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +21,26 @@ export class AuthService {
   private baseSignUpUrl: string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
 
   public refreshClick$: Subject<any> = new Subject<any>();
-  user$: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+  currentUser$: BehaviorSubject<VerifiedUser> = new BehaviorSubject<VerifiedUser>(null);
 
   constructor(public http: HttpClient, public firestore: AngularFireDatabase,
-    public router: Router) {
+    public router: Router, public sbs: SnackbarService) {
+      firebase.auth().onAuthStateChanged(
+        (user: firebase.User) => {
+          if (user) {
+            console.log("user is now: ", user.toJSON());
+            const u = (<VerifiedUser>user.toJSON());
+            this.currentUser$.next(u);
+          } else {
+            this.currentUser$.next(null);
+          }
+        },
+        (err) => {
+          this.sbs.openSnackBar("Error: " + err.code + err.message);
+        },
+        () => {
+        }
+      );
   }
 
   handleError(err: HttpErrorResponse) {
@@ -31,12 +48,16 @@ export class AuthService {
   }
 
 
-  userSignUp() {
-    //firebase.auth().createUserWithEmailAndPassword()
+  createUser(authInfo: AuthInfo): Promise<firebase.auth.UserCredential> {
+    return firebase.auth().createUserWithEmailAndPassword(authInfo.id, authInfo.password);
   }
 
-  userSignIn(authInfo: AuthInfo): Promise<firebase.auth.UserCredential> {
+  loginUser(authInfo: AuthInfo): Promise<firebase.auth.UserCredential> {
     return firebase.auth().signInWithEmailAndPassword(authInfo.id, authInfo.password);
+  }
+
+  signoutUser(): Promise<void> {
+    return firebase.auth().signOut();
   }
 
   getFirebaseErrorMsg(err: any): string {
