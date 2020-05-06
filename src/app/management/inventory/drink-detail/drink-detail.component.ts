@@ -108,11 +108,12 @@ export class InventoryDrinkDetailComponent implements OnInit {
           this.is.getDrinkDetail(this.getFirebaseDrinkSeries(this.currentDrink.seriesName),
             this.currentDrink.fireKey).remove();
         }
+        this.router.navigate(['../../'], {relativeTo: this.route});
       },
       (err) => {
         this.sbs.openSnackBar(item.display + " could not be saved, error occured: " +  err);
       }).finally(() => {
-        this.router.navigate(['../../'], {relativeTo: this.route});
+        //this.router.navigate(['../../'], {relativeTo: this.route});
       });
     }
   }

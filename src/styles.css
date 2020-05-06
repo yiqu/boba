@@ -77,6 +77,11 @@ h2 {
   justify-content: center;
 }
 
+.left-align {
+  display: flex;
+  justify-content: left;
+}
+
 .float-right {
   justify-content: flex-end;
 }

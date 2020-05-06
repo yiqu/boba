@@ -68,6 +68,10 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
 
+  onAuthClick() {
+    this.router.navigate(['auth']);
+  }
+
   ngOnDestroy() {
     this.compDest$.next();
   }
