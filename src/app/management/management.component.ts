@@ -8,16 +8,10 @@ import { NavItem } from '../shared/models/nav-item.model';
 })
 export class ManagementComponent implements OnInit {
 
-  managementLinks: NavItem[] = [];
-
   tabLinks: NavItem[] = [];
   activeLink: NavItem;
 
   constructor() {
-    this.managementLinks.push(
-
-    )
-
     this.tabLinks.push(
       new NavItem("inventory", "Inventory", "inventory", false, 'assignment'),
       new NavItem("users", "Users", "users", false, 'people'),

@@ -48,6 +48,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
       (val) => {
       },
       (err) => {
+        this.sbs.openSnackBar("Order could not be placed, error occured: " +  err['code']);
       },
       () => {
         from(this.cartOrders).pipe(
@@ -59,6 +60,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
           (val) => {
           },
           (err) => {
+            this.sbs.openSnackBar("Order could not be placed, error occured: " +  err['code']);
           },
           () => {
             this.sbs.openSnackBar("We have received your orders!");

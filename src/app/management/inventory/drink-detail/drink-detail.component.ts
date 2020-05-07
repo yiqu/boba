@@ -111,7 +111,7 @@ export class InventoryDrinkDetailComponent implements OnInit {
         this.router.navigate(['../../'], {relativeTo: this.route});
       },
       (err) => {
-        this.sbs.openSnackBar(item.display + " could not be saved, error occured: " +  err);
+        this.sbs.openSnackBar(item.display + " could not be saved, error occured: " +  err['code']);
       }).finally(() => {
         //this.router.navigate(['../../'], {relativeTo: this.route});
       });

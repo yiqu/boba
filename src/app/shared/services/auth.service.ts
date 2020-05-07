@@ -28,7 +28,6 @@ export class AuthService {
       firebase.auth().onAuthStateChanged(
         (user: firebase.User) => {
           if (user) {
-            console.log("user is now: ", user.toJSON());
             const u = (<VerifiedUser>user.toJSON());
             this.currentUser$.next(u);
           } else {

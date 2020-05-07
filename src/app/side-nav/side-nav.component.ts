@@ -17,6 +17,12 @@ export class SideNavComponent implements OnInit {
 
   constructor(public router: Router) {
     this.headerList.push(
+      new NavHeaderList(new NavHeader("Orders"), [
+        new NavHeaderLink("New Order", "add_shopping_cart", ["/", "new-order", "new"]),
+        new NavHeaderLink("My Cart", "shopping_cart", ["/", "new-order", "all"]),
+        new NavHeaderLink("Open", "alarm", ["/", "home", "open-orders"]),
+        new NavHeaderLink("Closed", "done_all", ["/", "home", "completed-orders"]),
+      ]),
       new NavHeaderList(new NavHeader("Management"), [
         new NavHeaderLink("Inventory", "assignment", ["/", "management", "inventory"]),
         new NavHeaderLink("Users", "people", ["/", "management", "users"]),

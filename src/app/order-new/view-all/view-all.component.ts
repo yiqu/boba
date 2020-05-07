@@ -92,7 +92,7 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
         this.sbs.openSnackBar("Item removed from cart.");
       },
       (err) => {
-        this.sbs.openSnackBar("Server Error: something went wrong while removing this item.");
+        this.sbs.openSnackBar("Server Error: something went wrong while removing this item. " + err['code']);
       })
     } else {
       this.sbs.openSnackBar("Error occured removing this item: Item does not exist anymore.");

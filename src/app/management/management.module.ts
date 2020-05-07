@@ -10,6 +10,7 @@ import { MaterialModuleBundle } from '../shared/material-bundle.module';
 import { DirectivesBundleModule } from '../shared/directives/directives-bundle.module';
 import { ArchivesComponent } from './archives/archives.component';
 import { UsersComponent } from './users/users.component';
+import { NotificationBannerModule } from '../notification-banner/banner.module';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { UsersComponent } from './users/users.component';
     PipeBundleModule,
     DirectivesBundleModule,
     ManagementInventoryModule,
+    NotificationBannerModule,
     ManagementRoutingModule
   ],
 

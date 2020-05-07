@@ -13,6 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class OrderNewComponent implements OnInit, OnDestroy {
 
   ads: AdItem[];
+  bannerMsg: string = "first, you will not be able to add orders or checkout.";
 
   constructor(public abs: AdBannerService, public router: Router, public route: ActivatedRoute) {
 

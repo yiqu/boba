@@ -3,6 +3,8 @@
     <app-shared-ad-banner [ads]="ads"></app-shared-ad-banner>
   </div>
   <hr>
+  <app-notification-banner [loginRequired]="true" [showBreak]="true"
+    [customMsg]="bannerMsg"></app-notification-banner>
   <div class="row mb-2">
     <div class="col-sm-12 d-flex order-nav-group">
       <button (click)="goToNew()" class="btn btn-outline-primary mr-2">Start new order</button>

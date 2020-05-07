@@ -76,7 +76,7 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
     .subscribe((val: User) => {
     },
     (err) => {
-      this.sbs.openSnackBar("A user with that ID already exists, try a different ID.", 10000);
+      this.sbs.openSnackBar("A user with that ID already exists, try a different ID. " + err['code'], 10000);
     },
     () => {
       this.sbs.openSnackBar("User added!");

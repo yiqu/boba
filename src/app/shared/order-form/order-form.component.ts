@@ -160,7 +160,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
         this.proceedToCart(formVal.isFavorite);
       },
       (err) => {
-        this.sbs.openSnackBar("There was an error adding this order to cart. Try again.")
+        this.sbs.openSnackBar("There was an error adding this order to cart. " + err['code']);
       }
     );
   }
@@ -206,7 +206,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     ).subscribe((val) => {
     },
     (err) => {
-      this.sbs.openSnackBar("A favorite drink with that name already exists, try a different name.");
+      this.sbs.openSnackBar("A favorite drink with that name already exists, try a different name. " + err['code']);
     },
     () => {
       this.sbs.openSnackBar("Favorite drink saved!");

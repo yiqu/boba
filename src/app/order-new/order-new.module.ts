@@ -21,6 +21,7 @@ import { DeliveryModule } from '../shared/delivery-info/delivery.module';
 import { PaymentModule } from '../shared/payment-info/payment.module';
 import { OrderNewFavListComponent } from './create/favorite-list/fav-list.component';
 import { DirectivesBundleModule } from '../shared/directives/directives-bundle.module';
+import { NotificationBannerModule } from '../notification-banner/banner.module';
 
 @NgModule({
 
@@ -40,6 +41,7 @@ import { DirectivesBundleModule } from '../shared/directives/directives-bundle.m
     CheckoutItemsDisplayModule,
     DeliveryModule,
     PaymentModule,
+    NotificationBannerModule,
     DirectivesBundleModule
   ],
 
