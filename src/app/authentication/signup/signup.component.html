@@ -28,27 +28,27 @@
           <div>
             <mat-form-field appearance="outline" class="password-input">
               <mat-label>Password</mat-label>
-              <input matInput placeholder="Password" [formControlName]="'password'">
+              <input matInput placeholder="Password" [formControlName]="'password'" type="password">
               <mat-icon matSuffix>https</mat-icon>
             </mat-form-field>
             <mat-form-field appearance="outline" class="repassword-input">
               <mat-label>Confirm</mat-label>
-              <input matInput placeholder="Confirm password" [formControlName]="'repassword'">
+              <input matInput placeholder="Confirm password" [formControlName]="'repassword'" type="password">
               <mat-icon matSuffix>https</mat-icon>
             </mat-form-field>
           </div>
 
-          <div *ngIf="errMsg">
+          <div *ngIf="this.as.authErrMsg">
             <div class="alert alert-warning">
-              {{errMsg}}
+              {{this.as.authErrMsg}}
             </div>
           </div>
         </mat-card-content>
 
         <mat-card-actions>
           <div class="center-align">
-            <app-loading-spinner *ngIf="loading" [diameter]="25"></app-loading-spinner>
-            <button *ngIf="!loading" mat-button class="signin-btn" (click)="onSignupClick()"
+            <app-loading-spinner *ngIf="this.as.authLoading" [diameter]="25"></app-loading-spinner>
+            <button *ngIf="!this.as.authLoading" mat-button class="signin-btn" (click)="onSignupClick()"
               [disabled]="emailFc.invalid">Create account</button>
           </div>
         </mat-card-actions>

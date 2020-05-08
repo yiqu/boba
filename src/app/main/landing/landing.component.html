@@ -1,19 +1,32 @@
 <div class="row comf text-center mb-3 mt-3 home-banner-text">
-  <div class="col">
+  <div class="col-sm-12">
     {{homeBannerText}}
   </div>
 </div>
 
 <div class="row text-center comf mb-3">
-  <div class="col">
+  <ng-container *ngIf="(this.as.currentUser$ | async) as user; else noUser">
+    <div class="col-sm-12 mb-3 f-w-800">
+      Hello {{user.email}}!
+    </div>
+  </ng-container>
+  <ng-template #noUser>
+    <div class="col-sm-12 mb-3">
+      Don't forget <a [routerLink]="['/', 'auth', 'signup']">create an account</a> with BobaShop today!
+        If you already have an account with us,
+        <a [routerLink]="['/', 'auth', 'signin']">sign in</a> to start shopping.
+    </div>
+  </ng-template>
+
+  <div class="col-sm-12">
     {{homeBannerSub}}
   </div>
 </div>
 
 <div class="row text-center comf mb-3">
   <div class="col">
-    See your<a [routerLink]="['open-orders']"> current orders</a>
-    , or your <a [routerLink]="['completed-orders']">past orders.</a>
+    See our<a [routerLink]="['open-orders']"> current orders</a>
+    , or <a [routerLink]="['completed-orders']">past orders.</a>
   </div>
 </div>
 

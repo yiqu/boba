@@ -1,16 +1,18 @@
-import { Component, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, OnDestroy, ViewChild, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CartService } from './shared/services/cart.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { RestDataFireService } from './shared/services/fire-data.service';
+import * as firebase from 'firebase/app';
+import 'firebase/analytics';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnDestroy, OnInit {
 
   footerTitle: string = "@KQ 2020";
   myUrl: string = "https://yiqu.github.io/";
@@ -32,6 +34,10 @@ export class AppComponent implements OnDestroy {
       this._mobileQueryListener = () => changeDetectorRef.detectChanges();
       this.mobileQuery.addListener(this._mobileQueryListener);
       this.fds.mobileQuery = this.mobileQuery;
+  }
+
+  ngOnInit() {
+    firebase.analytics();
   }
 
   onCartClick() {

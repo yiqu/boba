@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class SideNavComponent implements OnInit {
 
   headerList: NavHeaderList[] = [];
-  navTitle: string = "BobaShop";
+  navTitle: string = "Home";
 
   @Output()
   navClose: EventEmitter<any> = new EventEmitter<any>();

@@ -5,6 +5,7 @@ import { AuthInfo, IAuthInfo } from '../../shared/models/user.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-auth-signin',
@@ -16,8 +17,6 @@ export class AuthSigninComponent implements OnInit {
   signInTitle: string = "Sign in with your BobaShop Account";
   avartarImgSrc: string = "assets/images/main/user/signin-avatar-default.png";
   signFg: FormGroup;
-  errMsg: string;
-  loading: boolean = false;
 
 
   get idFc(): FormControl {
@@ -29,40 +28,38 @@ export class AuthSigninComponent implements OnInit {
   }
 
   constructor(public fb: FormBuilder, public as: AuthService, public router: Router) {
+    let id: string = null;
+    let pw: string = null;
+    if (!environment.production) {
+      id = "t@test.com";
+      pw = "123456";
+    }
     this.signFg = this.fb.group({
-      id: fu.createFormControl("t1@test.com", false, [Validators.required, Validators.email]),
-      password: fu.createFormControl("123456", false),
+      id: fu.createFormControl(id, false, [Validators.required, Validators.email]),
+      password: fu.createFormControl(pw, false),
+      saveSession: fu.createFormControl(false, false)
     });
   }
 
   ngOnInit() {
     this.signFg.valueChanges.subscribe((val) => {
-      this.errMsg = null;
+      this.as.authErrMsg = null;
     });
   }
 
   onSignInClick() {
     if (this.passwordFc.value && this.passwordFc.value.trim()!=="") {
-      const auth: AuthInfo = new AuthInfo(this.signFg.value.id, this.signFg.value.password);
+      console.log(this.signFg.value)
+      const auth: AuthInfo = new AuthInfo(this.signFg.value.id, this.signFg.value.password,
+        this.signFg.value.saveSession);
       this.signIn(auth);
     } else {
-      this.errMsg = "Enter a password.";
+      this.as.authErrMsg = "Enter a password.";
     }
   }
 
   signIn(a: AuthInfo) {
-    this.errMsg = null;
-    this.loading = true;
-    this.as.loginUser(a).then(
-      (res) => {
-        this.router.navigate(['/']);
-      },
-      (rej) => {
-        this.errMsg = this.as.getFirebaseErrorMsg(rej);
-      }
-    ).finally(() => {
-      this.loading = false;
-    })
+    this.as.loginUser(a);
   }
 
 

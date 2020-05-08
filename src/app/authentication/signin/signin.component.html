@@ -27,21 +27,27 @@
 
           <mat-form-field appearance="outline" class="full-w">
             <mat-label>Password</mat-label>
-            <input matInput placeholder="Password" [formControlName]="'password'">
+            <input matInput placeholder="Password" type="password" [formControlName]="'password'">
             <mat-icon matSuffix>https</mat-icon>
           </mat-form-field>
 
-          <div *ngIf="errMsg">
+          <div class="left-align">
+            <mat-checkbox class="example-margin" [formControlName]="'saveSession'" color="primary">
+              Keep me logged in.
+            </mat-checkbox>
+          </div>
+
+          <div *ngIf="this.as.authErrMsg">
             <div class="alert alert-warning">
-              {{errMsg}}
+              {{this.as.authErrMsg}}
             </div>
           </div>
         </mat-card-content>
 
         <mat-card-actions>
           <div class="center-align">
-            <app-loading-spinner *ngIf="loading" [diameter]="25"></app-loading-spinner>
-            <button *ngIf="!loading" mat-button class="signin-btn" (click)="onSignInClick()"
+            <app-loading-spinner *ngIf="this.as.authLoading" [diameter]="25"></app-loading-spinner>
+            <button *ngIf="!this.as.authLoading" mat-button class="signin-btn" (click)="onSignInClick()"
               [disabled]="idFc.invalid">Sign in</button>
           </div>
         </mat-card-actions>

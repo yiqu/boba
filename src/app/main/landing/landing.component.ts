@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-m-landing',
@@ -15,7 +16,7 @@ export class MainLandingComponent implements OnInit {
   homeBannerSub: string = "We are always working hard to " +
   "serve you the most delicious boba tea!";
 
-  constructor() { }
+  constructor(public as: AuthService) { }
 
   ngOnInit() { }
 }

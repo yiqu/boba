@@ -13,7 +13,7 @@ export interface IAuthInfo {
 }
 
 export class AuthInfo implements IAuthInfo{
-  constructor(public id: string, public password: string){
+  constructor(public id: string, public password: string, public saveSession: boolean){
   }
 }
 

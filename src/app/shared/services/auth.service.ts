@@ -20,8 +20,10 @@ export class AuthService {
   private baseSignInWithPasswordUrl: string = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword";
   private baseSignUpUrl: string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
 
-  public refreshClick$: Subject<any> = new Subject<any>();
   currentUser$: BehaviorSubject<VerifiedUser> = new BehaviorSubject<VerifiedUser>(null);
+  authStateResolved$: Subject<any> = new Subject<any>();
+  authErrMsg: string;
+  authLoading: boolean = false;
 
   constructor(public http: HttpClient, public firestore: AngularFireDatabase,
     public router: Router, public sbs: SnackbarService) {
@@ -31,8 +33,9 @@ export class AuthService {
             const u = (<VerifiedUser>user.toJSON());
             this.currentUser$.next(u);
           } else {
-            this.currentUser$.next(null);
+            this.currentUser$.next(undefined);
           }
+          this.authStateResolved$.next(true);
         },
         (err) => {
           this.sbs.openSnackBar("Error: " + err.code + err.message);
@@ -47,12 +50,53 @@ export class AuthService {
   }
 
 
-  createUser(authInfo: AuthInfo): Promise<firebase.auth.UserCredential> {
-    return firebase.auth().createUserWithEmailAndPassword(authInfo.id, authInfo.password);
+  createUser(authInfo: AuthInfo) {
+    this.authErrMsg = null;
+    let sess: string = authInfo.saveSession ?
+      firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+    firebase.auth().setPersistence(sess)
+    .then(() => {
+      this.authLoading = true;
+      return firebase.auth().createUserWithEmailAndPassword(authInfo.id, authInfo.password);
+    })
+    .then(
+      (u: firebase.auth.UserCredential) => {
+        this.router.navigate(['/']);
+      },
+      (rej) => {
+        this.authErrMsg = this.getFirebaseErrorMsg(rej);
+      }
+    ).finally(() => {
+      this.authLoading = false;
+    });
   }
 
-  loginUser(authInfo: AuthInfo): Promise<firebase.auth.UserCredential> {
-    return firebase.auth().signInWithEmailAndPassword(authInfo.id, authInfo.password);
+  /**
+   * Existing and future Auth states are now persisted in the current
+   * session only. Closing the window would clear any existing state even
+   * if a user forgets to sign out.
+   * New sign-in will be persisted with session persistence.
+   *
+   */
+  loginUser(authInfo: AuthInfo) {
+    this.authErrMsg = null;
+    let sess: string = authInfo.saveSession ?
+      firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+    firebase.auth().setPersistence(sess)
+    .then(() => {
+      this.authLoading = true;
+      return firebase.auth().signInWithEmailAndPassword(authInfo.id, authInfo.password);
+    })
+    .then(
+      (u: firebase.auth.UserCredential) => {
+        this.router.navigate(['/']);
+      },
+      (rej) => {
+        this.authErrMsg = this.getFirebaseErrorMsg(rej);
+      }
+    ).finally(() => {
+      this.authLoading = false;
+    });
   }
 
   signoutUser(): Promise<void> {

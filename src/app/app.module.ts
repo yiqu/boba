@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { environment } from '../environments/environment';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -54,6 +55,7 @@ import { SideNavModule } from './side-nav/side-nav.module';
       }
     }),
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    //AngularFireAnalyticsModule,
     SnackModule,
     TopNavModule,
     SideNavModule,
