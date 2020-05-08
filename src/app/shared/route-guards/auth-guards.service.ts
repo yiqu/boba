@@ -67,19 +67,24 @@ export class AuthUserExistGuard implements CanActivate {
     // );
 
 
+    /**
+     * Logic:
+     * Create a subject that will be returned by this guard to examine TRUE or FALSE.
+     * this subject will only emit a value based on the firebase auth async function.
+     * Once firebase auth evaluated to a value, call the subject to emit TRUE or FALSE,
+     * Then return this subject, with Map to run additional steps for re-direct.
+     */
     let res: Subject<any> = new Subject<any>();
     firebase.auth().onAuthStateChanged(
       (user: firebase.User) => {
         if (user) {
-          const u = (<VerifiedUser>user.toJSON());
           res.next(false);
-          return this.router.createUrlTree(['/', 'my-account']);
         } else {
           res.next(true);
-          return true;
         }
       },
       (err) => {
+        res.next(false);
       }
     );
 
