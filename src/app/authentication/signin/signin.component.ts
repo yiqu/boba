@@ -37,7 +37,7 @@ export class AuthSigninComponent implements OnInit {
     this.signFg = this.fb.group({
       id: fu.createFormControl(id, false, [Validators.required, Validators.email]),
       password: fu.createFormControl(pw, false),
-      saveSession: fu.createFormControl(false, false)
+      saveSession: fu.createFormControl(true, false)
     });
   }
 

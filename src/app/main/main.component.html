@@ -10,7 +10,7 @@
   </div>
   <hr>
 
-  <div class="row mb-2">
+  <div *ngIf="this.as.appAuthHasLoaded" class="row mb-2">
     <div class="col-sm-12">
       <nav mat-tab-nav-bar [backgroundColor]="undefined">
         <a mat-tab-link *ngFor="let link of tabLinks"

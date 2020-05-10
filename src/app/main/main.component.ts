@@ -1,12 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { NavItem } from '../shared/models/nav-item.model';
-import { Router, ActivatedRoute, ParamMap, NavigationStart, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, NavigationStart, NavigationEnd, Data } from '@angular/router';
 import { RestDataFireService } from '../shared/services/fire-data.service';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { AdBannerService } from '../shared/services/ad-banner.service';
 import { AdItem } from '../shared/ad-banner/banner/ad.item';
 import { environment } from 'src/environments/environment';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-main',
@@ -21,7 +22,8 @@ export class MainComponent implements OnInit, OnDestroy {
   ads: AdItem[];
 
   constructor(public router: Router, public route: ActivatedRoute,
-    public fds: RestDataFireService, public abs: AdBannerService) {
+    public fds: RestDataFireService, public abs: AdBannerService,
+    private ngZone: NgZone, public as: AuthService) {
     this.tabLinks.push(
       new NavItem('open', "Working", "open-orders"),
       new NavItem('closed', "Delivered", "completed-orders")
@@ -39,7 +41,7 @@ export class MainComponent implements OnInit, OnDestroy {
     )
     .subscribe((val) => {
       this.setActiveTab();
-    })
+    });
   }
 
   ngOnInit() {
@@ -48,6 +50,11 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   onNewOrder() {
+    //TODO temp fix due to resolver
+    // this.ngZone.run(
+    //   () => {
+    //     this.router.navigate(['../', 'new-order'], {relativeTo: this.route})
+    // });
     this.router.navigate(['../', 'new-order'], {relativeTo: this.route});
   }
 

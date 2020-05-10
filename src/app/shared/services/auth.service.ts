@@ -24,11 +24,13 @@ export class AuthService {
   authStateResolved$: Subject<any> = new Subject<any>();
   authErrMsg: string;
   authLoading: boolean = false;
+  appAuthHasLoaded: boolean = false;
 
   constructor(public http: HttpClient, public firestore: AngularFireDatabase,
     public router: Router, public sbs: SnackbarService) {
       firebase.auth().onAuthStateChanged(
         (user: firebase.User) => {
+          this.appAuthHasLoaded = true;
           if (user) {
             const u = (<VerifiedUser>user.toJSON());
             this.currentUser$.next(u);

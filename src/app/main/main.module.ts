@@ -16,6 +16,7 @@ import { OrderAccordionModule } from '../shared/order-table-accordion/order-acco
 import { OrderDetailDisplayModule } from '../shared/order-detail-display/order-detail-display.module';
 import { OrderTableModule } from '../shared/order-table/order-table.module';
 import { AdBannerModule } from '../shared/ad-banner/ad-banner.module';
+import { LoadingModule } from '../loading/loading.module';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { AdBannerModule } from '../shared/ad-banner/ad-banner.module';
     PipeBundleModule,
     ReactiveFormsModule,
     MaterialModuleBundle,
-    AdBannerModule
+    AdBannerModule,
+    LoadingModule
   ],
 
   exports: [

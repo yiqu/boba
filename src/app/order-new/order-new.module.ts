@@ -22,6 +22,7 @@ import { PaymentModule } from '../shared/payment-info/payment.module';
 import { OrderNewFavListComponent } from './create/favorite-list/fav-list.component';
 import { DirectivesBundleModule } from '../shared/directives/directives-bundle.module';
 import { NotificationBannerModule } from '../notification-banner/banner.module';
+import { LoadingModule } from '../loading/loading.module';
 
 @NgModule({
 
@@ -42,7 +43,8 @@ import { NotificationBannerModule } from '../notification-banner/banner.module';
     DeliveryModule,
     PaymentModule,
     NotificationBannerModule,
-    DirectivesBundleModule
+    DirectivesBundleModule,
+    LoadingModule
   ],
 
   exports: [

@@ -11,6 +11,7 @@ import { DirectivesBundleModule } from '../shared/directives/directives-bundle.m
 import { ArchivesComponent } from './archives/archives.component';
 import { UsersComponent } from './users/users.component';
 import { NotificationBannerModule } from '../notification-banner/banner.module';
+import { LoadingModule } from '../loading/loading.module';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { NotificationBannerModule } from '../notification-banner/banner.module';
     DirectivesBundleModule,
     ManagementInventoryModule,
     NotificationBannerModule,
+    LoadingModule,
     ManagementRoutingModule
   ],
 

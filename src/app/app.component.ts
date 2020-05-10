@@ -1,11 +1,13 @@
 import { Component, ChangeDetectorRef, OnDestroy, ViewChild, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Event, NavigationStart, NavigationEnd,
+  NavigationCancel, NavigationError } from '@angular/router';
 import { CartService } from './shared/services/cart.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { RestDataFireService } from './shared/services/fire-data.service';
 import * as firebase from 'firebase/app';
 import 'firebase/analytics';
+import { AuthService } from './shared/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +27,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   constructor(public router: Router, public route: ActivatedRoute,
     public cs: CartService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
-    public fds: RestDataFireService) {
+    public fds: RestDataFireService, public as: AuthService) {
 
       /**
        * Detect if deive is mobile size, then re-run detection change
@@ -34,6 +36,7 @@ export class AppComponent implements OnDestroy, OnInit {
       this._mobileQueryListener = () => changeDetectorRef.detectChanges();
       this.mobileQuery.addListener(this._mobileQueryListener);
       this.fds.mobileQuery = this.mobileQuery;
+
   }
 
   ngOnInit() {

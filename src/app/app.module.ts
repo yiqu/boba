@@ -20,6 +20,9 @@ import { MainComponentModule } from './main/main.module';
 import { SnackModule } from './shared/snackbar/snack.module';
 import { TopNavModule } from './top-nav/top-nav.module';
 import { SideNavModule } from './side-nav/side-nav.module';
+import { AuthUserResolver } from './shared/resolver/auth-resolver.service';
+import { LoadingSpinnerModule } from './shared/loading/loading.module';
+import { LoadingModule } from './loading/loading.module';
 
 @NgModule({
 
@@ -59,11 +62,12 @@ import { SideNavModule } from './side-nav/side-nav.module';
     SnackModule,
     TopNavModule,
     SideNavModule,
+    LoadingSpinnerModule,
+    LoadingModule,
     AppRoutingModule
   ],
 
   providers: [
-
   ],
 
   bootstrap: [AppComponent]

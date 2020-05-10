@@ -1,4 +1,4 @@
-<div class="container mb-3">
+<div class="container mb-3" *ngIf="this.as.appAuthHasLoaded; else loading">
   <div class="deals-banner mt-2">
     <app-shared-ad-banner [ads]="ads"></app-shared-ad-banner>
   </div>
@@ -15,3 +15,7 @@
 
   <router-outlet></router-outlet>
 </div>
+
+<ng-template #loading>
+  <app-shared-loading></app-shared-loading>
+</ng-template>

@@ -4,21 +4,25 @@
       <h2>Management Corner</h2>
     </div>
   </div>
-  <app-notification-banner [adminRequired]="true"></app-notification-banner>
-  <div class="row mb-2 mt-2">
-    <div class="col-sm-12">
-      <nav mat-tab-nav-bar [backgroundColor]="undefined">
-        <a mat-tab-link *ngFor="let link of tabLinks"
-          (click)="activeLink = link"
-          routerLinkActive #rla="routerLinkActive"
-          [active]="rla.isActive"
-          [routerLink]="[link.url]">
-          <mat-icon mat-list-icon class="mr-1">{{link.iconName}}</mat-icon>
-          {{link.display}}
-        </a>
-      </nav>
+  <ng-container *ngIf="this.as.appAuthHasLoaded; else loading">
+    <app-notification-banner [adminRequired]="true"></app-notification-banner>
+    <div class="row mb-2 mt-2">
+      <div class="col-sm-12">
+        <nav mat-tab-nav-bar [backgroundColor]="undefined">
+          <a mat-tab-link *ngFor="let link of tabLinks"
+            (click)="activeLink = link"
+            routerLinkActive #rla="routerLinkActive"
+            [active]="rla.isActive"
+            [routerLink]="[link.url]">
+            <mat-icon mat-list-icon class="mr-1">{{link.iconName}}</mat-icon>
+            {{link.display}}
+          </a>
+        </nav>
+      </div>
     </div>
-  </div>
-
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
+  </ng-container>
+  <ng-template #loading>
+    <app-shared-loading></app-shared-loading>
+  </ng-template>
 </div>

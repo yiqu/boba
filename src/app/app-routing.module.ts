@@ -6,10 +6,12 @@ import { MainClosedComponent } from './main/closed/closed.component';
 import { MainLandingComponent } from './main/landing/landing.component';
 import { NotFoundComponent } from './404/404.component';
 import { NetworkAwarePreloadStrategy } from './shared/preload-strategies/preload-network';
+import { AuthUserResolver } from './shared/resolver/auth-resolver.service';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "home", component: MainComponent,
+    //resolve: {verifiedUser: AuthUserResolver},
     children: [
       { path: "", component: MainLandingComponent, data: {title: 'Home'} },
       { path: "open-orders", component: MainOpenComponent,  data: {title: 'Working'} },
