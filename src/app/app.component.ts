@@ -8,6 +8,7 @@ import { RestDataFireService } from './shared/services/fire-data.service';
 import * as firebase from 'firebase/app';
 import 'firebase/analytics';
 import { AuthService } from './shared/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +41,9 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    firebase.analytics();
+    if (environment.gAnalytics) {
+      firebase.analytics();
+    }
   }
 
   onCartClick() {

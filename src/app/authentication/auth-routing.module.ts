@@ -9,8 +9,12 @@ const routes: Routes = [
   { path: '', component: AuthComponent,
     children: [
       { path: '', redirectTo: 'signin', pathMatch: 'full' },
-      { path: 'signin', component: AuthSigninComponent, canActivate: [AuthUserExistGuard] },
-      { path: 'signup', component: AuthSignupComponent, canActivate: [AuthUserExistGuard] },
+      { path: 'signin', component: AuthSigninComponent,
+        //canActivate: [AuthUserExistGuard] ngZone issue
+      },
+      { path: 'signup', component: AuthSignupComponent,
+        //canActivate: [AuthUserExistGuard]
+      },
   ]}
 ]
 

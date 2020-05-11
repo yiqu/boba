@@ -7,6 +7,7 @@ import { headShakeAnimation, rotateAnimation, tadaAnimation } from 'angular-anim
 import { AuthService } from '../shared/services/auth.service';
 import { VerifiedUser } from '../shared/models/user.model';
 import { MenuItem } from '../shared/models/nav-item.model';
+import { RestDataFireService } from '../shared/services/fire-data.service';
 
 @Component({
   selector: 'app-top-nav',
@@ -29,12 +30,13 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
   userMenuIcon: string; //account_circle
   currentUser: VerifiedUser;
   userMenuItems: MenuItem[] = [];
+  accountBtnText: string;
 
   @Output()
   navToggle: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(public router: Router, public route: ActivatedRoute,
-    public cs: CartService, public as: AuthService) {
+    public cs: CartService, public as: AuthService, public rdf: RestDataFireService) {
       this.cs.cartItemList$.pipe(
         takeUntil(this.compDest$)
       )
@@ -47,10 +49,12 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
       ).subscribe((val: VerifiedUser) => {
         if (val) {
           this.currentUser = val;
+          this.accountBtnText = "My Account";
           this.userMenuIcon = "account_circle";
         } else {
           this.currentUser = null;
-          this.userMenuIcon = "more_vert";
+          this.accountBtnText = "Login";
+          this.userMenuIcon = "perm_identity";
         }
         this.buildUserMenuItems();
       });

@@ -3,7 +3,7 @@ import { HttpClient, HttpResponse, HttpErrorResponse, HttpParams } from '@angula
 import { Observable, Subject, from, of, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError, delay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireList, SnapshotAction } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { User, AuthInfo, VerifiedUser } from '../models/user.model';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -11,6 +11,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { SnackbarService } from './snackbar.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,25 +20,31 @@ export class AuthService {
 
   private baseSignInWithPasswordUrl: string = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword";
   private baseSignUpUrl: string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
+  private usersBaseUrl: string = "users/";
+  private aliasesUrl: string = "inAppAliases";
 
   currentUser$: BehaviorSubject<VerifiedUser> = new BehaviorSubject<VerifiedUser>(null);
-  authStateResolved$: Subject<any> = new Subject<any>();
   authErrMsg: string;
   authLoading: boolean = false;
   appAuthHasLoaded: boolean = false;
+  signupErrorOccured$: Subject<string> = new Subject<string>();
+  userAliasFL: AngularFireList<User>;
+  userAlias$: Observable<User[]>;
+  currentUserSnapshot: VerifiedUser;
 
-  constructor(public http: HttpClient, public firestore: AngularFireDatabase,
-    public router: Router, public sbs: SnackbarService) {
+
+  constructor(public http: HttpClient, public firedb: AngularFireDatabase,
+    public router: Router, public sbs: SnackbarService, public us: UserService) {
       firebase.auth().onAuthStateChanged(
         (user: firebase.User) => {
           this.appAuthHasLoaded = true;
           if (user) {
             const u = (<VerifiedUser>user.toJSON());
+            this.setUpUserRelated(u);
             this.currentUser$.next(u);
           } else {
             this.currentUser$.next(undefined);
           }
-          this.authStateResolved$.next(true);
         },
         (err) => {
           this.sbs.openSnackBar("Error: " + err.code + err.message);
@@ -45,14 +52,33 @@ export class AuthService {
         () => {
         }
       );
+
+  }
+
+  setUpUserRelated(u: VerifiedUser) {
+    this.setCurrentUserSnapshot(u);
+
+    this.userAliasFL = this.firedb.list(this.usersBaseUrl + u.uid + "/" + this.aliasesUrl);
+
+    this.userAlias$ = this.userAliasFL.snapshotChanges().pipe(
+      map((changes) => this.addfireKey(changes))
+    );
   }
 
   handleError(err: HttpErrorResponse) {
     return throwError(err);
   }
 
+  setCurrentUserSnapshot(u) {
+    this.currentUserSnapshot = u;
+  }
+
+  clearCurrentUserSnapshot() {
+    this.currentUserSnapshot = null;
+  }
 
   createUser(authInfo: AuthInfo) {
+    this.clearCurrentUserSnapshot();
     this.authErrMsg = null;
     let sess: string = authInfo.saveSession ?
       firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
@@ -63,12 +89,46 @@ export class AuthService {
     })
     .then(
       (u: firebase.auth.UserCredential) => {
-        this.router.navigate(['/']);
+        const user: VerifiedUser = <VerifiedUser>u.user.toJSON();
+        this.setCurrentUserSnapshot(user);
+        const userIdRef = firebase.database().ref(this.usersBaseUrl + user.uid);
+        return userIdRef.set(user);
       },
       (rej) => {
         this.authErrMsg = this.getFirebaseErrorMsg(rej);
+        return "ERROR";
       }
-    ).finally(() => {
+    ).then(
+      (res) => {
+        if (res !== "ERROR") {
+          if (this.currentUserSnapshot) {
+            const aliasName: string = this.createInitAlias(this.currentUserSnapshot.email);
+            const initAlias = new User(aliasName, aliasName);
+            const userAliasRef = firebase.database().ref(this.usersBaseUrl + this.currentUserSnapshot.uid + "/" +
+              this.aliasesUrl + "/" + initAlias.id);
+            return userAliasRef.set(initAlias)
+          }
+        }
+        // return error due to signup failure. i.e. email exists, etc.
+        return "ERROR";
+      },
+      (err) => {
+        console.error(err);
+        //this.signoutUser();
+        this.sbs.openSnackBar("Server error occured: " +  err['code']);
+        return "ERROR";
+      }
+    ).then(
+      (res) => {
+        if (res !== "ERROR") {
+          this.router.navigate(['/']);
+        }
+      },
+      (err) => {
+        console.error("err on alias", err);
+      }
+    )
+    .finally(() => {
       this.authLoading = false;
     });
   }
@@ -117,10 +177,12 @@ export class AuthService {
     switch (err.code) {
       case "auth/email-already-in-use": {
         errMsg = "Email already exists.";
+        this.signupErrorOccured$.next('email-already-in-use');
         break;
       }
       case "auth/invalid-email": {
         errMsg = "Email is invalid.";
+        this.signupErrorOccured$.next('invalid-email');
         break;
       }
       case "auth/operation-not-allowed": {
@@ -129,6 +191,7 @@ export class AuthService {
       }
       case "auth/weak-password": {
         errMsg = "Password is too weak, try 6+ characters.";
+        this.signupErrorOccured$.next('weak-password');
         break;
       }
       case "auth/user-not-found": {
@@ -187,6 +250,17 @@ export class AuthService {
   }
 
 
+  createInitAlias(email: string): string {
+    return email.substr(0, email.indexOf("@"));
+  }
 
-
+  addfireKey(c: SnapshotAction<any>[]) {
+    return c.map((c: SnapshotAction<any>) => {
+      return (
+        { fireKey: c.payload.key,
+          ...c.payload.val()
+        }
+      )}
+    );
+  }
 }

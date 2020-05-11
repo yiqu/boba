@@ -29,8 +29,8 @@ export class DialogAddUserComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userFg = this.fb.group({
       userName: fu.createFormControl(null, false, [Validators.required]),
-      userId: fu.createFormControl(null, false, [Validators.required])
-    })
+      userId: fu.createFormControl(null, false)
+    });
   }
 
   onCancel(): void {
@@ -38,12 +38,19 @@ export class DialogAddUserComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    const user = new User(this.userFg.value.userId, this.userFg.value.userName);
+    const id: string = this.trimAndReplace(this.userFg.value.userName);
+    const user = new User(id, this.userFg.value.userName);
     this.dialogRef.close(user);
   }
 
   ngOnDestroy() {
     console.log("dialog destoryed")
+  }
+
+  trimAndReplace(val: string) {
+    if (val) {
+      return val.trim().split(" ").join("");
+    }
   }
 
 }

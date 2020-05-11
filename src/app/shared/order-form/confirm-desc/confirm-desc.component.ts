@@ -12,6 +12,8 @@ import { RestDataFireService } from '../../services/fire-data.service';
 import { SnackbarService } from '../../services/snackbar.service';
 import { OrderFormService } from '../order-form.service';
 import * as _ from 'lodash';
+import { AuthService } from '../../services/auth.service';
+import { EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-shared-order-form-confirm-desc',
@@ -34,7 +36,7 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
 
   constructor(public us: UserService, public ds: DialogService,
     public rdf: RestDataFireService, public sbs: SnackbarService,
-    public ofs: OrderFormService) {
+    public ofs: OrderFormService, public as: AuthService) {
 
   }
 
@@ -51,14 +53,17 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.us.allUsersr$.pipe(
-      takeUntil(this.ofs.refreshComponent$)
-    ).subscribe(
-      (users: User[]) => {
-        this.users = [...users];
-        this.setDefaultValue();
-      }
-    );
+    // null when not logged in
+    if (this.as.userAlias$) {
+      this.as.userAlias$.pipe(
+        takeUntil(this.ofs.refreshComponent$)
+      ).subscribe(
+        (users: User[]) => {
+          this.users = [...users];
+          this.setDefaultValue();
+        }
+      );
+    }
   }
 
   onNameAdd() {
@@ -67,24 +72,21 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
       takeUntil(this.ofs.refreshComponent$),
       switchMap((u: User) => {
         if (u) {
-          let ref = this.us.getFDB().ref("users/" + u.id);
           const user: User = new User(u.id, u.display);
-          return (ref.set(user));
+          let ref = this.us.getFDB().ref("users/" + this.as.currentUserSnapshot.uid + "/inAppAliases/" + user.id);
+          return ref.set(user);
         }
+        return EMPTY;
       })
     )
     .subscribe((val: User) => {
+      this.sbs.openSnackBar("Successfully added your alias.");
     },
     (err) => {
-      this.sbs.openSnackBar("A user with that ID already exists, try a different ID. " + err['code'], 10000);
+      this.sbs.openSnackBar("That alias already exists under your account." + err['code'], 10000);
     },
     () => {
-      this.sbs.openSnackBar("User added!");
     });
-  }
-
-  onPushComplete(val: any) {
-    this.sbs.openSnackBar("User added!")
   }
 
   setDefaultValue() {
@@ -92,7 +94,11 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
       const i: number = _.findIndex(this.users, ['id', this.userFc.value['id']]);
       if (i > -1) {
         this.userFc.setValue(this.users[i]);
+        this.sbs.openSnackBar("Alias for this order has been pre-selected" +
+          " to '" + this.userFc.value.display + "'.", 10000);
       } else {
+        this.sbs.openSnackBar("Could not find alias '" + this.userFc.value.display +
+          "' in your alias list, so no alias has been selected.", 10000);
         this.userFc.reset(null);
       }
     }

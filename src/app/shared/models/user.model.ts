@@ -30,7 +30,8 @@ export class VerifiedUser {
     public stsTokenManager: any,
     public tenantId: string,
     public uid: string,
-    public phoneNumber: string
+    public phoneNumber: string,
+    public inAppAliases: User[]
   ) {
 
   }

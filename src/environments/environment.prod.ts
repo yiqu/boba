@@ -11,5 +11,6 @@ export const environment = {
     measurementId: "G-3X73F851QP"
   },
   adBannerInterval: 10000,
-  adsOn: true
+  adsOn: true,
+  gAnalytics: true
 };

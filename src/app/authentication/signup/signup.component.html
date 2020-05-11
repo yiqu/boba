@@ -18,27 +18,39 @@
           <div class="left-align mb-3">
             <mat-form-field appearance="outline" class="mb-2 full-w">
               <mat-label>Email</mat-label>
-              <input matInput placeholder="Email" [formControlName]="'email'">
+              <input matInput placeholder="Email" [formControlName]="'email'" [errorStateMatcher]="matcher">
               <mat-icon matSuffix>email</mat-icon>
               <mat-hint>This will be your login email.</mat-hint>
-              <mat-error>Invalid email format.</mat-error>
+              <mat-error *ngIf="this.emailFc.hasError('email')">Invalid email format.</mat-error>
+              <mat-error *ngIf="this.emailFc.hasError('required')">Email is required.</mat-error>
+              <mat-error *ngIf="this.emailFc.hasError('emailExists')">
+                This email is already taken. If you have already signed up, try logging in instead.
+              </mat-error>
             </mat-form-field>
           </div>
 
           <div>
             <mat-form-field appearance="outline" class="password-input">
               <mat-label>Password</mat-label>
-              <input matInput placeholder="Password" [formControlName]="'password'" type="password">
+              <input matInput placeholder="Password" [formControlName]="'password'" type="password"
+                [errorStateMatcher]="matcher">
               <mat-icon matSuffix>https</mat-icon>
+              <mat-error *ngIf="this.passwordFc.hasError('required')">Please enter a password.</mat-error>
+              <mat-error *ngIf="this.passwordFc.hasError('weak')">Needs to be at least 6 characters.</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" class="repassword-input">
               <mat-label>Confirm</mat-label>
-              <input matInput placeholder="Confirm password" [formControlName]="'repassword'" type="password">
+              <input matInput placeholder="Confirm password" [formControlName]="'repassword'" type="password"
+                [errorStateMatcher]="matcher">
               <mat-icon matSuffix>https</mat-icon>
+              <mat-error
+                *ngIf="this.repasswordFc && this.repasswordFc.hasError('passwordDoesNotMatch')">
+                Password does not match.
+              </mat-error>
             </mat-form-field>
           </div>
 
-          <div *ngIf="this.as.authErrMsg">
+          <div *ngIf="this.as.authErrMsg" class="err-msg-parent">
             <div class="alert alert-warning">
               {{this.as.authErrMsg}}
             </div>
@@ -48,8 +60,9 @@
         <mat-card-actions>
           <div class="center-align">
             <app-loading-spinner *ngIf="this.as.authLoading" [diameter]="25"></app-loading-spinner>
-            <button *ngIf="!this.as.authLoading" mat-button class="signin-btn" (click)="onSignupClick()"
-              [disabled]="emailFc.invalid">Create account</button>
+            <button *ngIf="!this.as.authLoading" mat-button class="signin-btn" (click)="onSignupClick()">
+              Create account
+            </button>
           </div>
         </mat-card-actions>
       </mat-card>

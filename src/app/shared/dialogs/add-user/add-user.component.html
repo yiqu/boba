@@ -1,22 +1,17 @@
 <div class="comf">
-  <h1 mat-dialog-title>Add new user</h1>
-
+  <h1 mat-dialog-title>Add an Alias</h1>
+  <p class="roboto">
+    This alias will be attached to your account only. You can have multiple aliases.
+  </p>
   <div mat-dialog-content>
     <form [formGroup]="userFg">
       <div class="input-ff mb-3">
         <mat-form-field appearance="outline" >
-          <mat-label>User ID</mat-label>
-          <input matInput placeholder="johndoe" formControlName="userId">
-          <mat-icon matSuffix>account_box</mat-icon>
-          <mat-hint>Enter a user ID</mat-hint>
-        </mat-form-field>
-      </div>
-      <div class="input-ff mb-3">
-        <mat-form-field appearance="outline" >
-          <mat-label>Display name</mat-label>
-          <input matInput placeholder="John Doe" [formControl]="userNameFc">
+          <mat-label>Alias name</mat-label>
+          <input matInput placeholder="John Doe" [formControlName]="'userName'">
           <mat-icon matSuffix>face</mat-icon>
-          <mat-hint>Enter your full name</mat-hint>
+          <mat-hint>Enter name</mat-hint>
+          <mat-error>Name is required.</mat-error>
         </mat-form-field>
       </div>
     </form>

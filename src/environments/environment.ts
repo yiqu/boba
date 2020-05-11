@@ -15,7 +15,8 @@ export const environment = {
     measurementId: "G-CRM944MDJE"
   },
   adBannerInterval: 999999,
-  adsOn: true
+  adsOn: true,
+  gAnalytics: false
 };
 
 /*

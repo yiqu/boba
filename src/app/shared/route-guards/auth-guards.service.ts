@@ -18,16 +18,27 @@ export class AuthUserChildrenGuard implements CanActivateChild {
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     Observable<boolean | UrlTree> | Promise<boolean> | boolean | UrlTree {
 
-    return this.as.currentUser$
-    .pipe(
-      take(1),
+    if (this.as.appAuthHasLoaded) {
+      return this.as.currentUser$.pipe(
+        map((val: VerifiedUser) => {
+          if (val) {
+            return true;
+          }
+          return this.router.createUrlTree(['/', 'auth','signin']);
+        }),
+        take(1)
+      );
+    }
+    return this.as.currentUser$.pipe(
+      skip(1), // skip the initial value, which is always null due to behavior subject
       map((val: VerifiedUser) => {
         if (val) {
           return true;
         }
         return this.router.createUrlTree(['/', 'auth','signin']);
-      })
-    )
+      }),
+      take(1)
+    );
   }
 
 }
@@ -97,6 +108,11 @@ export class AuthUserExistGuard implements CanActivate {
           return this.router.createUrlTree(['/', 'my-account']);
         }
       })
-    )
+    );
+
+    if (this.as.appAuthHasLoaded) {
+      //return this.as.currentUser$
+    }
+
   }
 }

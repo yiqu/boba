@@ -30,6 +30,7 @@ export class AuthSigninComponent implements OnInit {
   constructor(public fb: FormBuilder, public as: AuthService, public router: Router) {
     let id: string = null;
     let pw: string = null;
+    this.as.authErrMsg = null;
     if (!environment.production) {
       id = "t@test.com";
       pw = "123456";
@@ -49,7 +50,6 @@ export class AuthSigninComponent implements OnInit {
 
   onSignInClick() {
     if (this.passwordFc.value && this.passwordFc.value.trim()!=="") {
-      console.log(this.signFg.value)
       const auth: AuthInfo = new AuthInfo(this.signFg.value.id, this.signFg.value.password,
         this.signFg.value.saveSession);
       this.signIn(auth);
