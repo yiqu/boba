@@ -28,7 +28,7 @@ export class DrinkInventoryList {
 }
 
 export class MenuItem {
-  constructor(public iconName: string, public display: string) {
+  constructor(public iconName: string, public display: string, public id: string) {
 
   }
 }

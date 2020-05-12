@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { NavHeaderList, NavHeader, NavHeaderLink } from '../shared/models/nav-item.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
@@ -10,7 +10,7 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: 'side-nav.component.html',
   styleUrls: ['./side-nav.component.css']
 })
-export class SideNavComponent implements OnInit {
+export class SideNavComponent implements OnInit, OnDestroy {
 
   headerList: NavHeaderList[] = [];
   navTitle: string = "Home";
@@ -74,6 +74,10 @@ export class SideNavComponent implements OnInit {
   onTitleClick() {
     this.router.navigate(['/']);
     this.navClose.emit(true);
+  }
+
+  ngOnDestroy() {
+    this.compDest$.next();
   }
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import * as fu from '../../shared/utils/form.utils';
 import { AuthInfo, IAuthInfo, VerifiedUser } from '../../shared/models/user.model';
@@ -17,7 +17,7 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: 'signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class AuthSignupComponent implements OnInit {
+export class AuthSignupComponent implements OnInit, OnDestroy {
 
   matcher: ErrorStateMatcher = new em.InstantErrorStateMatcher();
   signInTitle: string = "Create your BobaShop Account.";
@@ -108,4 +108,9 @@ export class AuthSignupComponent implements OnInit {
   signup(a: AuthInfo) {
     this.as.createUser(a);
   }
+
+  ngOnDestroy() {
+    this.compDest$.next();
+  }
+
 }

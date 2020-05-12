@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable, Subject, from, of, throwError, BehaviorSubject } from 'rxjs';
-import { map, catchError, delay, tap } from 'rxjs/operators';
+import { Observable, Subject, from, of, throwError, BehaviorSubject, EMPTY } from 'rxjs';
+import { map, catchError, delay, tap, take, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AngularFireDatabase, AngularFireList, SnapshotAction } from '@angular/fire/database';
 import { Router } from '@angular/router';
@@ -37,17 +37,18 @@ export class AuthService {
     public router: Router, public sbs: SnackbarService, public us: UserService) {
       firebase.auth().onAuthStateChanged(
         (user: firebase.User) => {
-          this.appAuthHasLoaded = true;
           if (user) {
             const u = (<VerifiedUser>user.toJSON());
             this.setUpUserRelated(u);
-            this.currentUser$.next(u);
+            this.mergeUserFromDbAndFirebase(u);
           } else {
+            this.setCurrentUserSnapshot(null);
+            this.appAuthHasLoaded = true;
             this.currentUser$.next(undefined);
           }
         },
         (err) => {
-          this.sbs.openSnackBar("Error: " + err.code + err.message);
+          this.sbs.openSnackBar("Error authenticating user: " + err['code'] + err['message']);
         },
         () => {
         }
@@ -55,15 +56,65 @@ export class AuthService {
 
   }
 
+  /**
+   * Set up the alias list for current verified user
+   */
   setUpUserRelated(u: VerifiedUser) {
     this.setCurrentUserSnapshot(u);
-
     this.userAliasFL = this.firedb.list(this.usersBaseUrl + u.uid + "/" + this.aliasesUrl);
-
     this.userAlias$ = this.userAliasFL.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes))
     );
   }
+
+  /**
+   * Merge the Firebase user and currently stored user account together.
+   * Update the last login array
+   * Then broadcast the newly merged user info.
+   */
+  mergeUserFromDbAndFirebase(u: VerifiedUser) {
+    this.firedb.object(this.usersBaseUrl + u.uid).valueChanges().pipe(
+      take(1),
+      map((val: VerifiedUser) => {
+        let updatedUser: VerifiedUser = {...val, ...u};
+        // check to make sure it's not duplicate login time. Every refresh will cause this, so it could be duplicate
+        if (updatedUser.logins) {
+          if (updatedUser.logins[updatedUser.logins.length-1] !== u.lastLoginAt) {
+            updatedUser.logins.push(u.lastLoginAt);
+          }
+        } else {
+          updatedUser['logins'] = [];
+          updatedUser.logins.push(u.lastLoginAt);
+        }
+        // copy the aliases
+        if (val && val.inAppAliases) {
+          const aliases: User[] = Object.values(val.inAppAliases);
+          updatedUser.inAppAliases = [...aliases];
+        }
+        return updatedUser;
+      }),
+      switchMap(async (u: VerifiedUser) => {
+        const updatedU = await this.firedb.object(this.usersBaseUrl + u.uid).update(u);
+        this.firedb.object(this.usersBaseUrl + u.uid).valueChanges().pipe(take(1)).subscribe((u: VerifiedUser) => {
+          this.currentUser$.next(u);
+          this.appAuthHasLoaded = true;
+          this.sbs.openSnackBar("Welcome", 1000, "success");
+        }, (err) => {
+          this.appAuthHasLoaded = true;
+          console.error("err", err);
+          this.sbs.openSnackBar("Server error: " + err['code']);
+        });
+      })
+    ).subscribe(
+      (res) => {
+      },
+      (err) => {
+        console.error("err", err)
+        this.sbs.openSnackBar("Server error: " + err['code']);
+      }
+    )
+  }
+
 
   handleError(err: HttpErrorResponse) {
     return throwError(err);

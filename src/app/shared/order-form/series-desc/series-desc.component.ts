@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { IBaseItem, BaseItem, DrinkSeries } from '../../models/base.model';
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
@@ -10,7 +10,7 @@ import { OrderFormService } from '../order-form.service';
   templateUrl: 'series-desc.component.html',
   styleUrls: ['./series-desc.component.css', '../order-form.component.css']
 })
-export class SeriesDescComponent implements OnInit, OnChanges {
+export class SeriesDescComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   seriesCtrl: FormControl;
@@ -44,5 +44,9 @@ export class SeriesDescComponent implements OnInit, OnChanges {
 
   onSeriesChange() {
     this.ofs.orderFg.get("drinkName").reset(null, {onlySelf: false, emitEvent: true});
+  }
+
+  ngOnDestroy() {
+    this.compDest$.next();
   }
 }

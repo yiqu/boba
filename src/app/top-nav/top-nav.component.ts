@@ -49,7 +49,7 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
       ).subscribe((val: VerifiedUser) => {
         if (val) {
           this.currentUser = val;
-          this.accountBtnText = "My Account";
+          this.accountBtnText = null;
           this.userMenuIcon = "account_circle";
         } else {
           this.currentUser = null;
@@ -105,11 +105,11 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onMenuItemClick(item: MenuItem) {
-    if (item.display === "My account") {
+    if (item.id === "account") {
       this.router.navigate(['/', 'my-account']);
-    } else if (item.display === "Sign out") {
+    } else if (item.id === "signout") {
       this.onSignoutClick();
-    } else if (item.display === "Sign in") {
+    } else if (item.id === "signin") {
       this.onAuthClick();
     }
   }
@@ -117,15 +117,22 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
   buildUserMenuItems() {
     this.userMenuItems = [];
     if (this.currentUser) {
+      const accountName: string = this.currentUser.email ?
+        this.createInitAlias(this.currentUser.email) : 'My account';
+
       this.userMenuItems.push(
-        new MenuItem("person", "My account"),
-        new MenuItem("power_settings_new", "Sign out")
+        new MenuItem("person", accountName, "account"),
+        new MenuItem("power_settings_new", "Sign out", "signout")
       );
     } else {
       this.userMenuItems.push(
-        new MenuItem("record_voice_over", "Sign in")
+        new MenuItem("record_voice_over", "Sign in", "signin")
       )
     }
+  }
+
+  createInitAlias(email: string): string {
+    return email.substr(0, email.indexOf("@"));
   }
 
   ngOnDestroy() {

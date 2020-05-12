@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
 import { VerifiedUser } from '../shared/models/user.model';
 import { Subject } from 'rxjs';
@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: 'banner.component.html',
   styleUrls: ['./banner.component.css']
 })
-export class NotificationBannerComponent implements OnInit, OnChanges {
+export class NotificationBannerComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   alwaysShow: boolean = false;
@@ -68,5 +68,9 @@ export class NotificationBannerComponent implements OnInit, OnChanges {
       return;
     }
 
+  }
+
+  ngOnDestroy() {
+    this.compDest$.next();
   }
 }

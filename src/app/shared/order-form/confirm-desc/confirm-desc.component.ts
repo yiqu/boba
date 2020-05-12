@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
@@ -13,14 +13,14 @@ import { SnackbarService } from '../../services/snackbar.service';
 import { OrderFormService } from '../order-form.service';
 import * as _ from 'lodash';
 import { AuthService } from '../../services/auth.service';
-import { EMPTY } from 'rxjs';
+import { EMPTY, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-shared-order-form-confirm-desc',
   templateUrl: 'confirm-desc.component.html',
   styleUrls: ['./confirm-desc.component.css']
 })
-export class ConfirmDescComponent implements OnInit, OnChanges {
+export class ConfirmDescComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   userFc: FormControl;
@@ -33,6 +33,7 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
   userAddDialogRef: MatDialogRef<DialogAddUserComponent>;
   missingSelectionAlert: string = "Please fix your selections.";
   missingUserName: string = "Please pick a user name";
+  compDest$: Subject<any> = new Subject<any>();
 
   constructor(public us: UserService, public ds: DialogService,
     public rdf: RestDataFireService, public sbs: SnackbarService,
@@ -53,6 +54,7 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    this.compDest$.next();
     // null when not logged in
     if (this.as.userAlias$) {
       this.as.userAlias$.pipe(
@@ -63,6 +65,8 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
           this.setDefaultValue();
         }
       );
+    } else {
+      this.setDefaultValue();
     }
   }
 
@@ -71,7 +75,7 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
     this.userAddDialogRef.afterClosed().pipe(
       takeUntil(this.ofs.refreshComponent$),
       switchMap((u: User) => {
-        if (u) {
+        if (u && this.as.currentUserSnapshot) {
           const user: User = new User(u.id, u.display);
           let ref = this.us.getFDB().ref("users/" + this.as.currentUserSnapshot.uid + "/inAppAliases/" + user.id);
           return ref.set(user);
@@ -83,6 +87,7 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
       this.sbs.openSnackBar("Successfully added your alias.");
     },
     (err) => {
+      console.log(err);
       this.sbs.openSnackBar("That alias already exists under your account." + err['code'], 10000);
     },
     () => {
@@ -95,7 +100,7 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
       if (i > -1) {
         this.userFc.setValue(this.users[i]);
         this.sbs.openSnackBar("Alias for this order has been pre-selected" +
-          " to '" + this.userFc.value.display + "'.", 10000);
+          " to '" + this.userFc.value.display + "'.", 1000);
       } else {
         this.sbs.openSnackBar("Could not find alias '" + this.userFc.value.display +
           "' in your alias list, so no alias has been selected.", 10000);
@@ -112,6 +117,10 @@ export class ConfirmDescComponent implements OnInit, OnChanges {
       slide = 1;
     }
     this.fixGoBack.emit(slide);
+  }
+
+  ngOnDestroy() {
+    this.compDest$.next();
   }
 
 

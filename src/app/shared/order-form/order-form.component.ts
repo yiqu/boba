@@ -8,7 +8,7 @@ import { OrderFormService } from './order-form.service';
 import { UserService } from '../services/user.service';
 import { MatHorizontalStepper, MatStep } from '@angular/material/stepper';
 import { takeUntil, switchMap } from 'rxjs/operators';
-import { User } from '../models/user.model';
+import { User, VerifiedUser } from '../models/user.model';
 import { RestDataFireService } from '../services/fire-data.service';
 import { SnackbarService } from '../services/snackbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -144,10 +144,6 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onOrderSubmit() {
-    console.log("order status:",this.ofs.orderFg.status)
-    console.log("order value:",this.ofs.orderFg.value)
-    console.log("order fg", this.ofs.orderFg)
-
     const formVal: any = this.ofs.orderFg.value;
     const reviewOrderDetail = this.createCurrentDrinkOrderDetail(formVal);
     const currentUser: User = this.getSelectedUser(formVal);
@@ -206,7 +202,8 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     ).subscribe((val) => {
     },
     (err) => {
-      this.sbs.openSnackBar("A favorite drink with that name already exists, try a different name. " + err['code']);
+      console.error(err['code']);
+      this.sbs.openSnackBar("A favorite drink with that name already exists, try a different name.");
     },
     () => {
       this.sbs.openSnackBar("Favorite drink saved!");

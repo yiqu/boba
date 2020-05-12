@@ -165,3 +165,11 @@ h2 {
 .list-group-item.links {
   padding: 0 !important;
 }
+
+.mat-snack-bar-container.sb-success {
+  background-color: #0066cc;
+}
+
+.mat-snack-bar-container.sb-danger {
+  background-color: #990000;
+}

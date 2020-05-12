@@ -37,6 +37,7 @@ export class ToppingDescComponent implements OnInit, OnDestroy, AfterViewInit, O
   }
 
   ngOnChanges(c) {
+    this.compDest$.next();
     this.setupToppings();
     this.defaultSelected = this.getDefaultSelected();
     this.selectedCount = this.toppingFa.length;

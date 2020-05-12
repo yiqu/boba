@@ -28,6 +28,7 @@ export class DrinkDescComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes) {
+    this.compDest$.next();
     this.setUpDrinksBySeries();
   }
 
@@ -61,5 +62,6 @@ export class DrinkDescComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
+    this.compDest$.next();
   }
 }

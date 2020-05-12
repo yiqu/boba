@@ -31,7 +31,8 @@ export class VerifiedUser {
     public tenantId: string,
     public uid: string,
     public phoneNumber: string,
-    public inAppAliases: User[]
+    public inAppAliases: User[],
+    public logins: string[]
   ) {
 
   }
