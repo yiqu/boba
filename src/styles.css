@@ -173,3 +173,7 @@ h2 {
 .mat-snack-bar-container.sb-danger {
   background-color: #990000;
 }
+
+.icon-mat-success {
+  color: #33cc33;
+}

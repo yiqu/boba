@@ -118,7 +118,7 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userMenuItems = [];
     if (this.currentUser) {
       const accountName: string = this.currentUser.email ?
-        this.createInitAlias(this.currentUser.email) : 'My account';
+        this.currentUser.inAppAliases.alias.display : 'My account';
 
       this.userMenuItems.push(
         new MenuItem("person", accountName, "account"),
@@ -129,10 +129,6 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
         new MenuItem("record_voice_over", "Sign in", "signin")
       )
     }
-  }
-
-  createInitAlias(email: string): string {
-    return email.substr(0, email.indexOf("@"));
   }
 
   ngOnDestroy() {

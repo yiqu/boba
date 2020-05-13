@@ -12,6 +12,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import { SnackbarService } from './snackbar.service';
 import { UserService } from './user.service';
+import { RestDataFireService } from './fire-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,16 +35,17 @@ export class AuthService {
 
 
   constructor(public http: HttpClient, public firedb: AngularFireDatabase,
-    public router: Router, public sbs: SnackbarService, public us: UserService) {
+    public router: Router, public sbs: SnackbarService, public us: UserService,
+    public fds: RestDataFireService) {
       firebase.auth().onAuthStateChanged(
         (user: firebase.User) => {
           if (user) {
             const u = (<VerifiedUser>user.toJSON());
-            this.setUpUserRelated(u);
+            console.log("AUTH", u)
             this.mergeUserFromDbAndFirebase(u);
           } else {
             this.setCurrentUserSnapshot(null);
-            this.appAuthHasLoaded = true;
+            this.toggleAuthLoaded(true);
             this.currentUser$.next(undefined);
           }
         },
@@ -56,8 +58,12 @@ export class AuthService {
 
   }
 
+  toggleAuthLoaded(loaded: boolean) {
+    this.appAuthHasLoaded = loaded;
+  }
+
   /**
-   * Set up the alias list for current verified user
+   * Dont need
    */
   setUpUserRelated(u: VerifiedUser) {
     this.setCurrentUserSnapshot(u);
@@ -73,44 +79,38 @@ export class AuthService {
    * Then broadcast the newly merged user info.
    */
   mergeUserFromDbAndFirebase(u: VerifiedUser) {
-    this.firedb.object(this.usersBaseUrl + u.uid).valueChanges().pipe(
-      take(1),
-      map((val: VerifiedUser) => {
-        let updatedUser: VerifiedUser = {...val, ...u};
-        // check to make sure it's not duplicate login time. Every refresh will cause this, so it could be duplicate
-        if (updatedUser.logins) {
-          if (updatedUser.logins[updatedUser.logins.length-1] !== u.lastLoginAt) {
-            updatedUser.logins.push(u.lastLoginAt);
+    this.fds.getFireDB().ref("users/" + u.uid).once("value").then(
+      (snap) => {
+        let g = snap.val();
+        if (g.inAppAliases) {
+          // update login time
+          if (g.logins) {
+            // check to make sure it's not duplicate login time. Every refresh will cause this, so it could be duplicate
+            if (g.logins[g.logins.length-1] !== u.lastLoginAt) {
+              g.logins.push(u.lastLoginAt);
+            }
+          } else {
+            g['logins'] = [];
+            g.logins.push(u.lastLoginAt);
           }
-        } else {
-          updatedUser['logins'] = [];
-          updatedUser.logins.push(u.lastLoginAt);
+
+          this.toggleAuthLoaded(true);
+          this.currentUser$.next(g);
+          setTimeout(() => {
+            this.fds.getFireDB().ref("users/" + u.uid).update(g);
+          }, 1000);
         }
-        // copy the aliases
-        if (val && val.inAppAliases) {
-          const aliases: User[] = Object.values(val.inAppAliases);
-          updatedUser.inAppAliases = [...aliases];
-        }
-        return updatedUser;
-      }),
-      switchMap(async (u: VerifiedUser) => {
-        const updatedU = await this.firedb.object(this.usersBaseUrl + u.uid).update(u);
-        this.firedb.object(this.usersBaseUrl + u.uid).valueChanges().pipe(take(1)).subscribe((u: VerifiedUser) => {
-          this.currentUser$.next(u);
-          this.appAuthHasLoaded = true;
-          this.sbs.openSnackBar("Welcome", 1000, "success");
-        }, (err) => {
-          this.appAuthHasLoaded = true;
-          console.error("err", err);
-          this.sbs.openSnackBar("Server error: " + err['code']);
-        });
-      })
-    ).subscribe(
+      },
+      (rej) => {
+        this.sbs.openSnackBar("Error merging user info.");
+        console.log("error getting user:", rej);
+      }
+    ).then(
       (res) => {
       },
       (err) => {
-        console.error("err", err)
-        this.sbs.openSnackBar("Server error: " + err['code']);
+        this.sbs.openSnackBar("Error updating user's login time.");
+        console.log("error getting user:", err);
       }
     )
   }
@@ -129,10 +129,12 @@ export class AuthService {
   }
 
   createUser(authInfo: AuthInfo) {
+    this.toggleAuthLoaded(false);
     this.clearCurrentUserSnapshot();
     this.authErrMsg = null;
     let sess: string = authInfo.saveSession ?
       firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+
     firebase.auth().setPersistence(sess)
     .then(() => {
       this.authLoading = true;
@@ -141,6 +143,7 @@ export class AuthService {
     .then(
       (u: firebase.auth.UserCredential) => {
         const user: VerifiedUser = <VerifiedUser>u.user.toJSON();
+        // set current user snapshot, so can access it in the next then()
         this.setCurrentUserSnapshot(user);
         const userIdRef = firebase.database().ref(this.usersBaseUrl + user.uid);
         return userIdRef.set(user);
@@ -154,9 +157,10 @@ export class AuthService {
         if (res !== "ERROR") {
           if (this.currentUserSnapshot) {
             const aliasName: string = this.createInitAlias(this.currentUserSnapshot.email);
-            const initAlias = new User(aliasName, aliasName);
+            // user alias here includes name, id, and original Firebase User object
+            const initAlias = new User(aliasName, aliasName, this.currentUserSnapshot);
             const userAliasRef = firebase.database().ref(this.usersBaseUrl + this.currentUserSnapshot.uid + "/" +
-              this.aliasesUrl + "/" + initAlias.id);
+              this.aliasesUrl + "/alias");
             return userAliasRef.set(initAlias)
           }
         }
@@ -165,14 +169,19 @@ export class AuthService {
       },
       (err) => {
         console.error(err);
-        //this.signoutUser();
         this.sbs.openSnackBar("Server error occured: " +  err['code']);
         return "ERROR";
       }
     ).then(
       (res) => {
         if (res !== "ERROR") {
-          this.router.navigate(['/']);
+          this.fds.getFireDB().ref("users/" + this.currentUserSnapshot.uid).once("value").then(
+            (snap: any) => {
+              this.currentUser$.next(snap.val());
+              this.router.navigate(['/']);
+              this.toggleAuthLoaded(true);
+            }
+          )
         }
       },
       (err) => {
@@ -192,6 +201,7 @@ export class AuthService {
    *
    */
   loginUser(authInfo: AuthInfo) {
+    this.toggleAuthLoaded(false);
     this.authErrMsg = null;
     let sess: string = authInfo.saveSession ?
       firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
@@ -203,6 +213,7 @@ export class AuthService {
     .then(
       (u: firebase.auth.UserCredential) => {
         this.router.navigate(['/']);
+        this.toggleAuthLoaded(true);
       },
       (rej) => {
         this.authErrMsg = this.getFirebaseErrorMsg(rej);

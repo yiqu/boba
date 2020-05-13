@@ -6,6 +6,7 @@ import { ToppingUrlPipe, OrderTableDrinkDetailDisplayPipe,
   OrderTableDrinkSugarDisplayPipe, OrderTableDrinkIceDisplayPipe, DrinkTypeUrlPipe } from './topping-icon.pipe';
 import { DrinkOrderDetailDisplayPipe } from './drink-order-text-display.pipe';
 import { InventoryDrinkDisplayPipe } from './inventory-displays.pipe';
+import { UserDisplayPipe } from './user.pipe';
 
 @NgModule({
   imports: [],
@@ -20,7 +21,8 @@ import { InventoryDrinkDisplayPipe } from './inventory-displays.pipe';
     OrderTableDrinkSugarDisplayPipe,
     DrinkOrderDetailDisplayPipe,
     DrinkTypeUrlPipe,
-    InventoryDrinkDisplayPipe
+    InventoryDrinkDisplayPipe,
+    UserDisplayPipe
   ],
 
   declarations: [
@@ -33,7 +35,8 @@ import { InventoryDrinkDisplayPipe } from './inventory-displays.pipe';
     OrderTableDrinkIceDisplayPipe,
     DrinkOrderDetailDisplayPipe,
     DrinkTypeUrlPipe,
-    InventoryDrinkDisplayPipe
+    InventoryDrinkDisplayPipe,
+    UserDisplayPipe
   ],
 
   providers: [],

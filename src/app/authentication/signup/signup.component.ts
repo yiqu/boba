@@ -53,12 +53,6 @@ export class AuthSignupComponent implements OnInit, OnDestroy {
         password: fu.createFormControl(pw, false, [Validators.required]),
         repassword: fu.createFormControl(pw, false, [Validators.required])
       });
-
-      this.as.currentUser$.subscribe((val) => {
-        if (val) {
-          //this.router.navigate(["/"]);
-        }
-      });
   }
 
   ngOnInit() {

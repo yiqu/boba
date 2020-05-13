@@ -54,22 +54,11 @@ export class ConfirmDescComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    this.compDest$.next();
-    // null when not logged in
-    if (this.as.userAlias$) {
-      this.as.userAlias$.pipe(
-        takeUntil(this.ofs.refreshComponent$)
-      ).subscribe(
-        (users: User[]) => {
-          this.users = [...users];
-          this.setDefaultValue();
-        }
-      );
-    } else {
-      this.setDefaultValue();
-    }
   }
 
+  /**
+   * DEPRECATED
+   */
   onNameAdd() {
     this.userAddDialogRef = this.ds.getUserAddDialog();
     this.userAddDialogRef.afterClosed().pipe(
@@ -94,6 +83,9 @@ export class ConfirmDescComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  /**
+   * OUTDATED
+   */
   setDefaultValue() {
     if (this.userFc.value) {
       const i: number = _.findIndex(this.users, ['id', this.userFc.value['id']]);

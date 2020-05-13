@@ -11,7 +11,7 @@
     </div>
   </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="drinkOrder">
   <div class="col-sm-12">
     <app-shared-order-form [drinkOrder]="drinkOrder"></app-shared-order-form>
   </div>

@@ -35,15 +35,14 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
         );
       })
     ).subscribe((u: VerifiedUser) => {
-      this.ofs.refreshComponent$.next();
-      this.createDefaultDrink(u);
+      if (u) {
+        this.ofs.refreshComponent$.next();
+        this.createDefaultDrink(u);
+      }
     });
-
   }
 
   ngOnInit() {
-    //this.createDefaultDrink();
-
     this.cs.favItemsList$.pipe(
       takeUntil(this.compDest$)
     )
@@ -57,8 +56,6 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
    * Create the default Drink Detail when new order is clicked
    */
   createDefaultDrink(u: VerifiedUser) {
-    const createDate: number = new Date().getTime();
-    const user: User = new User("kevin", "Kevin");
     const ice = new DrinkIceLevel(null, null);
     const sugar = new DrinkSugarLevel(null, null);
     const size = new DrinkSize(null, null);
@@ -66,7 +63,7 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
     const toppings: DrinkTopping[] = [];
     let alias: User;
     if (u && u.inAppAliases) {
-      alias = u.inAppAliases[0];
+      alias = u.inAppAliases.alias;
     }
     this.drinkOrder = new DrinkOrderDetail(ice, drinkType, size, sugar, toppings, alias);
   }

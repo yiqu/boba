@@ -8,6 +8,8 @@ import { DrinkOrder } from '../models/tea.models';
 import { OrderStatusType, DrinkSeries, DrinkItem, BaseItem } from '../models/base.model';
 import { User } from '../models/user.model';
 import { from } from 'rxjs';
+import * as firebase from 'firebase/app';
+import 'firebase/database';
 
 @Injectable({
   providedIn: 'root'
@@ -196,6 +198,9 @@ export class RestDataFireService {
     return res;
   }
 
+  getFireDB(): firebase.database.Database {
+    return firebase.database();
+  }
 
 
 

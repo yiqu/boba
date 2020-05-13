@@ -87,7 +87,6 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
 
       this.ofs.orderFg = null;
       this.ofs.orderFg = this.createForm(this.drinkOrder);
-      console.log("FG created: ",this.drinkOrder, this.ofs.orderFg)
       this.setFormValidStatus(this.ofs.orderFg.status);
 
       this.ofs.orderFg.valueChanges.pipe(
@@ -212,7 +211,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getSelectedUser(fgVal: any): User {
-    return new User(fgVal.user.id, fgVal.user.display);
+    return new User(fgVal.user.id, fgVal.user.display, fgVal.user.user);
   }
 
   onFixGoBack(slideIndex: number) {
