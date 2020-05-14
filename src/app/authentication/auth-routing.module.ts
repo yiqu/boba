@@ -10,10 +10,10 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'signin', pathMatch: 'full' },
       { path: 'signin', component: AuthSigninComponent,
-        //canActivate: [AuthUserExistGuard] ngZone issue
+        canActivate: [AuthUserExistGuard]
       },
       { path: 'signup', component: AuthSignupComponent,
-        //canActivate: [AuthUserExistGuard]
+        canActivate: [AuthUserExistGuard]
       },
   ]}
 ]

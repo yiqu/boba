@@ -19,7 +19,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class AuthSignupComponent implements OnInit, OnDestroy {
 
-  matcher: ErrorStateMatcher = new em.InstantErrorStateMatcher();
+  matcher: ErrorStateMatcher = new em.AfterActionsErrorStateMatcher();
   signInTitle: string = "Create your BobaShop Account.";
   avartarImgSrc: string = "assets/images/main/user/signin-avatar-default.png";
   signFg: FormGroup;

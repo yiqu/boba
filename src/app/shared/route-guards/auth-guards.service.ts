@@ -18,19 +18,7 @@ export class AuthUserChildrenGuard implements CanActivateChild {
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     Observable<boolean | UrlTree> | Promise<boolean> | boolean | UrlTree {
 
-    if (this.as.appAuthHasLoaded) {
-      return this.as.currentUser$.pipe(
-        map((val: VerifiedUser) => {
-          if (val) {
-            return true;
-          }
-          return this.router.createUrlTree(['/', 'auth','signin']);
-        }),
-        take(1)
-      );
-    }
     return this.as.currentUser$.pipe(
-      skip(1), // skip the initial value, which is always null due to behavior subject
       map((val: VerifiedUser) => {
         if (val) {
           return true;
@@ -53,30 +41,16 @@ export class AuthUserExistGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     Observable<boolean | UrlTree> | Promise<boolean> | boolean | UrlTree {
 
-    // return this.as.currentUser$
-    // .pipe(
-    //   take(1),
-    //   map((val: VerifiedUser) => {
-    //     if (val) {
-    //       return this.router.createUrlTree(['/', 'my-account']);;
-    //     }
-    //     return true;
-    //   })
-    // );
-
-    // return combineLatest(this.as.currentUser$, this.as.authStateResolved$).pipe(
-    //   take(1),
-    //   map(([u, resolved]) => {
-    //     console.log("user is", u, resolved);
-    //     if (u) {
-    //       return this.router.createUrlTree(['/', 'my-account']);;
-    //     }
-    //     return true;
-    //   }),
-    //   tap(() => {
-    //   })
-    // );
-
+    return this.as.currentUser$
+    .pipe(
+      take(1),
+      map((val: VerifiedUser) => {
+        if (val) {
+          return this.router.createUrlTree(['/', 'my-account']);;
+        }
+        return true;
+      })
+    );
 
     /**
      * Logic:
@@ -85,34 +59,34 @@ export class AuthUserExistGuard implements CanActivate {
      * Once firebase auth evaluated to a value, call the subject to emit TRUE or FALSE,
      * Then return this subject, with Map to run additional steps for re-direct.
      */
-    let res: Subject<any> = new Subject<any>();
-    firebase.auth().onAuthStateChanged(
-      (user: firebase.User) => {
-        if (user) {
-          res.next(false);
-        } else {
-          res.next(true);
-        }
-      },
-      (err) => {
-        res.next(false);
-      }
-    );
+    // let res: Subject<any> = new Subject<any>();
+    // firebase.auth().onAuthStateChanged(
+    //   (user: firebase.User) => {
+    //     if (user) {
+    //       res.next(false);
+    //     } else {
+    //       res.next(true);
+    //     }
+    //   },
+    //   (err) => {
+    //     res.next(false);
+    //   }
+    // );
 
-    return res.pipe(
-      take(1),
-      map((val) => {
-        if (val) {
-          return true;
-        } else {
-          return this.router.createUrlTree(['/', 'my-account']);
-        }
-      })
-    );
+    // return res.pipe(
+    //   take(1),
+    //   map((val) => {
+    //     if (val) {
+    //       return true;
+    //     } else {
+    //       return this.router.createUrlTree(['/', 'my-account']);
+    //     }
+    //   })
+    // );
 
-    if (this.as.appAuthHasLoaded) {
-      //return this.as.currentUser$
-    }
+    // if (this.as.appAuthHasLoaded) {
+    //   //return this.as.currentUser$
+    // }
 
   }
 }

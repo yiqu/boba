@@ -32,7 +32,7 @@ export class AuthSigninComponent implements OnInit {
     let pw: string = null;
     this.as.authErrMsg = null;
     if (!environment.production) {
-      id = "t@test.com";
+      id = "tz2z@test.com";
       pw = "123456";
     }
     this.signFg = this.fb.group({

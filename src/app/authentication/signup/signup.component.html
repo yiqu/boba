@@ -41,7 +41,7 @@
             <mat-form-field appearance="outline" class="repassword-input">
               <mat-label>Confirm</mat-label>
               <input matInput placeholder="Confirm password" [formControlName]="'repassword'" type="password"
-                [errorStateMatcher]="matcher">
+                [errorStateMatcher]="matcher" (keyup.enter)="onSignupClick()">
               <mat-icon matSuffix>https</mat-icon>
               <mat-error
                 *ngIf="this.repasswordFc && this.repasswordFc.hasError('passwordDoesNotMatch')">

@@ -13,6 +13,7 @@ import 'firebase/auth';
 import { SnackbarService } from './snackbar.service';
 import { UserService } from './user.service';
 import { RestDataFireService } from './fire-data.service';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class AuthService {
 
   constructor(public http: HttpClient, public firedb: AngularFireDatabase,
     public router: Router, public sbs: SnackbarService, public us: UserService,
-    public fds: RestDataFireService) {
+    public fds: RestDataFireService, public ls: LocalStorageService) {
       firebase.auth().onAuthStateChanged(
         (user: firebase.User) => {
           if (user) {
@@ -45,6 +46,7 @@ export class AuthService {
             this.mergeUserFromDbAndFirebase(u);
           } else {
             this.setCurrentUserSnapshot(null);
+            this.ls.clearCurrentUser();
             this.toggleAuthLoaded(true);
             this.currentUser$.next(undefined);
           }
@@ -95,6 +97,7 @@ export class AuthService {
           }
 
           this.toggleAuthLoaded(true);
+          this.ls.saveCurrentUser(g);
           this.currentUser$.next(g);
           setTimeout(() => {
             this.fds.getFireDB().ref("users/" + u.uid).update(g);
@@ -177,9 +180,9 @@ export class AuthService {
         if (res !== "ERROR") {
           this.fds.getFireDB().ref("users/" + this.currentUserSnapshot.uid).once("value").then(
             (snap: any) => {
+              this.ls.saveCurrentUser(snap.val());
               this.currentUser$.next(snap.val());
               this.router.navigate(['/']);
-              this.toggleAuthLoaded(true);
             }
           )
         }
@@ -190,6 +193,7 @@ export class AuthService {
     )
     .finally(() => {
       this.authLoading = false;
+      this.toggleAuthLoaded(true);
     });
   }
 
@@ -205,6 +209,7 @@ export class AuthService {
     this.authErrMsg = null;
     let sess: string = authInfo.saveSession ?
       firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+
     firebase.auth().setPersistence(sess)
     .then(() => {
       this.authLoading = true;
@@ -213,12 +218,12 @@ export class AuthService {
     .then(
       (u: firebase.auth.UserCredential) => {
         this.router.navigate(['/']);
-        this.toggleAuthLoaded(true);
       },
       (rej) => {
         this.authErrMsg = this.getFirebaseErrorMsg(rej);
       }
     ).finally(() => {
+      this.toggleAuthLoaded(true);
       this.authLoading = false;
     });
   }

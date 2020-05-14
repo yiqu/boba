@@ -9,6 +9,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/analytics';
 import { AuthService } from './shared/services/auth.service';
 import { environment } from 'src/environments/environment';
+import { LocalStorageService } from './shared/services/local-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,8 @@ export class AppComponent implements OnDestroy, OnInit {
 
   constructor(public router: Router, public route: ActivatedRoute,
     public cs: CartService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
-    public fds: RestDataFireService, public as: AuthService) {
+    public fds: RestDataFireService, public as: AuthService,
+    public ls: LocalStorageService) {
 
       /**
        * Detect if deive is mobile size, then re-run detection change
@@ -41,13 +43,13 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    const u = this.ls.setCurrentUserFromLocalStorage();
+    if (u) {
+      this.as.currentUser$.next(u);
+    }
     if (environment.gAnalytics) {
       firebase.analytics();
     }
-  }
-
-  onCartClick() {
-    this.router.navigate(['new-order', 'all']);
   }
 
   onTopNavMenuClick() {
