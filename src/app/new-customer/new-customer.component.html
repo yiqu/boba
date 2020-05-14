@@ -1,0 +1,31 @@
+<div class="container mb-3">
+  <div class="row mb-3 comf text-center mt-5">
+    <div class="col-sm-12">
+      <h3>But first...</h3>
+    </div>
+  </div>
+  <div class="row text-center roboto">
+    <div class="col-sm-12">
+      {{title}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="center-align mt-3">
+        <button mat-flat-button color="primary" class="mr-3 btn-w"
+          (click)="onClick('login')">
+          Login</button>
+        <button mat-flat-button color="accent" class="btn-w"
+          (click)="onClick('register')">
+          Register</button>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-5 ">
+    <div class="col-sm-12">
+      <div class="img-parent center-align">
+        <img [src]="imgUrl" class="img-h-100 b-r" alt="bg">
+      </div>
+    </div>
+  </div>
+</div>
