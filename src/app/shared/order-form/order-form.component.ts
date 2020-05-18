@@ -7,7 +7,7 @@ import { STEPPER_GLOBAL_OPTIONS, CdkStep} from '@angular/cdk/stepper';
 import { OrderFormService } from './order-form.service';
 import { UserService } from '../services/user.service';
 import { MatHorizontalStepper, MatStep } from '@angular/material/stepper';
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { takeUntil, switchMap, catchError } from 'rxjs/operators';
 import { User, VerifiedUser } from '../models/user.model';
 import { RestDataFireService } from '../services/fire-data.service';
 import { SnackbarService } from '../services/snackbar.service';
@@ -16,7 +16,7 @@ import { CartService } from '../services/cart.service';
 import { DialogSingleInputComponent, DialogSingleInputData } from '../dialogs/single-input/single-input-dialog.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '../services/dialog.service';
-import { Subject, of } from 'rxjs';
+import { Subject, of, Observable, throwError } from 'rxjs';
 import * as fv from '../validators/general-form.validator';
 
 @Component({
@@ -146,27 +146,42 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     const formVal: any = this.ofs.orderFg.value;
     const reviewOrderDetail = this.createCurrentDrinkOrderDetail(formVal);
     const currentUser: User = this.getSelectedUser(formVal);
-
     let order = new DrinkOrder(null, new Date().getTime(), [], currentUser, null);
     order.orders = [reviewOrderDetail];
-    this.rdf.getCartOrders().push(order).then(
-      (val) => {
-        this.sbs.openSnackBar("Order added to cart.");
-        this.proceedToCart(formVal.isFavorite);
+
+    // if fav. is being saved, then only add to cart after fav. is saved
+    if (formVal.isFavorite) {
+      this.getFavoriteAddObs(formVal).pipe(
+        switchMap((r) => {
+          return this.rdf.getCartOrders().push(order);
+        }),
+        catchError((err) => {
+          return throwError(err['code']);
+        })
+      ).subscribe((res) => {
       },
       (err) => {
-        this.sbs.openSnackBar("There was an error adding this order to cart. " + err['code']);
-      }
-    );
+        console.error(err);
+        this.sbs.openSnackBar("A favorite drink with that name already exists, try a different name.", 5000);
+      },
+      () => {
+        this.sbs.openSnackBar("Fav drink saved and order added to cart.");
+        this.router.navigate(['../', 'all'], {relativeTo: this.route});
+      })
+    } else {
+      this.rdf.getCartOrders().push(order).then(
+        (val) => {
+          this.sbs.openSnackBar("Order added to cart.");
+          this.router.navigate(['../', 'all'], {relativeTo: this.route});
+        },
+        (err) => {
+          this.sbs.openSnackBar("There was an error adding this order to cart. " + err['code']);
+        }
+     );
+    }
+
   }
 
-  proceedToCart(addingToFavorite: boolean) {
-    if (addingToFavorite) {
-      this.onFavoriteAdd();
-    } else {
-      this.router.navigate(['../', 'all'], {relativeTo: this.route});
-    }
-  }
 
   createCurrentDrinkOrderDetail(formVal: any): DrinkOrderDetail {
     const ice = new DrinkIceLevel(formVal.settings.ice.name, formVal.settings.ice.display);
@@ -181,33 +196,25 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
     return new DrinkOrderDetail(ice, type, size, sugar, toppings);
   }
 
-  onFavoriteAdd() {
+
+  getFavoriteAddObs(formValue: any): Observable<any> {
     const data: DialogSingleInputData = new DialogSingleInputData("Add new favorite",
       "Name", null, "edit", "This will be the name of your favorite drink");
     const favoriteAddDialogRef = this.ds.getFavDrinkAddDialog(data);
-
-    favoriteAddDialogRef.afterClosed().pipe(
+    const user: VerifiedUser = formValue.user?.user;
+    return favoriteAddDialogRef.afterClosed().pipe(
       takeUntil(this.compDes$),
       switchMap((name: string) => {
-        if (name) {
+        if (user && name) {
           const timeStamp: number = new Date().getTime();
-          let ref = this.cs.getFDB().ref("favorites/" + name);
+          let ref = this.cs.getFDB().ref("favorites/" + user.uid + "/" + name);
           const favItem: DrinkFavoriteItem = new DrinkFavoriteItem(ref.key,
             this.getSelectedUser(this.ofs.orderFg.value), timeStamp,
             this.createCurrentDrinkOrderDetail(this.ofs.orderFg.value));
           return (ref.set(favItem));
         }
       })
-    ).subscribe((val) => {
-    },
-    (err) => {
-      console.error(err['code']);
-      this.sbs.openSnackBar("A favorite drink with that name already exists, try a different name.");
-    },
-    () => {
-      this.sbs.openSnackBar("Favorite drink saved!");
-      this.router.navigate(['../', 'all'], {relativeTo: this.route});
-    });
+    );
   }
 
   getSelectedUser(fgVal: any): User {

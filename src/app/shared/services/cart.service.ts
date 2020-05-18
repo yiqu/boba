@@ -19,15 +19,10 @@ export class CartService {
 
   cartItemsListFire: AngularFireList<DrinkOrder>;
   cartItemList$: Observable<DrinkOrder[]>;
-  favItemsListFDB: AngularFireList<DrinkFavoriteItem>;
-  favItemsList$: Observable<DrinkFavoriteItem[]>;
 
   constructor(public firedb: AngularFireDatabase) {
     this.cartItemsListFire = this.firedb.list(this.BASE_CART_URL);
     this.cartItemList$ = this.getCartItemObs<DrinkOrder>();
-
-    this.favItemsListFDB = this.firedb.list(this.BASE_FAV_URL, (ref)=> {return ref.orderByChild("date")});
-    this.favItemsList$ = this.getFavItemObs<DrinkFavoriteItem>();
   }
 
   getFDB(): database.Database {
@@ -40,8 +35,12 @@ export class CartService {
     );
   }
 
-  private getFavItemObs<T>(): Observable<T[]> {
-    return this.favItemsListFDB.snapshotChanges().pipe(
+  getFavItemListFDB(uid: string): AngularFireList<DrinkFavoriteItem> {
+    return this.firedb.list(this.BASE_FAV_URL + "/" + uid, (ref)=> {return ref.orderByChild("date")});
+  }
+
+  getFavItemsObs(list: AngularFireList<DrinkFavoriteItem>): Observable<DrinkFavoriteItem[]> {
+    return list.snapshotChanges().pipe(
       map((changes) => this.addfireKey(changes)),
       map((val) => {return val.reverse()})
     );

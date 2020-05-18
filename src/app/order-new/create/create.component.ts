@@ -38,18 +38,20 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
       if (u) {
         this.ofs.refreshComponent$.next();
         this.createDefaultDrink(u);
+
       }
     });
   }
 
   ngOnInit() {
-    this.cs.favItemsList$.pipe(
-      takeUntil(this.compDest$)
-    )
-    .subscribe((favs: DrinkFavoriteItem[]) => {
+    this.as.currentUser$.pipe(
+      takeUntil(this.compDest$),
+      switchMap((u) => {
+        return this.cs.getFavItemsObs(this.cs.getFavItemListFDB(u.uid));
+      })
+    ).subscribe((favs: DrinkFavoriteItem[]) => {
       this.favItems = [...favs];
     });
-
   }
 
   /**
