@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 
 export class MainLandingComponent implements OnInit {
 
-  bgUrl: string = "assets/images/bg/new-order-bg.jpg";
+  bgUrl: string = "assets/images/bg/store-front.png";
 
   homeBannerText: string = "Welcome to k.q's boba shop."
 
