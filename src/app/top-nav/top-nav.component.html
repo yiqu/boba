@@ -18,7 +18,7 @@
     <button mat-icon-button color="primary"
       [matBadge]="cartItemsCount" class="mat-elevation-z0"
       matBadgePosition="before" matBadgeColor="accent" (click)="onCartClick()"
-      [matBadgeHidden]="cartItemsCount<1">
+      [matBadgeHidden]="(cartItemsCount)==='0'">
         <mat-icon>shopping_cart</mat-icon>
     </button>
 

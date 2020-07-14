@@ -43,7 +43,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
   favoriteAddDialogRef: MatDialogRef<DialogSingleInputComponent>;
   compDes$: Subject<any> = new Subject<any>();
 
-  labelPosition: string = "bottom";
+  labelPosition: "end" | "bottom" = "bottom";
   isStepperLinear: boolean = false;
   selectionFcNames: string[] = ["seriesName", "drinkName", "settings"];
 

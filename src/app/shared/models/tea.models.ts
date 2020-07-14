@@ -1,5 +1,5 @@
 import { User } from './user.model';
-import { IBaseItem, DrinkItem, ToppingItem } from './base.model';
+import { IBaseItem, DrinkItem, ToppingItem, DrinkSeries } from './base.model';
 
 
 export class DrinkOrder {
@@ -62,7 +62,7 @@ export class DrinkOrderDetail {
 
 export class DrinkType implements IBaseItem {
   constructor(public name: string, public display: string,
-    public seriesName: string, public seriesDisplay: string) {
+    public seriesName: DrinkSeries, public seriesDisplay: string) {
 
     this.name = name ? name : null;
     this.display = display ? display : null;

@@ -22,7 +22,7 @@ import { RestDataFireService } from '../shared/services/fire-data.service';
 export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
 
   headerTitle: string = "BobaShop";
-  cartItemsCount: number = 0;
+  cartItemsCount: string = "0";
   compDest$: Subject<any> = new Subject<any>();
   logoShakeState: boolean = false;
   leftNavMenuState: boolean = false;
@@ -41,7 +41,7 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
         takeUntil(this.compDest$)
       )
       .subscribe((val) => {
-        this.cartItemsCount = val ? val.length : 0;
+        this.cartItemsCount = val ? (val.length + "") : "0";
       });
 
       this.as.currentUser$.pipe(
