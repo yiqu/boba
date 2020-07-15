@@ -34,6 +34,10 @@ const routes: Routes = [
     path: 'new-customer',
     loadChildren: () => import('./new-customer/new-customer.module').then(m => m.NewCustomerModule)
   },
+  {
+    path: 'stores',
+    loadChildren: () => import('./stores/stores.module').then(m => m.StoresModule)
+  },
   { path: '**', component: NotFoundComponent}
 ];
 

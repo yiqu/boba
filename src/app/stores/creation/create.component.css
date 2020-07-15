@@ -1,0 +1,9 @@
+.store-form {
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+td {
+  padding-right: 8px;
+}

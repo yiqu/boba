@@ -177,3 +177,13 @@ h2 {
 .icon-mat-success {
   color: #33cc33;
 }
+
+.title-banner-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.subtitle-banner-text {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
