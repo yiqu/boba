@@ -312,6 +312,9 @@ Apache-2.0
 @firebase/database
 Apache-2.0
 
+@firebase/firestore
+Apache-2.0
+
 @firebase/installations
 Apache-2.0
 
@@ -319,6 +322,9 @@ Apache-2.0
 Apache-2.0
 
 @firebase/util
+Apache-2.0
+
+@firebase/webchannel-wrapper
 Apache-2.0
 
 @fortawesome/angular-fontawesome
@@ -421,6 +427,15 @@ trademarks does not indicate endorsement of the trademark holder by Font
 Awesome, nor vice versa. **Please do not use brand logos for any purpose except
 to represent the company, product, or service to which they refer.**
 
+
+@ngrx/effects
+MIT
+
+@ngrx/store
+MIT
+
+@ngrx/store-devtools
+MIT
 
 angular-animations
 MIT
@@ -526,6 +541,8 @@ firebase/app
 firebase/auth
 
 firebase/database
+
+firebase/firestore
 
 idb
 ISC
