@@ -3,6 +3,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { environment } from '../environments/environment';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +26,8 @@ import { SideNavModule } from './side-nav/side-nav.module';
 import { AuthUserResolver } from './shared/resolver/auth-resolver.service';
 import { LoadingSpinnerModule } from './shared/loading/loading.module';
 import { LoadingModule } from './loading/loading.module';
+import { appReducers } from './redux-stores/global-store/app.reducer';
+import { appEffects } from './redux-stores/global-store/app.effects';
 
 @NgModule({
 
@@ -41,6 +46,11 @@ import { LoadingModule } from './loading/loading.module';
     FontAwesomeModule,
     NotFoundComponentModule,
     MainComponentModule,
+    StoreModule.forRoot(appReducers),
+    EffectsModule.forRoot(appEffects),
+    environment.production ? [] : StoreDevtoolsModule.instrument({
+      maxAge: 30
+    }),
     ToastrModule.forRoot({
       timeOut: 5000,
       extendedTimeOut: 1000,
