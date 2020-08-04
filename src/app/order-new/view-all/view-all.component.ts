@@ -102,5 +102,6 @@ export class OrderNewViewAllComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

@@ -1,4 +1,4 @@
-<div class="row mb-3 comf text-center mt-3">
+<div class="row mb-3 roboto text-center mt-3">
   <div class="col-sm-12">
     <div class="mb-2">
       {{signInTitle}}
@@ -14,18 +14,19 @@
             <img [src]="avartarImgSrc" class="img-h-100 border-circ" alt="avartar">
           </div>
 
-          <div>
-            <mat-form-field appearance="outline" class="mb-3 full-w">
-              <mat-label>Email</mat-label>
-              <input matInput placeholder="Email" [formControlName]="'id'" (keyup.enter)="onSignInClick()">
-              <mat-icon matSuffix>email</mat-icon>
-              <mat-hint>Email associated with your account.</mat-hint>
-              <mat-error>Invalid email format.</mat-error>
-            </mat-form-field>
+          <mat-form-field appearance="outline" class="mb-1 full-w">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Email" [formControlName]="'id'" (keyup.enter)="onSignInClick()">
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-hint>Email associated with your account.</mat-hint>
+            <mat-error>Invalid email format.</mat-error>
+          </mat-form-field>
+
+          <div class="f-right mb-1">
+            <button mat-button class="forgot-btn" (click)="onForgotPassword()">Forgot password?</button>
           </div>
 
-
-          <mat-form-field appearance="outline" class="full-w">
+          <mat-form-field appearance="outline" class="mb-1 full-w">
             <mat-label>Password</mat-label>
             <input matInput placeholder="Password" type="password" [formControlName]="'password'"
               (keyup.enter)="onSignInClick()">
@@ -38,17 +39,17 @@
             </mat-checkbox>
           </div>
 
-          <div *ngIf="this.as.authErrMsg">
+          <div *ngIf="errorOccured">
             <div class="alert alert-warning">
-              {{this.as.authErrMsg}}
+              {{errorMsg}}
             </div>
           </div>
         </mat-card-content>
 
         <mat-card-actions>
           <div class="center-align">
-            <app-loading-spinner *ngIf="this.as.authLoading" [diameter]="25"></app-loading-spinner>
-            <button *ngIf="!this.as.authLoading" mat-button class="signin-btn" (click)="onSignInClick()"
+            <app-loading-spinner *ngIf="loading" [diameter]="25"></app-loading-spinner>
+            <button *ngIf="!loading" mat-button class="signin-btn" (click)="onSignInClick()"
               [disabled]="idFc.invalid">Sign in</button>
           </div>
         </mat-card-actions>

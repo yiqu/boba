@@ -77,7 +77,9 @@ export class AuthEffects {
             (u: firebase.auth.UserCredential) => {
               this.ts.getSuccess("Your account has been successfully registered.");
               const user: VerifiedUser = <VerifiedUser>u.user.toJSON();
-              user.inAppAliases = JSON.parse(JSON.stringify(new InAppAlias(JSON.parse(JSON.stringify(new User(user.uid, user.email, {...user}))))));
+              user.inAppAliases = JSON.parse(JSON.stringify(
+                new InAppAlias(JSON.parse(JSON.stringify(new User(user.uid, AuthUtils.createInitAlias(user.email), {...user}))))
+              ));
               const p = new AuthVerifiedUserProp(user);
               return fromAuthActions.authAddNewRegisteredUserToDatabase(p);
             },
@@ -149,13 +151,15 @@ export class AuthEffects {
 
   /**
    * Does not auto redirect to /
+   * Do not turn loading to FALSE. Wait till real auth comes back to turn back on.
+   * this will provide the loading screen until Fire auth comes back with result.
    */
   autoLoginFromLocalStorage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromAuthActions.authAutoLogin),
       map((opts) => {
         this.ts.getSuccess("Auto logging in...");
-        const prop = new LoginSuccessActionProp(opts.user, false, false);
+        const prop = new LoginSuccessActionProp(opts.user, false, false, true);
         return fromAuthActions.authLoginSuccess(prop);
       })
     );

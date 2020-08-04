@@ -31,6 +31,10 @@ a.btn {
   font-family: 'Comfortaa', cursive;
 }
 
+.secfont {
+  font-family: 'Comfortaa', cursive;
+}
+
 a {
   text-decoration: none !important;
 }
@@ -63,6 +67,11 @@ a {
   font-weight: 800;
 }
 
+.f-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
 h2 {
   font-size: 1.5rem !important;
 }
@@ -87,6 +96,7 @@ h2 {
 }
 
 .float-right {
+  display: flex;
   justify-content: flex-end;
 }
 
@@ -98,6 +108,10 @@ h2 {
 .border-b {
   padding-bottom: 0.8rem !important;
   border-bottom: 1px solid #dee2e6;
+}
+
+.round-corners {
+  border-radius: 50%;
 }
 
  /* Extra small devices (phones, 600px and down) */

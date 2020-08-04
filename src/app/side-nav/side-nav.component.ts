@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState } from '../redux-stores/global-store/app.reducer';
+import { AuthState } from '../redux-stores/auth/auth.models';
+import { VerifiedUser } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-side-nav',
@@ -15,25 +19,29 @@ export class SideNavComponent implements OnInit, OnDestroy {
   headerList: NavHeaderList[] = [];
   navTitle: string = "Home";
   compDest$: Subject<any> = new Subject<any>();
+  user: VerifiedUser;
 
   @Output()
   navClose: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(public router: Router, public as: AuthService) {
-    this.as.currentUser$.pipe(
+  constructor(public router: Router, public as: AuthService, private store: Store<AppState>) {
+
+    this.store.select("appAuth").pipe(
       takeUntil(this.compDest$)
-    )
-    .subscribe((u) => {
-      this.headerList = [];
-      if (!u) {
-        this.headerList.push(
-          new NavHeaderList(new NavHeader("Login"), [
-            new NavHeaderLink("Login", "account_circle", ["/", "auth", "signin"]),
-          ]),
-        )
+    ).subscribe(
+      (state: AuthState) => {
+        this.headerList = [];
+        this.user = state.verifiedUser;
+        if (!this.user) {
+          this.headerList.push(
+            new NavHeaderList(new NavHeader("Login"), [
+              new NavHeaderLink("Login", "account_circle", ["/", "auth", "signin"]),
+            ]),
+          )
+        }
+        this.createAllOptions();
       }
-      this.createAllOptions();
-    });
+    )
   }
 
   createAllOptions() {
@@ -78,6 +86,7 @@ export class SideNavComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }
 

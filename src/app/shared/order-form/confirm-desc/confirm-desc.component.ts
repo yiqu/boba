@@ -56,32 +56,6 @@ export class ConfirmDescComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges() {
   }
 
-  /**
-   * DEPRECATED
-   */
-  onNameAdd() {
-    this.userAddDialogRef = this.ds.getUserAddDialog();
-    this.userAddDialogRef.afterClosed().pipe(
-      takeUntil(this.ofs.refreshComponent$),
-      switchMap((u: User) => {
-        if (u && this.as.currentUserSnapshot) {
-          const user: User = new User(u.id, u.display);
-          let ref = this.us.getFDB().ref("users/" + this.as.currentUserSnapshot.uid + "/inAppAliases/" + user.id);
-          return ref.set(user);
-        }
-        return EMPTY;
-      })
-    )
-    .subscribe((val: User) => {
-      this.sbs.openSnackBar("Successfully added your alias.");
-    },
-    (err) => {
-      console.log(err);
-      this.sbs.openSnackBar("That alias already exists under your account." + err['code'], 10000);
-    },
-    () => {
-    });
-  }
 
   /**
    * OUTDATED
@@ -113,6 +87,7 @@ export class ConfirmDescComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 
 

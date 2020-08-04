@@ -6,16 +6,16 @@ import { OrderNewCreateComponent } from './create/create.component';
 import { OrderNewViewAllComponent } from './view-all/view-all.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutRouteGuard } from '../shared/route-guards/checkout-guard.service';
-import { CurrentUserExistGuard } from '../shared/route-guards/current-user-guard.service';
+import { NoVerifiedUserGuard } from '../shared/route-guards/no-user.guard';
 
 const routes: Routes = [
   {
     path: '', component: OrderNewComponent, data: {title: 'New Order'},
     children: [
       { path: '', redirectTo: 'new', pathMatch: 'full' },
-      { path: 'new', component: OrderNewCreateComponent, canActivate: [CurrentUserExistGuard] },
+      { path: 'new', component: OrderNewCreateComponent, canActivate: [NoVerifiedUserGuard] },
       { path: 'checkout', component: CheckoutComponent, canActivate: [CheckoutRouteGuard] },
-      { path: 'all', component: OrderNewViewAllComponent, canActivate: [CurrentUserExistGuard],
+      { path: 'all', component: OrderNewViewAllComponent, canActivate: [NoVerifiedUserGuard],
         children: [
           { path: ':id', component: OrderNewOrderComponent }
         ]

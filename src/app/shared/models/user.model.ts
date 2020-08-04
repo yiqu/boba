@@ -17,13 +17,18 @@ export class AuthInfo implements IAuthInfo{
   }
 }
 
+export class AuthInfoFromUser implements IAuthInfo{
+  constructor(public id: string, public password: string, public saveSession: boolean){
+  }
+}
+
 export class VerifiedUser {
 
   constructor(
     public createdAt: string,
     public displayName: string,
     public email: string,
-    public emailVerified: string,
+    public emailVerified: boolean,
     public isAnonymous: string,
     public lastLoginAt: string,
     public photoURL: string,

@@ -55,5 +55,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

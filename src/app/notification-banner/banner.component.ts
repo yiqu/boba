@@ -33,13 +33,6 @@ export class NotificationBannerComponent implements OnInit, OnChanges, OnDestroy
   compDest$: Subject<any> = new Subject<any>();
 
   constructor(public as: AuthService) {
-    this.as.currentUser$.pipe(
-      takeUntil(this.compDest$)
-    )
-    .subscribe((u) => {
-      this.currentUser = u;
-      this.getMessage();
-    });
   }
 
   ngOnInit() {
@@ -72,5 +65,6 @@ export class NotificationBannerComponent implements OnInit, OnChanges, OnDestroy
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

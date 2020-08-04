@@ -1,13 +1,14 @@
 import { AuthState } from "./auth.models";
 import { createReducer, on } from '@ngrx/store';
 import * as AuthActions from './auth.actions';
+import { VerifiedUser } from 'src/app/shared/models/user.model';
 
 /**
  * Auth Initial State
  */
 const inititalState: AuthState = {
   verifiedUser: null,
-  loading: false,
+  loading: true,
   error: false,
   errorMsg: null,
   resetEmail: null
@@ -26,11 +27,12 @@ export const authReducer = createReducer(
     }
   }),
   // Firebase auth valueChanges logged in with a user
-  on(AuthActions.authLoginSuccess, (state, {verifiedUser}) => {
-    const u = verifiedUser;
+  on(AuthActions.authLoginSuccess, (state, {verifiedUser, loadingOverride}) => {
+    const u: VerifiedUser = verifiedUser;
+    const overrideLoadingToFalse: boolean = loadingOverride;
     return {
       ...state,
-      loading: false,
+      loading: overrideLoadingToFalse,
       verifiedUser: u,
       error: false,
       errorMsg: null

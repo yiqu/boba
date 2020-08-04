@@ -130,7 +130,7 @@ export class InventoryDrinkDetailComponent implements OnInit {
     return true;
   }
 
-  createDrinkItemToUpdate(): DrinkItem {
+  createDrinkItemToUpdate(): DrinkItem | null {
     const val = this.detailFg.value;
     const sd = val.drinkSeries ? val.drinkSeries.seriesDisplay : null;
     const sn = val.drinkSeries ? val.drinkSeries.seriesName : null;
@@ -143,6 +143,7 @@ export class InventoryDrinkDetailComponent implements OnInit {
       }
       return item;
     }
+    return null;
   }
 
   getFirebaseDrinkSeries(series: string): string {

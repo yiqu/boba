@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.as.appAuthHasLoaded; else loading">
+<ng-container *ngIf="!authLoading; else loading">
   <div class="row comf text-center mb-3 mt-3 home-banner-text" >
     <div class="col-sm-12">
       {{homeBannerText}}
@@ -6,9 +6,9 @@
   </div>
 
   <div class="row text-center comf mb-3">
-    <ng-container *ngIf="(this.as.currentUser$ | async) as user; else noUser">
+    <ng-container *ngIf="user; else noUser">
       <div class="col-sm-12 mb-3 f-w-800">
-        Hello {{user.inAppAliases.alias.display}}!
+        Hello {{user.displayName}}!
       </div>
     </ng-container>
     <ng-template #noUser>

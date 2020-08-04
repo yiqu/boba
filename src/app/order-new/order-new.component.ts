@@ -4,6 +4,11 @@ import { AdItem } from '../shared/ad-banner/banner/ad.item';
 import { environment } from 'src/environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
+import { AppState } from '../redux-stores/global-store/app.reducer';
+import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AuthState } from '../redux-stores/auth/auth.models';
 
 @Component({
   selector: 'app-order-new',
@@ -15,9 +20,11 @@ export class OrderNewComponent implements OnInit, OnDestroy {
 
   ads: AdItem[];
   bannerMsg: string = "first, you will not be able to add orders or checkout.";
+  compDest$: Subject<any> = new Subject<any>();
+  authLoading: boolean;
 
   constructor(public abs: AdBannerService, public router: Router, public route: ActivatedRoute,
-    public as: AuthService) {
+    public as: AuthService, private store: Store<AppState>) {
   }
 
   getCurrentTime(): number {
@@ -35,10 +42,18 @@ export class OrderNewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setupAds();
+    this.store.select("appAuth").pipe(
+      takeUntil(this.compDest$)
+    ).subscribe(
+      (state: AuthState) => {
+        this.authLoading = state.loading;
+      }
+    )
   }
 
   ngOnDestroy() {
-
+    this.compDest$.next();
+    this.compDest$.complete();
   }
 
   setupAds() {

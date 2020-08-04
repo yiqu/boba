@@ -84,5 +84,6 @@ export class ToppingDescComponent implements OnInit, OnDestroy, AfterViewInit, O
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

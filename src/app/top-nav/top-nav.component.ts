@@ -7,7 +7,12 @@ import { headShakeAnimation, rotateAnimation, tadaAnimation } from 'angular-anim
 import { AuthService } from '../shared/services/auth.service';
 import { VerifiedUser } from '../shared/models/user.model';
 import { MenuItem } from '../shared/models/nav-item.model';
-import { RestDataFireService } from '../shared/services/fire-data.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../redux-stores/global-store/app.reducer';
+import { IUserInfoState } from '../redux-stores/user/user.model';
+import * as AuthUtils from '../shared/utils/auth.utils';
+
+const defaultProfileImg: string = "assets/user/default-user.png";
 
 @Component({
   selector: 'app-top-nav',
@@ -30,34 +35,33 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
   userMenuIcon: string; //account_circle
   currentUser: VerifiedUser;
   userMenuItems: MenuItem[] = [];
-  accountBtnText: string;
+  loading: boolean;
+  avartarImgSrc: string = defaultProfileImg;
 
   @Output()
   navToggle: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(public router: Router, public route: ActivatedRoute,
-    public cs: CartService, public as: AuthService, public rdf: RestDataFireService) {
-      this.cs.cartItemList$.pipe(
-        takeUntil(this.compDest$)
-      )
-      .subscribe((val) => {
-        this.cartItemsCount = val ? (val.length + "") : "0";
-      });
+    public cs: CartService, public as: AuthService, private store: Store<AppState>) {
 
-      this.as.currentUser$.pipe(
+      // this.cs.cartItemList$.pipe(
+      //   takeUntil(this.compDest$)
+      // )
+      // .subscribe((val) => {
+      //   this.cartItemsCount = val ? (val.length + "") : "0";
+      // });
+
+      this.loading = true;
+      this.store.select("userInfoProfile").pipe(
         takeUntil(this.compDest$)
-      ).subscribe((val: VerifiedUser) => {
-        if (val) {
-          this.currentUser = val;
-          this.accountBtnText = null;
-          this.userMenuIcon = "account_circle";
-        } else {
-          this.currentUser = null;
-          this.accountBtnText = "Login";
-          this.userMenuIcon = "perm_identity";
+      ).subscribe(
+        (state: IUserInfoState) => {
+          this.loading = state.loading;
+          this.setUserProfileImg(state.userInfo);
+          this.buildUserMenuItems(state.userInfo);
+          this.userMenuIcon = state.userInfo ? "account_circle" : "perm_identity";
         }
-        this.buildUserMenuItems();
-      });
+      )
   }
 
   ngOnInit() {
@@ -94,14 +98,7 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSignoutClick() {
-    this.as.signoutUser().then(
-      (res) => {
-        this.router.navigate(['/']);
-      },
-      (rej) => {
-
-      }
-    );
+    this.as.signoutUser();
   }
 
   onMenuItemClick(item: MenuItem) {
@@ -114,24 +111,32 @@ export class TopNavComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  buildUserMenuItems() {
+  buildUserMenuItems(u: VerifiedUser): void {
     this.userMenuItems = [];
-    if (this.currentUser) {
-      const accountName: string = this.currentUser.email ?
-        this.currentUser.inAppAliases.alias.display : 'My account';
-
+    if (u) {
+      const displayName = u.displayName ? u.displayName : AuthUtils.createInitAlias(u.email);
       this.userMenuItems.push(
-        new MenuItem("person", accountName, "account"),
-        new MenuItem("power_settings_new", "Sign out", "signout")
-      );
+        new MenuItem(null, "Signed in as " + (displayName), null, true),
+        new MenuItem("account_circle", "My profile", "account"),
+        new MenuItem("forward", "Sign Out", "signout")
+      )
     } else {
       this.userMenuItems.push(
-        new MenuItem("record_voice_over", "Sign in", "signin")
+        new MenuItem("record_voice_over", "Sign in", "signin"),
       )
+    }
+  }
+
+  setUserProfileImg(u: VerifiedUser) {
+    if (u) {
+      this.avartarImgSrc = u.photoURL;
+    } else {
+      this.avartarImgSrc = defaultProfileImg;
     }
   }
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

@@ -31,4 +31,15 @@
   }
 }
 
+.profile-img-parent {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.user-dropdown {
+  height: 3rem;
+}
+
 

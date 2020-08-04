@@ -15,7 +15,7 @@ export class LoginStartActionProp {
 }
 
 export class LoginSuccessActionProp {
-  constructor(public verifiedUser: any, public redirect?: boolean, public showAlert?: boolean) {
+  constructor(public verifiedUser: any, public redirect?: boolean, public showAlert?: boolean, public loadingOverride?: boolean) {
   }
 }
 

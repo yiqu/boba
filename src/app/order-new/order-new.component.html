@@ -1,4 +1,4 @@
-<div class="container mb-3" *ngIf="this.as.appAuthHasLoaded; else loading">
+<div class="container mb-3" *ngIf="!authLoading; else loading">
   <div class="deals-banner mt-2">
     <app-shared-ad-banner [ads]="ads"></app-shared-ad-banner>
   </div>

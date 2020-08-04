@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AccountComponent } from './account.component';
-import { AccountEditComponent } from './edit/edit.component';
+import { MyAccountComponent } from './my.component';
 import { AccountViewComponent } from './view/view.component';
-import { AuthUserChildrenGuard } from '../shared/route-guards/auth-guards.service';
+import { AccountEditComponent } from './edit/edit.component';
+import { NoVerifiedUserGuard } from '../shared/route-guards/no-user.guard';
+import { CanDeactivateGuard } from '../shared/route-guards/can-deactivate.guard';
 
 const routes: Routes = [
   {
-    path: '', component: AccountComponent, canActivateChild: [AuthUserChildrenGuard],
+    path: '', component: MyAccountComponent, canActivate: [NoVerifiedUserGuard],
     children: [
       { path: '', redirectTo: 'view', pathMatch: 'full' },
       { path: 'view', component: AccountViewComponent },
-      { path: 'edit', component: AccountEditComponent }
+      { path: 'edit', component: AccountEditComponent, canDeactivate: [CanDeactivateGuard] }
     ]
   }
 ];

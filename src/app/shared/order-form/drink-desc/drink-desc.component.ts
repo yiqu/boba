@@ -63,5 +63,6 @@ export class DrinkDescComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

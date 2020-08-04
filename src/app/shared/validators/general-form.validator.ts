@@ -27,3 +27,17 @@ export function customOnlyNumbersValidator(control: FormControl): {[s: string]: 
   }
   return {"numbersOnly": true};
 }
+
+/**
+ * Regex for allowing alphanumeric,-,_ and space
+ * @param control
+ */
+export function alphaNumericValidator(control: FormControl): {[s: string]: boolean} {
+  const alphaNumeric: RegExp = /^[a-z\d\-_\s]+$/i;
+  // convert to string first
+  const val = (control.value + "").trim();
+  if (control.value && val.match(alphaNumeric)) {
+    return null;
+  }
+  return {"alphanumericOnly": true};
+}

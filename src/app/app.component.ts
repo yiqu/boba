@@ -9,7 +9,13 @@ import * as firebase from 'firebase/app';
 import 'firebase/analytics';
 import { AuthService } from './shared/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { LocalStorageService } from './shared/services/local-storage.service';
+import { AppState } from './redux-stores/global-store/app.reducer';
+import { Store } from '@ngrx/store';
+import { VerifiedUser } from './shared/models/user.model';
+import * as AuthActions from './redux-stores/auth/auth.actions';
+import { IsMobileService } from './shared/services/is-mobile.service';
+
+const LOCAL_STORAGE_USER_KEY: string = "VERIFIED_USER";
 
 @Component({
   selector: 'app-root',
@@ -28,28 +34,32 @@ export class AppComponent implements OnDestroy, OnInit {
   private _mobileQueryListener: () => void;
 
   constructor(public router: Router, public route: ActivatedRoute,
-    public cs: CartService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
-    public fds: RestDataFireService, public as: AuthService,
-    public ls: LocalStorageService) {
+    public cs: CartService, public changeDetectorRef: ChangeDetectorRef, public media: MediaMatcher,
+    public fds: RestDataFireService, public as: AuthService, public ims: IsMobileService,
+    private store: Store<AppState>) {
 
-      /**
-       * Detect if deive is mobile size, then re-run detection change
-       */
-      this.mobileQuery = media.matchMedia('(max-width: 600px)');
-      this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-      this.mobileQuery.addListener(this._mobileQueryListener);
-      this.fds.mobileQuery = this.mobileQuery;
+      this.setMobileDetection();
 
   }
 
   ngOnInit() {
-    const u = this.ls.setCurrentUserFromLocalStorage();
+    const u: VerifiedUser = this.getUserFromLocalStorage();
     if (u) {
-      this.as.currentUser$.next(u);
+      this.store.dispatch(AuthActions.authAutoLogin({user: u}))
     }
     if (environment.gAnalytics) {
       firebase.analytics();
     }
+  }
+
+  /**
+   * Detect if deive is mobile size, then re-run detection change
+   */
+  setMobileDetection() {
+    this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => this.changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.ims.mediaQList = this.mobileQuery;
   }
 
   onTopNavMenuClick() {
@@ -62,6 +72,15 @@ export class AppComponent implements OnDestroy, OnInit {
     if (this.sideNav) {
       this.sideNav.close();
     }
+  }
+
+  getUserFromLocalStorage(): VerifiedUser | null{
+    const localStorageUser: any = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER_KEY));
+    if (!localStorageUser) {
+      return null;
+    }
+    console.info("Local Storage: User Present");
+    return localStorageUser;
   }
 
   ngOnDestroy() {

@@ -16,7 +16,7 @@ import { CartService } from '../services/cart.service';
 import { DialogSingleInputComponent, DialogSingleInputData } from '../dialogs/single-input/single-input-dialog.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from '../services/dialog.service';
-import { Subject, of, Observable, throwError } from 'rxjs';
+import { Subject, of, Observable, throwError, EMPTY } from 'rxjs';
 import * as fv from '../validators/general-form.validator';
 
 @Component({
@@ -213,6 +213,7 @@ export class OrderFormComponent implements OnInit, OnChanges, OnDestroy {
             this.createCurrentDrinkOrderDetail(this.ofs.orderFg.value));
           return (ref.set(favItem));
         }
+        return EMPTY;
       })
     );
   }

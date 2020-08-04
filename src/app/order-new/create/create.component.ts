@@ -11,6 +11,9 @@ import { takeUntil, switchMap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/redux-stores/global-store/app.reducer';
+import { AuthState } from 'src/app/redux-stores/auth/auth.models';
 
 @Component({
   selector: 'app-order-new-create',
@@ -22,36 +25,42 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
   drinkOrder: DrinkOrderDetail;
   favItems: DrinkFavoriteItem[] = [];
   compDest$: Subject<any> = new Subject<any>();
+  user: VerifiedUser;
 
   constructor(public fds: RestDataFireService, public route: ActivatedRoute,
     public ofs: OrderFormService, public cs: CartService, public sbs: SnackbarService,
-    public as: AuthService) {
+    public as: AuthService, public store: Store<AppState>) {
 
     this.route.queryParamMap.pipe(
       takeUntil(this.compDest$),
       switchMap((params: Params) => {
-        return this.as.currentUser$.pipe(
+        return this.store.select("appAuth").pipe(
           takeUntil(this.compDest$)
         );
       })
-    ).subscribe((u: VerifiedUser) => {
-      if (u) {
+    ).subscribe((state: AuthState) => {
+      if (state?.verifiedUser) {
         this.ofs.refreshComponent$.next();
-        this.createDefaultDrink(u);
-
+        this.createDefaultDrink(state.verifiedUser);
       }
     });
   }
 
   ngOnInit() {
-    this.as.currentUser$.pipe(
-      takeUntil(this.compDest$),
-      switchMap((u) => {
-        return this.cs.getFavItemsObs(this.cs.getFavItemListFDB(u.uid));
-      })
-    ).subscribe((favs: DrinkFavoriteItem[]) => {
-      this.favItems = [...favs];
-    });
+    // TODO: Fix Fav items list to use FireStore.
+
+    // this.as.currentUser$.pipe(
+    //   takeUntil(this.compDest$),
+    //   switchMap((u) => {
+    //     return this.cs.getFavItemsObs(this.cs.getFavItemListFDB(u.uid));
+    //   })
+    // ).subscribe((favs: DrinkFavoriteItem[]) => {
+    //   this.favItems = [...favs];
+    // });
+
+    this.store.select("appAuth").pipe(
+      takeUntil(this.compDest$)
+    )
   }
 
   /**
@@ -99,5 +108,6 @@ export class OrderNewCreateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

@@ -47,10 +47,11 @@ export class DialogAddUserComponent implements OnInit, OnDestroy {
     console.log("dialog destoryed")
   }
 
-  trimAndReplace(val: string) {
+  trimAndReplace(val: string): string {
     if (val) {
       return val.trim().split(" ").join("");
     }
+    return val;
   }
 
 }

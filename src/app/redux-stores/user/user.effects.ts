@@ -6,7 +6,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import * as AuthUtils from '../../shared/utils/auth.utils';
 import { ToasterService } from '../../shared/services/toastr.service';
-import { FireUserProfile } from './user.model';
+import { FireUserProfile, IUserInfo } from './user.model';
 import { VerifiedUser } from '../../shared/models/user.model';
 
 @Injectable()
@@ -25,13 +25,23 @@ export class UserInfoEffects {
           photoURL: data.info.photoURL
         }).then(
           () => {
-            this.ts.getSuccess("Profile updated.");
-            return UserActions.getUserProfileStart();
+            return UserActions.saveUserProfileSuccess({info: data.info});
           },
           (rej) => {
             return UserActions.saveUserProfileFailure({errorMsg: AuthUtils.getFirebaseErrorMsg(rej)})
           }
         )
+      })
+    );
+  });
+
+  updateProfileSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserActions.saveUserProfileSuccess),
+      map((data) => {
+        const info: IUserInfo = data.info;
+        this.ts.getSuccess("Profile updated for " + info.displayName);
+        return UserActions.getUserProfileStart();
       })
     );
   });

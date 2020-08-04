@@ -8,6 +8,9 @@ import { AdBannerService } from '../shared/services/ad-banner.service';
 import { AdItem } from '../shared/ad-banner/banner/ad.item';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../shared/services/auth.service';
+import { AppState } from '../redux-stores/global-store/app.reducer';
+import { Store } from '@ngrx/store';
+import { AuthState } from '../redux-stores/auth/auth.models';
 
 @Component({
   selector: 'app-main',
@@ -20,10 +23,12 @@ export class MainComponent implements OnInit, OnDestroy {
   activeLink: NavItem;
   compDest$: Subject<any> = new Subject<any>();
   ads: AdItem[];
+  authLoading: boolean;
 
   constructor(public router: Router, public route: ActivatedRoute,
     public fds: RestDataFireService, public abs: AdBannerService,
-    private ngZone: NgZone, public as: AuthService) {
+    public as: AuthService, public store: Store<AppState>) {
+
     this.tabLinks.push(
       new NavItem('open', "Working", "open-orders"),
       new NavItem('closed', "Delivered", "completed-orders")
@@ -42,6 +47,15 @@ export class MainComponent implements OnInit, OnDestroy {
     .subscribe((val) => {
       this.setActiveTab();
     });
+
+    this.store.select("appAuth").pipe(
+      takeUntil(this.compDest$)
+    ).subscribe(
+      (state: AuthState) => {
+        this.authLoading = state.loading;
+      }
+    )
+
   }
 
   ngOnInit() {
@@ -50,11 +64,6 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   onNewOrder() {
-    //TODO temp fix due to resolver
-    // this.ngZone.run(
-    //   () => {
-    //     this.router.navigate(['../', 'new-order'], {relativeTo: this.route})
-    // });
     this.router.navigate(['../', 'new-order'], {relativeTo: this.route});
   }
 
@@ -80,5 +89,6 @@ export class MainComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

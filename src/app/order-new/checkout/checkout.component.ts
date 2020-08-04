@@ -80,5 +80,6 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

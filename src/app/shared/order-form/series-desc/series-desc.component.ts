@@ -48,5 +48,6 @@ export class SeriesDescComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }

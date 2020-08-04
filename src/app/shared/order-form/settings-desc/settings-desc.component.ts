@@ -167,6 +167,7 @@ export class SettingsDescComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnDestroy() {
     this.compDest$.next();
+    this.compDest$.complete();
   }
 }
 
