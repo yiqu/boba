@@ -7,6 +7,7 @@ export interface AuthState {
   error: boolean;
   errorMsg: string;
   resetEmail: string;
+  shouldRedirect: boolean;
 }
 
 export class LoginStartActionProp {
@@ -15,11 +16,17 @@ export class LoginStartActionProp {
 }
 
 export class LoginSuccessActionProp {
-  constructor(public verifiedUser: any, public redirect?: boolean, public showAlert?: boolean, public loadingOverride?: boolean) {
+  constructor(public verifiedUser: any, public redirect?: boolean,
+    public showAlert?: boolean, public loadingOverride?: boolean) {
   }
 }
 
 export class LoginFailureActionProp {
+  constructor(public errorMsg: any) {
+  }
+}
+
+export class FailureActionProp {
   constructor(public errorMsg: any) {
   }
 }

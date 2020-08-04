@@ -11,7 +11,8 @@ const inititalState: AuthState = {
   loading: true,
   error: false,
   errorMsg: null,
-  resetEmail: null
+  resetEmail: null,
+  shouldRedirect: false
 }
 
 export const authReducer = createReducer(
@@ -27,7 +28,7 @@ export const authReducer = createReducer(
     }
   }),
   // Firebase auth valueChanges logged in with a user
-  on(AuthActions.authLoginSuccess, (state, {verifiedUser, loadingOverride}) => {
+  on(AuthActions.authLoginSuccess, (state, {verifiedUser, loadingOverride, redirect}) => {
     const u: VerifiedUser = verifiedUser;
     const overrideLoadingToFalse: boolean = loadingOverride;
     return {
@@ -35,7 +36,8 @@ export const authReducer = createReducer(
       loading: overrideLoadingToFalse,
       verifiedUser: u,
       error: false,
-      errorMsg: null
+      errorMsg: null,
+      shouldRedirect: redirect
     }
   }),
   // Login done

@@ -1,22 +1,29 @@
-<div class="app-container" [class.app-is-mobile]="mobileQuery.matches">
-  <app-top-nav (navToggle)="onTopNavMenuClick()"></app-top-nav>
+<ng-container *ngIf="userLoaded; else loadingUser">
+  <div class="app-container" [class.app-is-mobile]="mobileQuery.matches">
+    <app-top-nav (navToggle)="onTopNavMenuClick()"></app-top-nav>
 
-  <mat-sidenav-container class="app-sidenav-container"
-    [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav-container class="app-sidenav-container"
+      [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
 
-    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'over'"
-      [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" fixedBottomGap="41"
-      autoFocus="false">
-      <app-side-nav (navClose)="onNavClose()"></app-side-nav>
-    </mat-sidenav>
+      <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'over'"
+        [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" fixedBottomGap="41"
+        autoFocus="false">
+        <app-side-nav (navClose)="onNavClose()"></app-side-nav>
+      </mat-sidenav>
 
-    <mat-sidenav-content>
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
+      <mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
 
-<mat-toolbar class="app-footer">
-  <div class="mr-3">{{footerTitle}}</div>
-  <a [href]="myUrl" target="_blank">Come visit me</a>
-</mat-toolbar>
+  <mat-toolbar class="app-footer">
+    <div class="mr-3">{{footerTitle}}</div>
+    <a [href]="myUrl" target="_blank">Come visit me</a>
+  </mat-toolbar>
+</ng-container>
+
+<ng-template #loadingUser>
+  <app-shared-loading></app-shared-loading>
+</ng-template>
+

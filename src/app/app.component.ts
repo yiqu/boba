@@ -14,6 +14,9 @@ import { Store } from '@ngrx/store';
 import { VerifiedUser } from './shared/models/user.model';
 import * as AuthActions from './redux-stores/auth/auth.actions';
 import { IsMobileService } from './shared/services/is-mobile.service';
+import { IUserDBState } from './redux-stores/user/user.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 const LOCAL_STORAGE_USER_KEY: string = "VERIFIED_USER";
 
@@ -26,6 +29,9 @@ export class AppComponent implements OnDestroy, OnInit {
 
   footerTitle: string = "@KQ 2020";
   myUrl: string = "https://yiqu.github.io/";
+  stopListenToUserDB$: Subject<any> = new Subject<any>();
+  userLoaded: boolean;
+
 
   @ViewChild("snav")
   sideNav: MatSidenav;
@@ -37,8 +43,19 @@ export class AppComponent implements OnDestroy, OnInit {
     public cs: CartService, public changeDetectorRef: ChangeDetectorRef, public media: MediaMatcher,
     public fds: RestDataFireService, public as: AuthService, public ims: IsMobileService,
     private store: Store<AppState>) {
-
       this.setMobileDetection();
+
+      this.store.select("userDB").pipe(
+        takeUntil(this.stopListenToUserDB$)
+      ).subscribe(
+        (state: IUserDBState) => {
+          this.userLoaded = state.loaded;
+          if (state.loaded) {
+            this.stopListenToUserDB$.next();
+            this.stopListenToUserDB$.complete();
+          }
+        }
+      )
 
   }
 

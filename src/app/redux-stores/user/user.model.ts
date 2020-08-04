@@ -26,3 +26,11 @@ export interface IUserInfoState {
   error: boolean;
   errMsg: string;
 }
+
+export interface IUserDBState {
+  loaded: boolean;
+  loading: boolean;
+  user: VerifiedUser;
+  error: boolean;
+  errorMsg: string;
+}

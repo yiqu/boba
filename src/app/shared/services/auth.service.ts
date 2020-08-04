@@ -17,24 +17,17 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class AuthService {
 
+  // this determines if firebase auth has emitted the first result,
+  // if it has not, don't redirect to /, or resume redirect operations
+  firstAuthUserFetchCallAndRedirect: boolean = false;
+
   constructor(public router: Router, public sbs: SnackbarService, public store: Store<AppState>,
     private afs: AngularFirestore) {
-      // this determines if firebase auth has emitted the first result,
-      // if it has not, don't redirect to /, or resume redirect operations
-      let firstAuthUserFetchCallCompleted: boolean = false;
 
       firebase.auth().onAuthStateChanged(
         (user: firebase.User) => {
           console.log("Firebase State AUTH:", user ? user.toJSON() : user);
-          if (user) {
-            const u = (<VerifiedUser>user.toJSON());
-            this.setVerifiedUser(u, firstAuthUserFetchCallCompleted, true);
-            firstAuthUserFetchCallCompleted = true;
-            this.store.dispatch(UserActions.getUserProfileStart());
-          } else {
-            this.unsetVerifiedUser();
-            firstAuthUserFetchCallCompleted = true;
-          }
+          this.handleOnAuthChange(user);
         },
         (err) => {
           this.sbs.openSnackBar("Error authenticating user: " + err['code'] + err['message']);
@@ -43,6 +36,19 @@ export class AuthService {
         }
       );
 
+  }
+
+  handleOnAuthChange(fireUser: firebase.User) {
+    if (fireUser) {
+      const u = (<VerifiedUser>fireUser.toJSON());
+      this.setVerifiedUser(u, this.firstAuthUserFetchCallAndRedirect, true);
+      this.store.dispatch(UserActions.getUserProfileStart());
+    } else {
+      this.unsetVerifiedUser();
+    }
+
+    this.store.dispatch(UserActions.getUserDBEntryStart({uid: fireUser?.uid}));
+    this.firstAuthUserFetchCallAndRedirect = true;
   }
 
   throwErrorMessage(msg: string) {
