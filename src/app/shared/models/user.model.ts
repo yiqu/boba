@@ -38,7 +38,7 @@ export class VerifiedUser {
     public uid: string,
     public phoneNumber: string,
     public inAppAliases: InAppAlias,
-    public logins: string[]
+    public logins: number[]
   ) {
   }
 

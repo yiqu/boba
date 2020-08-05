@@ -12,6 +12,8 @@ import { LoginSuccessActionProp, UserRegistrationFromEmailActionProp } from '../
 import * as UserActions from '../../redux-stores/user/user.actions';
 import { AngularFirestore } from '@angular/fire/firestore';
 
+const LOCAL_STORAGE_USER_KEY: string = "VERIFIED_USER";
+
 @Injectable({
   providedIn: 'root'
 })
@@ -79,5 +81,21 @@ export class AuthService {
 
   clearErrors() {
     this.store.dispatch(AuthActions.authClearErrorsByUser());
+  }
+
+  autoLoginFromLocalStorage() {
+    const u: VerifiedUser = this.getUserFromLocalStorage();
+    if (u) {
+      this.store.dispatch(AuthActions.authAutoLogin({user: u}))
+    }
+  }
+
+  private getUserFromLocalStorage(): VerifiedUser | null{
+    const localStorageUser: any = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER_KEY));
+    if (!localStorageUser) {
+      return null;
+    }
+    console.info("Local Storage: User Present");
+    return localStorageUser;
   }
 }

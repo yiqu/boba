@@ -11,7 +11,6 @@ import { AuthUserResolver } from './shared/resolver/auth-resolver.service';
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "home", component: MainComponent,
-    //resolve: {verifiedUser: AuthUserResolver},
     children: [
       { path: "", component: MainLandingComponent, data: {title: 'Home'} },
       { path: "open-orders", component: MainOpenComponent,  data: {title: 'Working'} },

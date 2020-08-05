@@ -14,6 +14,7 @@ import * as fromRouterActions from '../router-related/router-related.actions';
 import * as fromLsActions from '../local-storage/local-storage.actions';
 import { ToasterService } from '../../shared/services/toastr.service';
 import { FirebasePromiseError } from '../../shared/models/firebase.model';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Injectable()
 export class AuthEffects {
@@ -22,7 +23,7 @@ export class AuthEffects {
 
   constructor(public as: AuthService, public actions$: Actions,
     public router: Router, public route: ActivatedRoute, private ts: ToasterService,
-    private afs: AngularFirestore) {
+    private afs: AngularFirestore, private us: UserService) {
   }
 
   userLogin$ = createEffect(() => {
@@ -39,7 +40,7 @@ export class AuthEffects {
           })
           .then(
             (u: firebase.auth.UserCredential) => {
-              return fromAuthActions.authLoginFirebaseRequestSuccess();
+              return fromAuthActions.authLoginFirebaseRequestSuccess({userId: u?.user?.uid});
             },
             (rej) => {
               const authErrMsg = AuthUtils.getFirebaseErrorMsg(rej);
@@ -49,6 +50,49 @@ export class AuthEffects {
           )
       })
     )
+  });
+
+  loginToFirebaseSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromAuthActions.authLoginFirebaseRequestSuccess),
+      map((data) => {
+        const currentTime = new Date().getTime();
+        if (data.userId) {
+          return fromAuthActions.updateUserLoginsTimeStart({uid: data.userId, time: currentTime});
+        }
+        return fromAuthActions.updateUserLoginsTimeFailure({errorMsg:
+          "No User ID returned from Auth Login Firebase Request Success action"});
+      })
+    );
+  });
+
+  updateUserLoginTimes$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromAuthActions.updateUserLoginsTimeStart),
+      switchMap((data) => {
+        const time = data.time;
+        return this.us.getUserDBEntryById(data.uid).get().then(
+          (res) => {
+            const user: VerifiedUser = res.data() as VerifiedUser;
+            const logins: number[] = user.logins ?? [];
+            logins.push(time);
+            return this.us.getUserDBEntryById(data.uid).set({
+              logins: logins
+            }, {merge: true});
+          },
+          (rej: FirebasePromiseError) => {
+            return fromAuthActions.updateUserLoginsTimeFailure({errorMsg: AuthUtils.getFirebaseErrorMsg(rej)});
+          }
+        ).then(
+          (res) => {
+            return fromAuthActions.updateUserLoginsTimeSuccess()
+          },
+          (rej: FirebasePromiseError) => {
+            return fromAuthActions.updateUserLoginsTimeFailure({errorMsg: AuthUtils.getFirebaseErrorMsg(rej)});
+          }
+        )
+      })
+    );
   });
 
   userLogout$ = createEffect(() => {

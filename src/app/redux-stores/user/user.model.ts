@@ -28,9 +28,10 @@ export interface IUserInfoState {
 }
 
 export interface IUserDBState {
-  loaded: boolean;
-  loading: boolean;
+  appLoadMask: boolean;
+  crudLoaded: boolean;
   user: VerifiedUser;
+  uid: string;
   error: boolean;
   errorMsg: string;
 }

@@ -81,7 +81,6 @@ export class UserInfoEffects {
       ofType(UserActions.getUserDBEntryStart),
       switchMap((data) => {
         const uid: string = data.uid ? data.uid : "-";
-        console.log(uid)
         return this.us.getUserDBEntryById(uid).get().then(
           (res) => {
             if (res.exists) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Router, Event, NavigationStart, NavigationEnd,
   NavigationCancel, NavigationError } from '@angular/router';
 
@@ -7,10 +7,14 @@ import { Router, Event, NavigationStart, NavigationEnd,
   templateUrl: 'loading.component.html',
   styleUrls: ['./loading.component.css']
 })
-export class LoadingComponent implements OnInit {
+export class LoadingComponent implements OnInit, OnChanges {
+
+  @Input()
+  wholePage: boolean;
 
   loading: boolean = true;
   logoShakeState: boolean = false;
+  parentClass: string;
 
   constructor(public router: Router) {
     // this.router.events.subscribe((event: Event) => {
@@ -31,6 +35,14 @@ export class LoadingComponent implements OnInit {
     //     }
     //   }
     // });
+  }
+
+  ngOnChanges(c) {
+    if (this.wholePage) {
+      this.parentClass = "whole-page loading-container"
+    } else {
+      this.parentClass = "container loading-container mt-5";
+    }
   }
 
   ngOnInit() {

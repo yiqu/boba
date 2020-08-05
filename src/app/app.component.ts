@@ -29,7 +29,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   footerTitle: string = "@KQ 2020";
   myUrl: string = "https://yiqu.github.io/";
-  stopListenToUserDB$: Subject<any> = new Subject<any>();
+  compDest$: Subject<any> = new Subject<any>();
   userLoaded: boolean;
 
 
@@ -46,27 +46,18 @@ export class AppComponent implements OnDestroy, OnInit {
       this.setMobileDetection();
 
       this.store.select("userDB").pipe(
-        takeUntil(this.stopListenToUserDB$)
+        takeUntil(this.compDest$)
       ).subscribe(
         (state: IUserDBState) => {
-          this.userLoaded = state.loaded;
-          if (state.loaded) {
-            this.stopListenToUserDB$.next();
-            this.stopListenToUserDB$.complete();
-          }
+          this.userLoaded = !state.appLoadMask;
         }
       )
 
   }
 
   ngOnInit() {
-    const u: VerifiedUser = this.getUserFromLocalStorage();
-    if (u) {
-      this.store.dispatch(AuthActions.authAutoLogin({user: u}))
-    }
-    if (environment.gAnalytics) {
-      firebase.analytics();
-    }
+    this.as.autoLoginFromLocalStorage();
+    this.startUpAnalytics();
   }
 
   /**
@@ -91,16 +82,15 @@ export class AppComponent implements OnDestroy, OnInit {
     }
   }
 
-  getUserFromLocalStorage(): VerifiedUser | null{
-    const localStorageUser: any = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER_KEY));
-    if (!localStorageUser) {
-      return null;
+  startUpAnalytics() {
+    if (environment.gAnalytics) {
+      firebase.analytics();
     }
-    console.info("Local Storage: User Present");
-    return localStorageUser;
   }
 
   ngOnDestroy() {
+    this.compDest$.next();
+    this.compDest$.complete();
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 }

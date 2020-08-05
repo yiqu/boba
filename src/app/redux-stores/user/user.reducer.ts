@@ -66,5 +66,5 @@ export const userInfoReducer = createReducer(
       errMsg: errorMsg,
       error: true
     }
-  }),
+  })
 )

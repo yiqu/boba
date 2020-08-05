@@ -190,6 +190,6 @@ export const authReducer = createReducer(
       error: false,
       errorMsg: null,
     }
-  }),
+  })
 
 )

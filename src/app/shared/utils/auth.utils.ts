@@ -56,6 +56,9 @@ function decodeFireBaseErr(err: FirebasePromiseError): string {
       errMsg = "BLAH.";
       break;
     }
+    default: {
+      errMsg = err.name + ":";
+    }
   }
   return errMsg + " " + err['message'];
 }
