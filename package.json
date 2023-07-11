@@ -57,7 +57,7 @@
     "@types/lodash": "~4.14.116",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
-    "firebase-tools": "^8.0.0",
+    "firebase-tools": "^12.4.3",
     "fuzzy": "^0.1.3",
     "hammerjs": "^2.0.8",
     "inquirer": "^6.2.2",
